@@ -18,34 +18,34 @@ export class RegisterComponent implements OnInit {
   }
 
   checkUsername(): boolean {
-    return this.username.length > 3;
+    const usernameOk = this.username.length > 3;
+    if(!usernameOk){
+      this.errorMessage="Username must have at least 4 characters."
+    }
+    return usernameOk;
   }
 
   checkPassword(): boolean {
-    return this.password.length > 3;
+    const pwdOk = this.password.length > 3;
+    if(!pwdOk){
+      this.errorMessage="Password must have at least 4 characters."
+    }
+    return pwdOk;
   }
 
   checkPasswordRepeat(): boolean {
-    return this.passwordRepeat===this.password;
-  }
-
-  formErrorMessage(usernameOk: boolean,passwordOk: boolean,passwordRepeatOk: boolean): string {
-    let message = usernameOk ? "" : "Username must have at least 4 characters! ";
-    message = `${message}${passwordOk ? "" : "Password must have at least 4 characters! "}`;
-    message = `${message}${passwordRepeatOk ? "" : "Repeated password must match password!"}`;
-    return message;
+    const pwdRepOk = this.passwordRepeat===this.password;
+    if(!pwdRepOk){
+      this.errorMessage="Repeated password must equal given password."
+    }
+    return pwdRepOk;
   }
 
   get canCreateAccount(): boolean {
-    const usernameOk = this.checkUsername()
-    const passwordOk = this.checkPassword()
-    const passwordRepeatOk = this.checkPasswordRepeat()
-    const canCreate = usernameOk && passwordOk && passwordRepeatOk;
-    if(canCreate == false){
-      this.errorMessage = this.formErrorMessage(usernameOk,passwordOk,passwordRepeatOk)
-    }
-    return canCreate;
+    return this.checkUsername() && this.checkPassword() &&this.checkPasswordRepeat();
   }
 
-  public createAccount(): void { console.log("Implement me. See 'create-news.component.ts' for example...")}
+  public createAccount(): void { 
+    console.log("Implement me. See 'create-news.component.ts' for example...")
+  }
 }
