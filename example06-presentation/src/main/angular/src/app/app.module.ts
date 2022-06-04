@@ -15,9 +15,7 @@ import { CreateNewsSecurityComponent } from './security/create-news-security/cre
 import { LoginComponent } from './auth/login/login.component';
 import { CreateNewsAuthComponent } from './auth/create-news-auth/create-news-auth.component';
 import { NewsListComponent } from './angular/news-list/news-list.component';
-import { RegisterComponent } from './register/register.component';
-import { ProfileComponent } from './profile/profile.component';
-import { HomeComponent } from './home/home.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 @NgModule({
   declarations: [
@@ -31,9 +29,7 @@ import { HomeComponent } from './home/home.component';
     NewsDetailsComponent,
     LoginComponent,
     NewsListComponent,
-    RegisterComponent,
-    ProfileComponent,
-    HomeComponent
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
