@@ -47,7 +47,7 @@ export class RegisterComponent implements OnInit{
   }
 
   get canCreateAccount(): boolean {
-    return this.checkUsername() && this.checkPassword() &&this.checkPasswordRepeat();
+    return this.checkUsername() && this.checkPassword() && this.checkPasswordRepeat();
   }
 
   public createAccount(e: Event): void { 
