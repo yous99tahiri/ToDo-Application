@@ -16,11 +16,11 @@ export class LoginComponent {
 
   public username: string = "";
   public password: string = "";
-  public errorMessage: string;
+  public errorMessage: string = '';
 
   login(e: Event) {
     e.preventDefault();
-    this.errorMessage = null;
+    this.errorMessage = '';
     if (this.canLogin) {
       this.authService.login(this.username, this.password).subscribe({
         next: () => this.loggedIn.emit(),

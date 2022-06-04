@@ -1,20 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { RegisterService } from '../register.service';
 
 @Component({
   selector: 'wt2-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.sass']
+  styleUrls: ['./register.component.sass'],
+  providers: [RegisterService]
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit{
+
+  @Output()
+  public created = new EventEmitter();
 
   public username: string = "MyUsername";
   public password: string = "MyPassword$$$$";
   public passwordRepeat: string = "MyPassword$$$$";
-  public errorMessage: string = null;
+  public errorMessage: string = '';
   
-  constructor() { }
+  constructor(private registerService: RegisterService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
   checkUsername(): boolean {
@@ -45,7 +50,20 @@ export class RegisterComponent implements OnInit {
     return this.checkUsername() && this.checkPassword() &&this.checkPasswordRepeat();
   }
 
-  public createAccount(): void { 
-    console.log("Implement me. See 'create-news.component.ts' for example...")
+  public createAccount(e: Event): void { 
+    e.preventDefault();
+    this.errorMessage = '';
+
+    if (this.checkUsername() && this.checkPassword() &&this.checkPasswordRepeat()) {
+      this.registerService.create(this.username, this.password).subscribe({
+        next: () => {
+          this.created.emit();
+          this.username = 'MyUsername';
+          this.password = 'MyPassword$$$$';
+          this.passwordRepeat = 'MyPassword$$$$'
+        },
+        error: () => this.errorMessage = 'Could not create account'
+      });
+    }
   }
 }

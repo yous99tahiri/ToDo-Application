@@ -13,13 +13,13 @@ export class CreateNewsComponent {
 
   public headline: string = "";
   public content: string = "";
-  public errorMessage: string;
+  public errorMessage: string = "";
 
   constructor(private newsService: NewsService) { }
 
   public createNews(e: Event): void {
     e.preventDefault();
-    this.errorMessage = null;
+    this.errorMessage = "";
 
     if (this.headline.trim() != null && this.content.trim() != null) {
       this.newsService.create(this.headline, this.content).subscribe({

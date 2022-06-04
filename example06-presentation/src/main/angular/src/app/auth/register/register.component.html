@@ -1,10 +1,10 @@
 
-<div class="alert alert-danger alert-dismissible" *ngIf="errorMessage !== null">
+<div class="alert alert-danger alert-dismissible" *ngIf="errorMessage !== ''">
     {{errorMessage}}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="errorMessage = null"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="errorMessage = ''"></button>
 </div>
   
-<form (submit)="createAccount()">
+<form (submit)="createAccount($event)">
     <div class="mb-3">
         <label class="form-label">Username</label>
         <input name="username" class="form-control" type="text" required [(ngModel)]="username" placeholder="Enter a username">
@@ -17,5 +17,5 @@
         <label class="form-label">Repeat password</label>
         <input name="passwordRepeat" type="password" class="form-control" required [(ngModel)]="passwordRepeat" placeholder="Repeat the password">
     </div>
-    <button class="btn w-100 btn-outline-primary" [disabled]="!canCreateAccount">Create Account</button>
+    <button class="btn w-100 btn-outline-primary" type="submit" [disabled]="!canCreateAccount">Create Account</button>
 </form>
