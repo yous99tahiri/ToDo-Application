@@ -1,6 +1,6 @@
 package de.ls5.wt2;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -10,8 +10,6 @@ import de.ls5.wt2.conf.auth.BasicAuthenticationFilterWithoutRedirect;
 import de.ls5.wt2.conf.auth.FormAuthenticationFilterWithoutRedirect;
 import de.ls5.wt2.conf.auth.LogoutFilterWithoutRedirect;
 import de.ls5.wt2.conf.auth.WT2Realm;
-import de.ls5.wt2.conf.auth.jwt.JWTAuthenticationFilter;
-import de.ls5.wt2.conf.auth.jwt.JWTWT2Realm;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -27,13 +25,8 @@ public class ShiroConfig {
     }
 
     @Bean
-    public Realm jwtRealm() {
-        return new JWTWT2Realm();
-    }
-
-    @Bean
-    public DefaultWebSecurityManager securityManager(Realm realm, Realm jwtRealm) {
-        return new DefaultWebSecurityManager(Arrays.asList(jwtRealm, realm));
+    public DefaultWebSecurityManager securityManager(Realm realm) {
+        return new DefaultWebSecurityManager(Collections.singletonList(realm));
     }
 
     @Bean
@@ -46,17 +39,9 @@ public class ShiroConfig {
         filters.put("restAuthenticator", new BasicAuthenticationFilterWithoutRedirect());
         filters.put("loginFilter", new FormAuthenticationFilterWithoutRedirect());
         filters.put("logoutFilter", new LogoutFilterWithoutRedirect());
-        filters.put("jwtFilter", new JWTAuthenticationFilter());
 
 
         final Map<String, String> chainDefinition = new LinkedHashMap<>();
-
-        // configuration for stateless authentication on each request
-        chainDefinition.put("/rest/auth/basic/**", "noSessionCreation, restAuthenticator");
-
-        // configuration for JWT based authentication
-        chainDefinition.put("/rest/auth/jwt/authenticate", "anon");
-        chainDefinition.put("/rest/auth/jwt/**", "noSessionCreation, jwtFilter");
 
         // configuration for using session based authentication
         chainDefinition.put("/login.jsp", "loginFilter");

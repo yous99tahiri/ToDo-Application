@@ -29,15 +29,15 @@ public class RegisterREST {
                  produces = MediaType.APPLICATION_JSON_VALUE)
     public DBUserAccount create(@RequestBody final DBUserAccount param) {
 
-        final DBUserAccount news = new DBUserAccount();
+        final DBUserAccount account = new DBUserAccount();
 
-        news.setUsername(param.getUsername());
-        news.setPassword(param.getPassword());
-        news.setCreated(new Date());
+        account.setUsername(param.getUsername());
+        account.setPassword(param.getPassword());
+        account.setCreated(new Date());
 
-        this.entityManager.persist(news);
+        this.entityManager.persist(account);
 
-        return news;
+        return account;
     }
 
     @GetMapping(path = "{id}",

@@ -11,7 +11,6 @@ import javax.persistence.criteria.Root;
 
 import de.ls5.wt2.conf.auth.permission.ViewFirstFiveNewsItemsPermission;
 import de.ls5.wt2.entity.DBNews;
-import de.ls5.wt2.entity.DBNews_;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.subject.Subject;
@@ -28,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-@RequestMapping(path = {"rest/auth/session/news", "rest/auth/basic/news", "rest/auth/jwt/news"})
+@RequestMapping(path = {"rest/auth/session/news"})
 public class AuthNewsREST {
 
     @Autowired
@@ -42,7 +41,7 @@ public class AuthNewsREST {
 
         final Root<DBNews> from = query.from(DBNews.class);
 
-        final Order order = builder.desc(from.get(DBNews_.publishedOn));
+        final Order order = builder.desc(from.get(DBNews.publishedOn));
 
         query.select(from).orderBy(order);
 

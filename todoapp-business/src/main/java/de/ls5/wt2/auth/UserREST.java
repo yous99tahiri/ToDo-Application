@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-@RequestMapping(path = {"rest/auth/session/profile", "rest/auth/basic/profile", "rest/auth/jwt/profile"})
+@RequestMapping(path = {"rest/auth/session/profile"})
 public class UserREST {
-
     @GetMapping(produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<?> getProfile() {
 
