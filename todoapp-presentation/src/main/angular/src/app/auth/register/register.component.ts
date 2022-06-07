@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit/*, EventEmitter, Output*/ } from '@angular/core';
 import { RegisterService } from '../register.service';
 
 @Component({
@@ -9,13 +9,17 @@ import { RegisterService } from '../register.service';
 })
 export class RegisterComponent implements OnInit{
 
-  @Output()
-  public created = new EventEmitter();
+  //@Output()
+  //public created = new EventEmitter();
 
-  public username: string = "MyUsername";
-  public password: string = "MyPassword$$$$";
-  public passwordRepeat: string = "MyPassword$$$$";
+  public username: string = '';
+  private usernameHelp: string = 'The username must have atleast 4 characters. ';
+  public password: string = '';
+  private passwordHelp: string = 'The password must have atleast 4 characters. ';
+  public passwordRepeat: string = '';
+  private passwordRepeatHelp: string = 'The repeated password must equal the password.';
   public errorMessage: string = '';
+  public successMessage: string = '';
   
   constructor(private registerService: RegisterService) { }
 
@@ -23,47 +27,47 @@ export class RegisterComponent implements OnInit{
   }
 
   checkUsername(): boolean {
-    const usernameOk = this.username.length > 3;
-    if(!usernameOk){
-      this.errorMessage="Username must have at least 4 characters."
-    }
-    return usernameOk;
+    return this.username.length > 3;
   }
 
   checkPassword(): boolean {
-    const pwdOk = this.password.length > 3;
-    if(!pwdOk){
-      this.errorMessage="Password must have at least 4 characters."
-    }
-    return pwdOk;
+    return this.password.length > 3;
   }
 
   checkPasswordRepeat(): boolean {
-    const pwdRepOk = this.passwordRepeat===this.password;
-    if(!pwdRepOk){
-      this.errorMessage="Repeated password must equal given password."
-    }
-    return pwdRepOk;
+    return this.passwordRepeat===this.password;
   }
 
-  get canCreateAccount(): boolean {
+  formErrorMessage() : string {
+    let msg:string = !this.checkUsername() ? this.usernameHelp : '';
+    msg = `${msg}${!this.checkPassword() ? this.passwordHelp : ''}`;
+    msg = `${msg}${!this.checkPasswordRepeat() ? this.passwordRepeatHelp : ''}`;
+    return msg
+  }
+
+  canCreateAccount(): boolean {
+    this.successMessage = ''
     return this.checkUsername() && this.checkPassword() && this.checkPasswordRepeat();
   }
 
   public createAccount(e: Event): void { 
     e.preventDefault();
-    this.errorMessage = '';
-
-    if (this.checkUsername() && this.checkPassword() &&this.checkPasswordRepeat()) {
+    if (this.canCreateAccount()) {
       this.registerService.create(this.username, this.password).subscribe({
         next: () => {
-          this.created.emit();
-          this.username = 'MyUsername';
-          this.password = 'MyPassword$$$$';
-          this.passwordRepeat = 'MyPassword$$$$'
+          //this.created.emit();
+          this.errorMessage = ''
+          this.successMessage = 'Account successfully created!'
+          this.username = '';
+          this.password = '';
+          this.passwordRepeat = ''
         },
         error: () => this.errorMessage = 'Could not create account'
       });
+    }
+    else{
+      this.successMessage = ''
+      this.errorMessage = this.formErrorMessage()
     }
   }
 }

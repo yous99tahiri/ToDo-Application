@@ -3,7 +3,11 @@
     {{errorMessage}}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="errorMessage = ''"></button>
 </div>
-  
+<div class="alert alert-info alert-dismissible" *ngIf="successMessage !== ''">
+    {{successMessage}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="successMessage = ''"></button>
+</div>
+
 <form (submit)="createAccount($event)">
     <div class="mb-3">
         <label class="form-label">Username</label>
@@ -17,5 +21,5 @@
         <label class="form-label">Repeat password</label>
         <input name="passwordRepeat" type="password" class="form-control" required [(ngModel)]="passwordRepeat" placeholder="Repeat the password">
     </div>
-    <button class="btn w-100 btn-outline-primary" type="submit" [disabled]="!canCreateAccount">Create Account</button>
+    <button class="btn w-100 btn-outline-primary" type="submit">Create Account</button>
 </form>

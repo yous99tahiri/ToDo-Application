@@ -3,18 +3,6 @@
     <h4 class="title">Login</h4>
     <hr>
     <div class="card-body">
-      <ul class="nav nav-pills nav-fill">
-        <li class="nav-item">
-          <a class="nav-link" href="#" (click)="useBasicAuth($event)" [class.active]="isBasicAuth()">Basic</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" (click)="useSessionAuth($event)" [class.active]="isSessionAuth()">Session</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" (click)="useJwtAuth($event)" [class.active]="isJwtAuth()">JWT</a>
-        </li>
-      </ul>
-      <hr>
       <wt2-login [authService]="authService" (loggedIn)="load()"></wt2-login>
     </div>
   </div>

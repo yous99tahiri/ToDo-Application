@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Transactional
 @RestController
 @RequestMapping(path = "rest/register")
-//if above does not work try this:
-//@RequestMapping(path = {"rest/auth/session/register", "rest/auth/basic/register", "rest/auth/jwt/register"})
 public class RegisterREST {
     @Autowired
     private EntityManager entityManager;

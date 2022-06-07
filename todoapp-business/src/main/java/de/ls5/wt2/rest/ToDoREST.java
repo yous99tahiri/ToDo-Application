@@ -13,8 +13,6 @@ import java.util.Date;
 @Transactional
 @RestController
 @RequestMapping(path = "rest/todo")
-//if above does not work try this:
-//@RequestMapping(path = {"rest/auth/session/register", "rest/auth/basic/register", "rest/auth/jwt/register"})
 public class ToDoREST {
     @Autowired
     private EntityManager entityManager;
