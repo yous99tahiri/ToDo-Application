@@ -4,12 +4,12 @@
 
     <parent>
         <groupId>de.ls5.wt2</groupId>
-        <artifactId>example06-parent</artifactId>
+        <artifactId>todo-app-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>example06-persistence</artifactId>
+    <artifactId>todo-app-persistence</artifactId>
     <packaging>jar</packaging>
 
     <name>WT2 :: ${project.artifactId}</name>

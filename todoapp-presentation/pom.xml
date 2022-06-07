@@ -7,12 +7,12 @@
 
     <parent>
         <groupId>de.ls5.wt2</groupId>
-        <artifactId>example06-parent</artifactId>
+        <artifactId>todo-app-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>example06-presentation</artifactId>
+    <artifactId>todo-app-presentation</artifactId>
     <packaging>war</packaging>
 
     <name>WT2 :: ${project.artifactId}</name>
@@ -106,7 +106,7 @@
     <dependencies>
         <dependency>
             <groupId>de.ls5.wt2</groupId>
-            <artifactId>example06-business</artifactId>
+            <artifactId>todo-app-business</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -123,4 +123,3 @@
     </dependencies>
 
 </project>
-

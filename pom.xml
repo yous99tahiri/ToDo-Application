@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>de.ls5.wt2</groupId>
-    <artifactId>todo-app</artifactId>
+    <artifactId>todo-app-parent</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
