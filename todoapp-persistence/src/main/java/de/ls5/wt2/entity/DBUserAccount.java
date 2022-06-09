@@ -1,10 +1,10 @@
 package de.ls5.wt2.entity;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -41,4 +41,25 @@ public class DBUserAccount extends DBIdentified{
     public Date getCreated() {
         return this.created;
     }
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<DBRole> roles = new HashSet<>();
+    public void addRole(DBRole role) {
+        this.roles.add(role);
+    }
+    public Set<DBRole> getRoles (){
+        return this.roles ;
+    }
+    public void setRoles (Set<DBRole> roles ){
+        this.roles = roles ;
+    }
+
+
+
+
 }
