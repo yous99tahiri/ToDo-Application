@@ -1,30 +1,30 @@
 <div class="card">
-    <h4 class="title">Register</h4>
     <hr>
+    <h4 class="title">Register</h4>
     <div class="card-body">
         <div class="alert alert-danger alert-dismissible" *ngIf="errorMessage !== ''">
             {{errorMessage}}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="errorMessage = ''"></button>
+            <button type="button" id="closeAlertBtn_err" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="errorMessage = ''"></button>
         </div>
-        <div class="alert alert-info alert-dismissible" *ngIf="successMessage !== ''">
+        <div class="alert alert-success alert-dismissible" *ngIf="successMessage !== ''">
             {{successMessage}}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="successMessage = ''"></button>
+            <button type="button" id="closeAlertBtn_suc" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="successMessage = ''"></button>
         </div>
 
         <form (submit)="createAccount($event)">
             <div class="mb-3">
                 <label class="form-label">Username</label>
-                <input name="username" class="form-control" type="text" required [(ngModel)]="username" placeholder="Enter a username">
+                <input name="username" id="usernameInput" class="form-control" type="text" required [(ngModel)]="username" placeholder="Enter a username">
             </div>
             <div class="mb-3">
                 <label class="form-label">Password</label>
-                <input name="password" type="password" class="form-control" required [(ngModel)]="password" placeholder="Enter a password">
+                <input name="password" id="pwdInput" type="password" class="form-control" required [(ngModel)]="password" placeholder="Enter a password">
             </div>
             <div class="mb-3">
                 <label class="form-label">Repeat password</label>
-                <input name="passwordRepeat" type="password" class="form-control" required [(ngModel)]="passwordRepeat" placeholder="Repeat the password">
+                <input name="passwordRepeat" id="pwdRepInput" type="password" class="form-control" required [(ngModel)]="passwordRepeat" placeholder="Repeat the password">
             </div>
-            <button class="btn w-100 btn-outline-primary" type="submit">Create Account</button>
+            <button class="btn w-100 btn-outline-primary" id="submitBtn" type="submit">Create Account</button>
         </form>
     </div>
 </div> 

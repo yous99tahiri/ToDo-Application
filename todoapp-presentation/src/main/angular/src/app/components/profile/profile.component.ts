@@ -10,6 +10,9 @@ export class ProfileComponent implements OnInit {
   constructor() { }
   username:string = "abc"
   registrationDate:string = "abc"
+  role:string = "abc"
+  isAdmin:boolean = true
+  hasItemsAssigned:boolean = true
   ngOnInit(): void {
   }
 

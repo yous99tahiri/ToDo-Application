@@ -1,9 +1,24 @@
 <div class="card">
-    <h4 class="title">Profile</h4>
     <hr>
+    <h4 class="title">Profile</h4>
     <div class="card-body">
         <p>Username: {{username}}</p>
         <p>Date of Registration: {{registrationDate}}</p>
+        <p>Role: {{role}}</p>
+    </div>
+    <div *ngIf="hasItemsAssigned">
+        <hr>
+        <h4 class="title" >Assigned items:</h4>
+        <div class="card-body">
+            <p>nur sichtbar falls items zugewiesen sind</p>
+        </div>
+    </div>
+    <div *ngIf="isAdmin">
+        <hr>
+        <h4 class="title" >Admin Area</h4>
+        <div class="card-body">
+            <p>nur sichtbar falls role admin</p>
+        </div>
     </div>
 </div>
   
