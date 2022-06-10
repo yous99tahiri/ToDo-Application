@@ -1,5 +1,5 @@
 import { Component, OnInit/*, EventEmitter, Output*/ } from '@angular/core';
-import { RegisterService } from '../register.service';
+import { RegisterService } from '../../services/register.service';
 
 @Component({
   selector: 'wt2-register',

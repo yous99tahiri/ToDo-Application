@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment as env } from '../../environments/environment';
 import { map } from 'rxjs/operators';
-import { NewUserAccount } from './register/new-user-account';
+import { NewUserAccount } from '../components/register/new-user-account';
 
 @Injectable()
 export class RegisterService {
