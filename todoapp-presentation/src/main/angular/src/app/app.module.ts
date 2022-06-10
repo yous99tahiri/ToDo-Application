@@ -9,6 +9,9 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { TodoItemListComponent } from './components/todo-item-list/todo-item-list.component';
+import { TodoItemDetailsComponent } from './components/todo-item-details/todo-item-details.component';
+import { TodoItemListDetailsComponent } from './components/todo-item-list-details/todo-item-list-details.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +19,10 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
-    DashboardComponent
+    DashboardComponent,
+    TodoItemListComponent,
+    TodoItemDetailsComponent,
+    TodoItemListDetailsComponent
   ],
   imports: [
     BrowserModule,
