@@ -1,13 +1,13 @@
 export class NewUserAccount{
     username: string;
     password: string;
-    created: Date;
+    registrationDate: Date;
   
     static fromObject(object: any): NewUserAccount {
       const n = new NewUserAccount();
       n.username = object.username;
       n.password = object.password;
-      n.created = new Date(object.created);
+      n.registrationDate = new Date(object.registrationDate);
       return n;
     }
   }

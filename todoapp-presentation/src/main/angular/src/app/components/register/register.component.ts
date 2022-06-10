@@ -10,7 +10,7 @@ import { RegisterService } from '../../services/register.service';
 export class RegisterComponent implements OnInit{
 
   //@Output()
-  //public created = new EventEmitter();
+  //public registrationDate = new EventEmitter();
 
   public username: string = '';
   private usernameHelp: string = 'The username must have atleast 4 characters. ';
@@ -55,9 +55,9 @@ export class RegisterComponent implements OnInit{
     if (this.canCreateAccount()) {
       this.registerService.create(this.username, this.password).subscribe({
         next: () => {
-          //this.created.emit();
+          //this.registrationDate.emit();
           this.errorMessage = ''
-          this.successMessage = 'Account successfully created!'
+          this.successMessage = 'Account successfully registrationDate!'
           this.username = '';
           this.password = '';
           this.passwordRepeat = ''

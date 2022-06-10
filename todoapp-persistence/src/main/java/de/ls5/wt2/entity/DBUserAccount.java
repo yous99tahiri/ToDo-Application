@@ -14,7 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 public class DBUserAccount extends DBIdentified{
     private String username;
     private String password;
-    private Date created;
+    private Date registrationDate;
 
     public void setUsername(String username) {
         this.username = username;
@@ -24,8 +24,8 @@ public class DBUserAccount extends DBIdentified{
         this.password = password;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
+    public void setCreated(Date registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     public String getUsername() {
@@ -39,7 +39,7 @@ public class DBUserAccount extends DBIdentified{
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(iso = ISO.DATE_TIME)
     public Date getCreated() {
-        return this.created;
+        return this.registrationDate;
     }
 
     @ManyToMany(fetch = FetchType.EAGER)
