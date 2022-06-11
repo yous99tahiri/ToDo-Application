@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { TodoItemList } from 'src/app/entities/todo-item-list';
+
 
 @Component({
   selector: 'wt2-todo-item-list',
@@ -6,6 +8,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./todo-item-list.component.sass']
 })
 export class TodoItemListComponent implements OnInit {
+
+  @Input()
+  public todoItemList: TodoItemList = null;
 
   constructor() { }
 
