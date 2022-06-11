@@ -24,7 +24,7 @@ public class DBUserAccount extends DBIdentified{
         this.password = password;
     }
 
-    public void setCreated(Date registrationDate) {
+    public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
 
@@ -38,10 +38,10 @@ public class DBUserAccount extends DBIdentified{
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(iso = ISO.DATE_TIME)
-    public Date getCreated() {
+    public Date getRegistrationDate() {
         return this.registrationDate;
     }
-
+    /* 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
@@ -58,6 +58,7 @@ public class DBUserAccount extends DBIdentified{
     public void setRoles (Set<DBRole> roles ){
         this.roles = roles ;
     }
+    */
 
 
 

@@ -11,7 +11,6 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { TodoItemListComponent } from './components/todo-item-list/todo-item-list.component';
 import { TodoItemDetailsComponent } from './components/todo-item-details/todo-item-details.component';
-import { TodoItemListDetailsComponent } from './components/todo-item-list-details/todo-item-list-details.component';
 
 @NgModule({
   declarations: [
@@ -21,8 +20,7 @@ import { TodoItemListDetailsComponent } from './components/todo-item-list-detail
     ProfileComponent,
     DashboardComponent,
     TodoItemListComponent,
-    TodoItemDetailsComponent,
-    TodoItemListDetailsComponent
+    TodoItemDetailsComponent
   ],
   imports: [
     BrowserModule,

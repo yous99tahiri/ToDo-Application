@@ -31,7 +31,7 @@ public class RegisterREST {
 
         account.setUsername(param.getUsername());
         account.setPassword(param.getPassword());
-        account.setCreated(new Date());
+        account.setRegistrationDate(param.getRegistrationDate());
 
         this.entityManager.persist(account);
 
