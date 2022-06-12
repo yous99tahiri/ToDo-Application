@@ -1,1 +1,15 @@
-<p>create-todo-item-list works!</p>
+<form (submit)="createTodoItemList($event)">
+    <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input name="title" id="titleInput" class="form-control" type="text" required [(ngModel)]="todoItemList.title" placeholder="Enter a title">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <input name="description" id="descriptionInput" class="form-control" type="text" required [(ngModel)]="todoItemList.description" placeholder="Enter a description">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Deadline (TODO: use Datepicker)</label>
+        <input name="deadline" id="deadlineInput" class="form-control" type="text" required [(ngModel)]="todoItemList.deadLine" placeholder="Enter a deadline (TODO: use Datepicker)">
+    </div>
+    <button class="btn w-100 btn-outline-primary" id="submitBtn" type="submit">Create List</button>
+</form>

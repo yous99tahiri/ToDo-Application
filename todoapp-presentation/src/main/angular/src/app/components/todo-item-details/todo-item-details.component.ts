@@ -9,7 +9,7 @@ import { TodoItem } from 'src/app/entities/todo-item';
 export class TodoItemDetailsComponent implements OnInit {
 
   @Input()
-  public todoItem: TodoItem = null;
+  public todoItem: TodoItem;
 
   constructor() { }
 

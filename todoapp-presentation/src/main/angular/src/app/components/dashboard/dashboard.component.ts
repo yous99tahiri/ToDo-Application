@@ -12,6 +12,17 @@ export class DashboardComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.load()
   }
+
+  load():void {
+    //TODO: trigger from html code?
+  }
+  
+  addList(e: Event): void {
+    e.preventDefault();
+  }
+
+  
 
 }

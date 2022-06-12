@@ -15,4 +15,13 @@ export class CreateTodoItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public createTodoItem(e: Event): void { 
+    e.preventDefault();
+    this.todoItem.lastEdited = new Date()
+    //TODO...
+  }
+
+  canCreateTodoItem(): boolean {
+    return true;
+  }
 }

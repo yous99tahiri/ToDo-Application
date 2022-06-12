@@ -5,7 +5,7 @@ export class TodoItemList{
     description: string;
     lastEdited: Date;
     deadLine: Date;
-    todoItems: TodoItem[];
+    todoItems: TodoItem[] = [];
     //creator: any; //TODO
     //assignees: any; //TODO
     //comments

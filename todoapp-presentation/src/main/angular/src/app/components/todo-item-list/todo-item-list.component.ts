@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { TodoItem } from 'src/app/entities/todo-item';
 import { TodoItemList } from 'src/app/entities/todo-item-list';
 
 
@@ -10,11 +11,32 @@ import { TodoItemList } from 'src/app/entities/todo-item-list';
 export class TodoItemListComponent implements OnInit {
 
   @Input()
-  public todoItemList: TodoItemList = null;
+  public todoItemList: TodoItemList;
 
   constructor() { }
 
   ngOnInit(): void {
+    this.load()
+  }
+
+  load():void {
+    //TODO: trigger from html code?
+  }
+
+  seeItemDetails(e: Event,item:TodoItem): void {
+    e.preventDefault();
+  }
+
+  addItem(e: Event): void { 
+    e.preventDefault();
+  }
+
+  deleteList(e: Event): void { 
+    e.preventDefault();
+  }
+
+  deleteItem(e: Event,item:TodoItem): void {
+    e.preventDefault();
   }
 
 }
