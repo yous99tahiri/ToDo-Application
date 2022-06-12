@@ -27,7 +27,7 @@
         <div class="card-body">
             <form (submit)="deleteUser($event)">
                 <div class="mb-3">
-                    <label class="form-label">Username</label>
+                    <label class="form-label">Username (TODO: use a selection model here with usernames from db)</label>
                     <input name="deleteUsername" id="deleteUsernameInput" class="form-control" type="text" required [(ngModel)]="deleteUsername" placeholder="Enter a username">
                 </div>
                 <button class="btn w-100 btn-outline-primary" id="submitBtn" type="submit">Delete User</button>
