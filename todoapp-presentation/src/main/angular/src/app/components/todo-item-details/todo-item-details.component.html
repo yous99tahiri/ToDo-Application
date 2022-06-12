@@ -5,5 +5,10 @@
         <p>Description: {{todoItem.description}}</p>
         <p>Deadline: {{todoItem.deadLine}}</p>
         <p>Last edited: {{todoItem.lastEdited}}</p>
+        <p>Creator: {{todoItem.creator}}</p>
+        <p>Assignees:</p>
+        <div class="list-group-item d-flex" *ngFor="let username of todoItem.assignees; let i = index">
+            <span>{{username}} </span>
+        </div>
     </div>
 </div>

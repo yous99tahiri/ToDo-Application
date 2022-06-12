@@ -17,6 +17,7 @@ export class CreateTodoItemListComponent implements OnInit {
 
   public createTodoItemList(e: Event): void { 
     e.preventDefault();
+    this.todoItemList.creator = "TODO get name of actual user"
     this.todoItemList.lastEdited = new Date()
     //TODO...
   }

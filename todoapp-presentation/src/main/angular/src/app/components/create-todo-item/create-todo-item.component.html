@@ -8,6 +8,10 @@
         <input name="description" id="descriptionInput" class="form-control" type="text" required [(ngModel)]="todoItem.description" placeholder="Enter a description">
     </div>
     <div class="mb-3">
+        <label class="form-label">Assignees (usernames seperated by ',') (TODO: make selection model with usernames from db)</label>
+        <input name="assignees" id="assigneesInput" class="form-control" type="text" required [(ngModel)]="usernames" placeholder="Enter usernames">
+    </div>
+    <div class="mb-3">
         <label class="form-label">Deadline (TODO: use Datepicker)</label>
         <input name="deadline" id="deadlineInput" class="form-control" type="text" required [(ngModel)]="todoItem.deadLine" placeholder="Enter a deadline (TODO: use Datepicker)">
     </div>

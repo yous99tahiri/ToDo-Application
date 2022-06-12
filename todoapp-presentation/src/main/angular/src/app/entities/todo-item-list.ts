@@ -6,8 +6,7 @@ export class TodoItemList{
     lastEdited: Date;
     deadLine: Date;
     todoItems: TodoItem[] = [];
-    //creator: any; //TODO
-    //assignees: any; //TODO
+    creator: string; //TODO
     //comments
     //state (new,in progress, feedback)
     
@@ -18,8 +17,9 @@ export class TodoItemList{
       n.lastEdited = new Date(object.lastEdited);
       n.todoItems = new Array(object.todoItems)
       n.deadLine = new Date(object.deadLine);
-      //n.creator = ... TODO;
-      //n.assignees = ... TODO;
+      n.creator = object.creator;
+      //comments
+      //state (new,in progress, feedback)
       return n;
     }
   }

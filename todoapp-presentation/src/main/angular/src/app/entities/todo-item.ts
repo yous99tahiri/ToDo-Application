@@ -3,8 +3,8 @@ export class TodoItem{
     description: string;
     lastEdited: Date;
     deadLine: Date;
-    //creator: any; //TODO
-    //assignees: any; //TODO
+    creator: string; //TODO
+    assignees: string[] = []; //TODO
     //comments
     //state (new,in progress, feedback)
     
@@ -14,8 +14,10 @@ export class TodoItem{
       n.description = object.description;
       n.lastEdited = new Date(object.lastEdited);
       n.deadLine = new Date(object.deadLine);
-      //n.creator = ... TODO;
-      //n.assignees = ... TODO;
+      n.creator = object.creator;
+      n.assignees = new Array(object.assignees);
+      //comments
+      //state (new,in progress, feedback)
       return n;
     }
   }
