@@ -6,4 +6,9 @@ import { Injectable } from '@angular/core';
 export class ItemService {
 
   constructor() { }
+  
+  //TODO
+  //create,delete item
+  //create,delete item list
+  //getAssignedItems
 }

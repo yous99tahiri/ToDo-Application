@@ -3,6 +3,7 @@
     <h4 class="title">Dashboard</h4>
     <div class="card-body">
         <button class="btn btn-sm btn-outline-secondary" id="addListBtn" (click)="addList($event)">Add list</button>
+        <hr>
         <div class="alert alert-info" *ngIf="todoItemLists.length === 0">No item lists available</div>
         <div class="list-group" *ngIf="todoItemLists.length > 0">
             <p>Lists:</p>
