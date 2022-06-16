@@ -1,34 +1,52 @@
 <div class="card">
-    <hr>
-    <h4 class="title">Profile</h4>
-    <div class="card-body">
-        <p>Username: {{username}}</p>
-        <p>Date of Registration: {{registrationDate}}</p>
-        <p>Role: {{role}}</p>
+    <div id="userDetailsArea">
+        <hr>
+        <h4 class="title">Profile</h4>
+        <div class="alert alert-danger alert-dismissible" *ngIf="userAreaErrorMessage !== ''">
+            {{userAreaErrorMessage}}
+            <button type="button" id="closeAlertBtn_user" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="userAreaErrorMessage = ''"></button>
+        </div>
+        <div class="card-body">
+            <p id="userName">Username: {{userAccount.username}}</p>
+            <p id="registrationDate">Date of Registration: {{userAccount.registrationDate}}</p>
+            <p id="role">Role: {{userAccount.role}}</p>
+        </div>
     </div>
-    <div>
+    <div id="assignedItemsArea">
         <hr>
         <h4 class="title" >Assigned items:</h4>
+        <div class="alert alert-danger alert-dismissible" *ngIf="itemsAreaErrorMessage !== ''">
+            {{itemsAreaErrorMessage}}
+            <button type="button" id="closeAlertBtn_items" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="itemsAreaErrorMessage = ''"></button>
+        </div>
         <div class="card-body">
             <div class="alert alert-info" *ngIf="todoItems.length === 0">No items available</div>
             <div class="list-group" *ngIf="todoItems.length > 0">
                 <p>Items:</p>
                 <div class="list-group-item d-flex" *ngFor="let todoItem of todoItems; let i = index">
-                    <p>Item Title: {{todoItem.title}}</p>
-                    <p>Item Deadline: {{todoItem.deadLine}}</p>
+                    <p id="title">Item Title: {{todoItem.title}}</p>
+                    <p id="deadline">Item Deadline: {{todoItem.deadLine}}</p>
                     <button class="btn btn-sm btn-outline-secondary" id="itemDetailsBtn" (click)="seeItemDetails($event,todoItem)">Item Details</button>
                 </div>
             </div>
         </div>
     </div>
-    <div *ngIf="isAdmin">
+    <div *ngIf="isAdmin" id="adminArea">
         <hr>
         <h4 class="title" >Admin Area</h4>
+        <div class="alert alert-danger alert-dismissible" *ngIf="adminAreaErrorMessage !== ''">
+            {{adminAreaErrorMessage}}
+            <button type="button" id="closeAlertBtn_admin" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="adminAreaErrorMessage = ''"></button>
+        </div>
         <div class="card-body">
             <form (submit)="deleteUser($event)">
                 <div class="mb-3">
-                    <label class="form-label">Username (TODO: use a selection model here with usernames from db)</label>
-                    <input name="deleteUsername" id="deleteUsernameInput" class="form-control" type="text" required [(ngModel)]="deleteUsername" placeholder="Enter a username">
+                    <input name="deleteUsername" id="deleteUsernameInput" class="form-control" type="text" required [(ngModel)]="deleteUsername" placeholder="Pick a username"matInput [formControl]="myControl" [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let username of filteredUsernames | async" [value]="username">
+                            {{ username }}
+                        </mat-option>
+                    </mat-autocomplete>
                 </div>
                 <button class="btn w-100 btn-outline-primary" id="submitBtn" type="submit">Delete User</button>
             </form>

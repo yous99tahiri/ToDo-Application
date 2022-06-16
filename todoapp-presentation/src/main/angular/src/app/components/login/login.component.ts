@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
-
+import { Component } from '@angular/core';
+import { UserAccount } from 'src/app/entities/user-account';
+import { SessionAuthService } from 'src/app/services/session-auth.service';
 @Component({
   selector: 'wt2-login',
   templateUrl: './login.component.html',
@@ -8,28 +8,28 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
 
-  @Input()
-  public authService: AuthService;
+  private authService: SessionAuthService;
 
-  @Output()
-  public loggedIn = new EventEmitter<void>();
-
-  public username: string = "";
-  public password: string = "";
+  userAccount: UserAccount = new UserAccount()
   public errorMessage: string = '';
 
+  constructor(authService:SessionAuthService){
+    console.log("LoginComponent: created")
+    this.authService = authService;
+  }
+
   login(e: Event) {
+    console.log("LoginComponent: Login Button clicked")
     e.preventDefault();
     this.errorMessage = '';
     if (this.canLogin) {
-      this.authService.login(this.username, this.password).subscribe({
-        next: () => this.loggedIn.emit(),
+      this.authService.login(this.userAccount).subscribe({
         error: () => this.errorMessage = 'Failed to login'
       });
     }
   }
 
   get canLogin(): boolean {
-    return this.username.trim() !== '' && this.password.trim() !== '';
+    return this.userAccount.username.trim() !== '' && this.userAccount.password.trim() !== '';
   }
 }

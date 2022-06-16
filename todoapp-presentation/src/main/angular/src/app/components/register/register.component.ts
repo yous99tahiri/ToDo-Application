@@ -1,4 +1,5 @@
 import { Component, OnInit/*, EventEmitter, Output*/ } from '@angular/core';
+import { UserAccount, USER_ROLE } from 'src/app/entities/user-account';
 import { RegisterService } from '../../services/register.service';
 
 @Component({
@@ -9,33 +10,32 @@ import { RegisterService } from '../../services/register.service';
 })
 export class RegisterComponent implements OnInit{
 
-  //@Output()
-  //public registrationDate = new EventEmitter();
-
-  public username: string = '';
-  private usernameHelp: string = 'The username must have atleast 4 characters. ';
-  public password: string = '';
+  public newUserAccount: UserAccount = new UserAccount()
+  private usernameHelp: string = 'The must have atleast 4 characters. ';
   private passwordHelp: string = 'The password must have atleast 4 characters. ';
+
   public passwordRepeat: string = '';
   private passwordRepeatHelp: string = 'The repeated password must equal the password.';
+
   public errorMessage: string = '';
   public successMessage: string = '';
   
   constructor(private registerService: RegisterService) { }
 
   ngOnInit() {
+    console.log("RegisterComponent: created") 
   }
 
   checkUsername(): boolean {
-    return this.username.length > 3;
+    return this.newUserAccount.username.length > 3;
   }
 
   checkPassword(): boolean {
-    return this.password.length > 3;
+    return this.newUserAccount.password.length > 3;
   }
 
   checkPasswordRepeat(): boolean {
-    return this.passwordRepeat===this.password;
+    return this.passwordRepeat===this.newUserAccount.password;
   }
 
   formErrorMessage() : string {
@@ -51,18 +51,18 @@ export class RegisterComponent implements OnInit{
   }
 
   public createAccount(e: Event): void { 
+    console.log("RegisterComponent: Create Account Button clicked") 
     e.preventDefault();
     if (this.canCreateAccount()) {
-      this.registerService.create(this.username, this.password).subscribe({
+      this.newUserAccount.registrationDate = new Date()
+      this.registerService.createAccount(this.newUserAccount).subscribe({
         next: () => {
-          //this.registrationDate.emit();
           this.errorMessage = ''
-          this.successMessage = 'Account successfully registrationDate!'
-          this.username = '';
-          this.password = '';
+          this.successMessage = 'Account successfully created!'
+          this.newUserAccount = new UserAccount();
           this.passwordRepeat = ''
         },
-        error: () => this.errorMessage = 'Could not create account'
+        error: () => this.errorMessage = 'Could not create account: Service Error'
       });
     }
     else{

@@ -5,6 +5,10 @@
 <button class="btn btn-sm btn-outline-secondary" id="deleteListBtn" (click)="deleteList($event)">Delete List</button>
 <div class="alert alert-info" *ngIf="todoItemList.todoItems.length === 0">No items available</div>
 <div class="list-group" *ngIf="todoItemList.todoItems.length > 0">
+    <div class="alert alert-danger alert-dismissible" *ngIf="errorMessage !== ''">
+        {{errorMessage}}
+        <button type="button" id="closeAlertBtn" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="errorMessage = ''"></button>
+    </div>
     <p>Items:</p>
     <div class="list-group-item d-flex" *ngFor="let todoItem of todoItemList.todoItems; let i = index">
         <p>Item Title: {{todoItem.title}}</p>
