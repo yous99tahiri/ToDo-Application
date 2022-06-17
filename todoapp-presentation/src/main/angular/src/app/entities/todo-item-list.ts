@@ -6,7 +6,7 @@ export class TodoItemList{
     lastEdited: Date;
     deadLine: Date;
     todoItems: TodoItem[] = [];
-    creator: string = ""; //TODO
+    creator: string = "";
     //comments
     //state (open, in progress, feedback, done)
     

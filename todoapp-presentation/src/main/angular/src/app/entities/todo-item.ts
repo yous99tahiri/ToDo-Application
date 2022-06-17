@@ -3,8 +3,8 @@ export class TodoItem{
     description: string = "";
     lastEdited: Date;
     deadLine: Date;
-    creator: string = ""; //TODO
-    assignee: string = "None"; //TODO
+    creator: string = "";
+    assignee: string = "None";
     //comments
     state:ITEM_STATE = ITEM_STATE.OPEN
     

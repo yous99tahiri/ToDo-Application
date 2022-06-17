@@ -2,7 +2,7 @@ export class UserAccount{
     username: string ="";
     password: string ="";
     registrationDate: Date = null;
-    role:USER_ROLE = USER_ROLE.ADMIN
+    role:USER_ROLE = USER_ROLE.USER
   
     static fromObject(object: any): UserAccount {
       console.log(`UserAccount: fromObject called for ${JSON.stringify(object)}`)

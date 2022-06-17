@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HttpHeaders, HttpParams, HttpClient } from '@angular/common/http';
-import { environment as env } from '../../environments/environment';
 import { UserAccount } from '../entities/user-account';
 
 @Injectable()
@@ -41,14 +40,6 @@ export class SessionAuthService {
         return true;
       })
     );
-  }
-
-  getAuthHeaders(): HttpHeaders {
-    return new HttpHeaders();
-  }
-
-  getBaseUrl(): string {
-    return `${env.apiUrl}/auth/session`
   }
 
   get isLoggedIn(): boolean {

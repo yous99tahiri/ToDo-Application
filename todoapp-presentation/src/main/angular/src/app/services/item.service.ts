@@ -1,11 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { TodoItem } from '../entities/todo-item';
 import { TodoItemList } from '../entities/todo-item-list';
 import { SessionAuthService } from './session-auth.service';
-
+import { environment as env } from '../../environments/environment';
 @Injectable()
 export class ItemService {
 
@@ -26,7 +26,7 @@ export class ItemService {
 
   createTodoItem(todoItem:TodoItem): Observable<TodoItem> {
     console.log(`ItemService: createTodoItem called for item '${todoItem.title}'`)
-    return this.http.post<any>(`${this._authService.getBaseUrl()}/item`, todoItem.toObject(), {headers: this._authService.getAuthHeaders()}).pipe(
+    return this.http.post<any>(`${env.apiUrl}/item`, todoItem.toObject(), {headers: new HttpHeaders()}).pipe(
       map(body => TodoItem.fromObject(body))
     );
   }
@@ -38,14 +38,14 @@ export class ItemService {
       "itemTitle" : itemTitle,
       "listTitle" : listTitle
     }
-    return this.http.delete<any>(`${this._authService.getBaseUrl()}/item`, {headers: this._authService.getAuthHeaders(),params : params}).pipe(
+    return this.http.delete<any>(`${env.apiUrl}/item`, {headers: new HttpHeaders(),params : params}).pipe(
       map(body => TodoItem.fromObject(body))
     );
   }
   
   createTodoItemList(todoItemList:TodoItemList): Observable<TodoItemList> {
     console.log(`ItemService: createTodoItemList called for list '${todoItemList.title}'`)
-    return this.http.post<any>(`${this._authService.getBaseUrl()}/list`, todoItemList.toObject(), {headers: this._authService.getAuthHeaders()}).pipe(
+    return this.http.post<any>(`${env.apiUrl}/list`, todoItemList.toObject(), {headers: new HttpHeaders()}).pipe(
       map(body => TodoItemList.fromObject(body))
     );
   }
@@ -54,14 +54,14 @@ export class ItemService {
   readTodoItemList(title:string): Observable<TodoItemList> {
     console.log(`ItemService: readTodoItemList called for list '${title}'`)
     const params = {"title" : title}
-    return this.http.get<any>(`${this._authService.getBaseUrl()}/list`, {headers: this._authService.getAuthHeaders(),params : params}).pipe(
+    return this.http.get<any>(`${env.apiUrl}/list`, {headers: new HttpHeaders(),params : params}).pipe(
       map(body => TodoItemList.fromObject(body))
     );
   }
 
   readAllTodoItemLists(): Observable<TodoItemList[]> {
     console.log(`ItemService: readTodoItemList called`)
-    return this.http.get<any[]>(`${this._authService.getBaseUrl()}/list/all`, {headers: this._authService.getAuthHeaders()}).pipe(
+    return this.http.get<any[]>(`${env.apiUrl}/list/all`, {headers: new HttpHeaders()}).pipe(
       map(body => body.map(obj => { return TodoItemList.fromObject(obj)}))
     );
   }
@@ -71,7 +71,7 @@ export class ItemService {
     const params = {
       "listTitle" : listTitle
     }
-    return this.http.delete<any>(`${this._authService.getBaseUrl()}/list`, {headers: this._authService.getAuthHeaders(),params : params}).pipe(
+    return this.http.delete<any>(`${env.apiUrl}/list`, {headers: new HttpHeaders(),params : params}).pipe(
       map(body => TodoItemList.fromObject(body))
     );
   }
