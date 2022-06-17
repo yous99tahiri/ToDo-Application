@@ -62,7 +62,7 @@ export class CreateTodoItemComponent implements OnInit {
       this.errorMessage = "Can not create item"
       return
     }
-    this.todoItem.creator = this.itemService.authService._username;
+    this.todoItem.creator = this.itemService.authService.getUsername();
     this.todoItem.lastEdited = new Date()
     
     this.itemService.createTodoItem(this.todoItem).subscribe({

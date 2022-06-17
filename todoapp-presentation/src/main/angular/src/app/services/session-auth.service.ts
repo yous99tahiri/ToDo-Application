@@ -8,7 +8,7 @@ import { UserAccount } from '../entities/user-account';
 @Injectable()
 export class SessionAuthService {
   private loggedIn: boolean = false;
-  public username: string = "";
+  private username: string = "";
 
   constructor(private http: HttpClient) {
     console.log("SessionAuthService: created")
@@ -55,10 +55,7 @@ export class SessionAuthService {
     return this.loggedIn;
   }
 
-  get _username(): string {
+  getUsername(): string {
     return this.username;
-  }
-  set _username(value: string) {
-    this.username = value;
   }
 }

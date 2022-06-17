@@ -45,7 +45,7 @@ export class ProfileComponent implements OnInit {
 
   loadUserAccount():void {
     console.log("ProfileComponent: loadUserAccount")
-    this.userService.readUserAccount(this.userService.authService._username).subscribe({
+    this.userService.readUserAccount(this.userService.authService.getUsername()).subscribe({
       next: (userAccount) => { 
         this.userAccount = userAccount; 
       },
@@ -76,7 +76,7 @@ export class ProfileComponent implements OnInit {
 
   loadAssignedItems():void {
     console.log("ProfileComponent: load assigned items")
-    this.userService.readUserAssignedTodoItems(this.userService.authService._username).subscribe({
+    this.userService.readUserAssignedTodoItems(this.userService.authService.getUsername()).subscribe({
       next: (todoItems) => { 
         this.todoItems = todoItems; 
       },
