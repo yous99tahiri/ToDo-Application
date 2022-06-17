@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TodoItem } from 'src/app/entities/todo-item';
 import {FormControl} from '@angular/forms';
 import { Observable,startWith,map } from 'rxjs';
@@ -11,7 +11,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./create-todo-item.component.sass']
 })
 //TODO use textfield html object for descirption field!
-export class CreateTodoItemComponent implements OnInit {
+export class CreateTodoItemComponent implements OnInit,OnDestroy {
 
   myControl: FormControl = new FormControl();
   public usernames:string[] =[] 

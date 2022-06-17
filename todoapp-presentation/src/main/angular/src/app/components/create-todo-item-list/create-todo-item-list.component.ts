@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TodoItemList } from 'src/app/entities/todo-item-list';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ItemService } from 'src/app/services/item.service';
@@ -8,7 +8,7 @@ import { ItemService } from 'src/app/services/item.service';
   styleUrls: ['./create-todo-item-list.component.sass']
 })
 //TODO use textfield html object for descirption field!
-export class CreateTodoItemListComponent implements OnInit {
+export class CreateTodoItemListComponent implements OnInit,OnDestroy {
 
   public todoItemList: TodoItemList = new TodoItemList();
   public errorMessage:string = '';  //TODO add error messaging in component
