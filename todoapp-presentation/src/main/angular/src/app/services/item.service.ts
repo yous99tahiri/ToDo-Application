@@ -51,9 +51,9 @@ export class ItemService {
   }
 
   // "/list"
-  readTodoItemList(title:string): Observable<TodoItemList> {
-    console.log(`ItemService: readTodoItemList called for list '${title}'`)
-    const params = {"title" : title}
+  readTodoItemList(listTitle:string): Observable<TodoItemList> {
+    console.log(`ItemService: readTodoItemList called for list '${listTitle}'`)
+    const params = {"listTitle" : listTitle}
     return this.http.get<any>(`${env.apiUrl}/list`, {headers: new HttpHeaders(),params : params}).pipe(
       map(body => TodoItemList.fromObject(body))
     );
@@ -61,8 +61,8 @@ export class ItemService {
 
   readAllTodoItemLists(): Observable<TodoItemList[]> {
     console.log(`ItemService: readTodoItemList called`)
-    return this.http.get<any[]>(`${env.apiUrl}/list/all`, {headers: new HttpHeaders()}).pipe(
-      map(body => body.map(obj => { return TodoItemList.fromObject(obj)}))
+    return this.http.get<any>(`${env.apiUrl}/list/all`, {headers: new HttpHeaders()}).pipe(
+      map(body => body.lists.map(obj => { return TodoItemList.fromObject(obj)}))
     );
   }
 

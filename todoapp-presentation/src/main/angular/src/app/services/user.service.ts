@@ -44,15 +44,15 @@ export class UserService {
   readAllUserNames(): Observable<string[]> {
     console.log(`UserService: readAllUserNames called`)
     return this.http.get<any>(`${env.apiUrl}/user/all`, {headers: new HttpHeaders()}).pipe(
-      map(body => body.usernames )
+      map(body => body.names )
     );
   }
 
   readUserAssignedTodoItems(username:string): Observable<TodoItem[]> {
     console.log(`ItemService: readUserAssignedTodoItems called for user '${username}'`)
     const params = {"username" : username}
-    return this.http.get<any[]>(`${env.apiUrl}/user/items`, {headers: new HttpHeaders(),params : params}).pipe(
-      map(body => body.map(obj=> {return TodoItem.fromObject(obj)}))
+    return this.http.get<any>(`${env.apiUrl}/user/items`, {headers: new HttpHeaders(),params : params}).pipe(
+      map(body => body.items.map(obj=> {return TodoItem.fromObject(obj)}))
     );
   }
 
