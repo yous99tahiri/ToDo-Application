@@ -11,11 +11,11 @@ import { RegisterService } from '../../services/register.service';
 export class RegisterComponent implements OnInit{
 
   public newUserAccount: UserAccount = new UserAccount()
-  private usernameHelp: string = 'The must have atleast 4 characters. ';
-  private passwordHelp: string = 'The password must have atleast 4 characters. ';
+  private usernameHelp: string = 'Das System mag deinen Benutzernamen nicht. Versuchs doch noch mal. ';
+  private passwordHelp: string = 'Das Passwort muss mindestens 6 Zeichen haben. ';
 
   public passwordRepeat: string = '';
-  private passwordRepeatHelp: string = 'The repeated password must equal the password.';
+  private passwordRepeatHelp: string = 'Zwei Sachen hintereinander eingeben ist schon schwer. Vor allem dann, wenn sie identisch sein sollen... ';
 
   public errorMessage: string = '';
   public successMessage: string = '';
@@ -27,11 +27,11 @@ export class RegisterComponent implements OnInit{
   }
 
   checkUsername(): boolean {
-    return this.newUserAccount.username.length > 3;
+    return this.newUserAccount.username.length > 3 && !(this.newUserAccount.username.includes("frohme"));
   }
 
   checkPassword(): boolean {
-    return this.newUserAccount.password.length > 3;
+    return this.newUserAccount.password.length > 5 && !(this.newUserAccount.password.includes("frohme"));
   }
 
   checkPasswordRepeat(): boolean {
