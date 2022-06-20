@@ -103,6 +103,11 @@ export class ProfileComponent implements OnInit {
     }
     if(this.userAccount.username == this.deleteUsername){
       //TODO errormsg admin area "nice try but you can not delete yourself"
+
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      //Wie genau bau ich an so einer Stelle hier eine Error-Message? Kannst mir da einmal nen Beispiel geben? Dann krieg ich das denke ich für den Rest hin
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
       return
     }
     //we could check if the deleteUsername is in the list of usernames, but we can also skip that, lets make use of status codes :D

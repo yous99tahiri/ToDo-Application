@@ -46,7 +46,7 @@ export class RegisterComponent implements OnInit{
   }
 
   canCreateAccount(): boolean {
-    this.successMessage = ''
+    this.successMessage = '' //was genau soll hier rein? Variable macht für mich keinen Sinn
     return this.checkUsername() && this.checkPassword() && this.checkPasswordRepeat();
   }
 
@@ -57,16 +57,16 @@ export class RegisterComponent implements OnInit{
       this.newUserAccount.registrationDate = new Date()
       this.registerService.createAccount(this.newUserAccount).subscribe({
         next: () => {
-          this.errorMessage = ''
+          this.errorMessage = '' //Muss hier was hin? Weil eigentlich ist das ja nur im Successfall?
           this.successMessage = 'Account successfully created!'
           this.newUserAccount = new UserAccount();
-          this.passwordRepeat = ''
+          this.passwordRepeat = '' //Muss hier was hin? Weil eigentlich ist das ja nur im Successfall?
         },
         error: () => this.errorMessage = 'Could not create account: Service Error'
       });
     }
     else{
-      this.successMessage = ''
+      this.successMessage = ''//Muss hier was hin? Weil eigentlich ist das ja nur im Non-Successfall?
       this.errorMessage = this.formErrorMessage()
     }
   }
