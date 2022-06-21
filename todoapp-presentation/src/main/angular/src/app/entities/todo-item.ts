@@ -26,8 +26,8 @@ export class TodoItem{
       const obj = {
         "title" : this.title,
         "description" : this.description,
-        "lastEdited" : this.lastEdited.toString(),
-        "deadLine" : this.deadLine.toString(),
+        "lastEdited" : this.lastEdited.toISOString(),
+        "deadLine" : this.deadLine.toISOString(),
         "creator" : this.creator,
         "assignee" : this.assignee,
         "state":this.state

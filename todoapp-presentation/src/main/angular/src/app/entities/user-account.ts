@@ -18,7 +18,7 @@ export class UserAccount{
       const obj = {
         "username" : this.username,
         "password" : this.password,
-        "registrationDate" : this.registrationDate != null ? this.registrationDate.toString() : "null",
+        "registrationDate" : this.registrationDate != null ? this.registrationDate.toISOString() : "null",
         "role":this.role
       }
       console.log(`UserAccount: toObject called for ${JSON.stringify(obj)}`);

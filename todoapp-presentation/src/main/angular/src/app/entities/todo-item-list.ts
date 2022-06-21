@@ -28,8 +28,8 @@ export class TodoItemList{
       const obj = {
         "title" : this.title,
         "description" : this.description,
-        "lastEdited" : this.lastEdited.toString(),
-        "deadLine" : this.deadLine.toString(),
+        "lastEdited" : this.lastEdited.toISOString(),
+        "deadLine" : this.deadLine.toISOString(),
         "todoItems" : this.todoItems.map(item => { return item.toObject()} ),
         "creator" : this.creator
       }

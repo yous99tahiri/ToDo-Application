@@ -34,33 +34,9 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     console.log("ProfileComponent: ngOnInit")
 
-    this.usernames = ["Alex","Manu","Niklas","Youssef"]
-    this.userAccount.registrationDate = new Date()
-    this.userAccount.username = "Alex"
-    this.userAccount.role = USER_ROLE.ADMIN
-    let item1:any =  {
-      "title": "Item1 Title",
-      "description": "Item1 Description",
-      "lastEdited": new Date(), 
-      "deadLine":new Date(),
-      "creator":"Niklas",
-      "assignee":"Alex",
-      "state":ITEM_STATE.OPEN
-    }
-
-    let item2:any =  {
-        "title": "Item2 Title",
-        "description": "Item2 Description",
-        "lastEdited": new Date(), 
-        "deadLine":new Date(),
-        "creator":"Youssef",
-        "assignee":"Alex",
-        "state":ITEM_STATE.IN_PROGRESS
-    }
-    this.todoItems = [item1,item2].map(obj => TodoItem.fromObject(obj))
-    //this.loadUserAccount()
-    //this.loadAssignedItems()
-    //this.loadUsernames()
+    this.loadUserAccount()
+    this.loadAssignedItems()
+    this.loadUsernames()
     this.filteredUsernames = this.myControl.valueChanges
       .pipe(
         startWith(''),
