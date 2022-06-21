@@ -25,7 +25,7 @@ export class TodoItemListComponent implements OnInit {
   constructor(
     private matDialog:MatDialog,
     private itemService:ItemService) {
-    console.log(`TodoItemListComponent '${this.todoItemList.title}': created`)
+    console.log(`TodoItemListComponent created`)
   }
 
   ngOnInit(): void {

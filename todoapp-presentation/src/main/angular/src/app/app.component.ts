@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { SessionAuthService } from './services/session-auth.service';
 
 @Component({
@@ -11,7 +12,7 @@ export class AppComponent {
 
   authService: SessionAuthService;
 
-  constructor(private http: HttpClient,authService:SessionAuthService) {
+  constructor(private http: HttpClient,authService:SessionAuthService, private router:Router) {
     console.log("AppComponent created")
     this.authService = authService;
   }
@@ -21,6 +22,7 @@ export class AppComponent {
 
   logout() {
     this.authService.logout().subscribe();
+    this.router.navigate(["/login"])
   }
 
   get isLoggedIn(): boolean {

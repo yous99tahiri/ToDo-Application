@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { UserAccount } from 'src/app/entities/user-account';
 import { SessionAuthService } from 'src/app/services/session-auth.service';
 @Component({
@@ -13,7 +14,8 @@ export class LoginComponent {
   userAccount: UserAccount = new UserAccount()
   public errorMessage: string = '';
 
-  constructor(authService:SessionAuthService){
+  constructor(authService:SessionAuthService,
+    private router:Router){
     console.log("LoginComponent: created")
     this.authService = authService;
   }
@@ -24,6 +26,7 @@ export class LoginComponent {
     this.errorMessage = '';
     if (this.canLogin) {
       this.authService.login(this.userAccount).subscribe({
+        next : () => { this.router.navigate(["/dashboard"])},
         error: () => this.errorMessage = 'Failed to login'
       });
     }

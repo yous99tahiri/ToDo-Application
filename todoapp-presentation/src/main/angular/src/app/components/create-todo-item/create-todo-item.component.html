@@ -24,6 +24,6 @@
         <input name="deadLine" class="form-control" id="deadLineInput" class="form-control" type="date" required [(ngModel)]="todoItem.deadLine">
     </div>
     <button class="btn w-100 btn-outline-primary" id="submitBtn" type="submit">Create Item</button>
+    <hr>
+    <button class="btn w-100 btn-outline-primary" (click)="closeDialog()" id="closeDialogBtn" type="button">Close</button>
 </form>
-<hr>
-<button class="btn w-100 btn-outline-primary" (click)="closeDialog()" id="closeDialogBtn" type="button">Close</button>
