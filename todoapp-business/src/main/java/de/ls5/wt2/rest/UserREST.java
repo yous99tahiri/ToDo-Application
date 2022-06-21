@@ -1,5 +1,4 @@
 package de.ls5.wt2.rest;
-import de.ls5.wt2.Exception.ResourceAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +9,9 @@ import de.ls5.wt2.entity.DBUserAccount;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Transactional
 @RestController
-@RequestMapping(path = "rest/register")
-public class RegisterREST {
+@RequestMapping(path = "rest/user")
+public class UserREST {
     @Autowired
     private EntityManager entityManager;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
                  produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DBUserAccount> create(@RequestBody final DBUserAccount param) {
+    public ResponseEntity<Map> create(@RequestBody final DBUserAccount param) {
 
 
         String username = param.getUsername();
@@ -39,7 +40,7 @@ public class RegisterREST {
                             "SELECT u from DBUserAccount u WHERE u.username = :username", DBUserAccount.class).
                     setParameter("username", username).getResultList();
         if (Users.size() != 0) {
-            return  new ResponseEntity<>(param, HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new HashMap(), HttpStatus.CONFLICT);
         }
 
         final DBUserAccount account = new DBUserAccount();
@@ -50,14 +51,24 @@ public class RegisterREST {
 
         this.entityManager.persist(account);
 
-        return  new ResponseEntity<>(account, HttpStatus.CREATED);
+        HashMap response = new HashMap();
+        response.put("id", account.getId());
+        response.put("username", account.getUsername());
 
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping(path = "{id}",
                 consumes = MediaType.TEXT_PLAIN_VALUE,
                 produces = MediaType.APPLICATION_JSON_VALUE)
-    public DBUserAccount readAsJSON(@PathVariable("id") final long id) {
-        return this.entityManager.find(DBUserAccount.class, id);
+    public ResponseEntity<HashMap> readAsJSON(@PathVariable("id") final long id) {
+        // ToDo: Do not return the password here
+        DBUserAccount account = this.entityManager.find(DBUserAccount.class, id);
+
+        HashMap response = new HashMap();
+        response.put("id", account.getId());
+        response.put("username", account.getUsername());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
