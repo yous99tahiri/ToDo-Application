@@ -3,7 +3,10 @@ package de.ls5.wt2.entity;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
@@ -15,7 +18,7 @@ public class DBTodoItemList extends DBIdentified{
     String description = "";
     Date lastEdited;
     Date deadLine ;
-    //List<DBTodoItem> todoItems; TODO: java.util.List funktioniert hier nicht, andere Wege?
+    List<DBTodoItem> todoItems;
     String creator= "";
     
     public String getTitle(){
@@ -26,6 +29,7 @@ public class DBTodoItemList extends DBIdentified{
         this.description = description;
     }
 
+    @Column(length=255)
     public String getDescription(){
         return this.description;
     }
@@ -62,13 +66,12 @@ public class DBTodoItemList extends DBIdentified{
         this.creator = creator;
     }
 
-    /*  TODO: java.util.List funktioniert hier nicht, andere Wege?
     public void setDBTodoItems(List<DBTodoItem> todoItems){
         this.todoItems = todoItems;
     }
 
+    @ManyToOne
     public List<DBTodoItem> getDBTodoItems(){
         return this.todoItems;
     }
-     */
 }

@@ -3,6 +3,7 @@ package de.ls5.wt2.entity;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -35,6 +36,7 @@ public class DBTodoItem extends DBIdentified {
         this.description = description;
     }
 
+    @Column(length=255)
     public String getDescription(){
         return this.description;
     }
