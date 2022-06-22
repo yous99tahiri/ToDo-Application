@@ -70,7 +70,7 @@ public class DBTodoItemList extends DBIdentified{
         this.todoItems = todoItems;
     }
 
-    @ManyToOne
+    @OneToMany
     public List<DBTodoItem> getDBTodoItems(){
         return this.todoItems;
     }

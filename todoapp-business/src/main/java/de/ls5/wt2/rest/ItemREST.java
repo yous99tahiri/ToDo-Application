@@ -70,6 +70,7 @@ public class ItemREST {
         return new ResponseEntity<>(item, HttpStatus.CREATED);
     }
 
+    //TODO
     @DeleteMapping(params = {"listTitle","itemTitle"},
         produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DBTodoItem> deleteItem(@RequestParam final String listTitle,
@@ -119,6 +120,7 @@ public class ItemREST {
         return ResponseEntity.ok(list);
     }
 
+    //TODO
     @DeleteMapping(path = "list",
     params = { "listTitle" }, 
     produces = MediaType.APPLICATION_JSON_VALUE)
