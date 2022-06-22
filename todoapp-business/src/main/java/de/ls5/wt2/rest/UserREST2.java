@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
@@ -80,15 +81,15 @@ public class UserREST2 {
         return ResponseEntity.ok(account);
     }
 
-    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DBUserAccount> deleteUser(/*TODO get param "username"*/) {
+    @DeleteMapping(params = { "username" }, 
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DBUserAccount> deleteUser(@RequestParam final String username) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         subject.checkRole(UserRole.ADMIN.toString()); //"admin" ?
         //TODO...implement 
-        /*TODO get param "username"*/
         //set attribute "assignee" of items, that are assigned to given username, to "None"
         //same for attribute "creator" of items and item lists, where creator equals given username
         //delete user with given username

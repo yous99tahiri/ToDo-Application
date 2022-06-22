@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
@@ -55,14 +56,15 @@ public class ItemREST {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DBTodoItem> deleteItem(/*TODO get params "listTitle" and "itemTitle"*/) {
+    @DeleteMapping(params = {"listTitle","itemTitle"},
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DBTodoItem> deleteItem(@RequestParam final String listTitle,
+    @RequestParam final String itemTitle) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         //TODO...implement
-        /*TODO get params "listTitle" and "itemTitle"*/
         //...
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
@@ -86,8 +88,9 @@ public class ItemREST {
     }
 
     @GetMapping(path = "list",
+    params = { "listTitle" }, 
     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DBTodoItemList> readList(/*TODO get param "listTitle"*/) {
+    public ResponseEntity<DBTodoItemList> readList(@RequestParam final String listTitle) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -99,14 +102,14 @@ public class ItemREST {
     }
 
     @DeleteMapping(path = "list",
+    params = { "listTitle" }, 
     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DBTodoItemList> deleteList(/*TODO get param "listTitle"*/) {
+    public ResponseEntity<DBTodoItemList> deleteList(@RequestParam final String listTitle) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         //TODO...implement
-        /*TODO delete list with title "listTitle"*/
         //...
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }

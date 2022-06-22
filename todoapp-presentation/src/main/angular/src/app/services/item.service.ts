@@ -37,8 +37,8 @@ export class ItemService {
   deleteTodoItem(listTitle:string,itemTitle:string): Observable<TodoItem> {
     console.log(`ItemService: deleteTodoItem called for item '${itemTitle}' in list '${listTitle}'`)
     const params = {
-      "itemTitle" : itemTitle,
-      "listTitle" : listTitle
+      "listTitle" : listTitle,
+      "itemTitle" : itemTitle
     }
     return this.http.delete<any>(`${this._authService.getBaseUrl()}/item`, {headers: new HttpHeaders(),params : params}).pipe(
       map(body => TodoItem.fromObject(body))
