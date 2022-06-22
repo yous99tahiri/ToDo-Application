@@ -127,7 +127,9 @@ public class ItemREST {
 
         final Root<DBTodoItemList> from = query.from(DBTodoItemList.class);
 
-        query.select(from);
+        final Order order = builder.desc(from.get(DBTodoItemList_.lastEdited));
+
+        query.select(from).orderBy(order);
 
         final List<DBTodoItemList> result = this.entityManager.createQuery(query).getResultList();
         return ResponseEntity.ok(result);
