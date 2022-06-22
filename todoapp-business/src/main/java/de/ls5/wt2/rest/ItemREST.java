@@ -96,6 +96,7 @@ public class ItemREST {
         final String userId = subject.getPrincipal().toString();
         param.setCreator(userId);
         //TODO...implement, see AuthNewsREST.java in example06
+        //TODO how to persist a list of DBTodoItem objects ?!
         /*TODO persist param*/
         //...
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
@@ -109,10 +110,13 @@ public class ItemREST {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        //TODO...implement, see AuthNewsREST.java in example06
-        /*TODO read list with "listTitle"*/
-        //...
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        DBTodoItemList list = this.entityManager.find(DBTodoItemList.class, listTitle); 
+        //TODO: better use ids instead of listTitles, but they should be unique anyway
+
+        if (list == null) { 
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(list);
     }
 
     @DeleteMapping(path = "list",
