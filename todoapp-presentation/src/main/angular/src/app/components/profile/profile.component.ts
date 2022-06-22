@@ -51,7 +51,6 @@ export class ProfileComponent implements OnInit {
       },
       error: () => { 
         console.error 
-        //TODO errormsg user area
       }
     })
   }
