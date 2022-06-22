@@ -15,6 +15,7 @@ import de.ls5.wt2.entity.DBTodoItem;
 import de.ls5.wt2.entity.DBTodoItemList;
 import de.ls5.wt2.entity.DBTodoItemList_;
 import de.ls5.wt2.entity.DBTodoItem_;
+import de.ls5.wt2.entity.ItemState;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.Permission;
@@ -51,9 +52,22 @@ public class ItemREST {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         final String userId = subject.getPrincipal().toString();
-        param.setCreator(userId);
-        //TODO...implement
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+        //TODO: check if in db an item with param.getTitle() in the SAME LIST (param.getListTitle() !) already exists, 
+        //=>return ALREADY_EXISTS
+        final DBTodoItem item = new DBTodoItem();
+        item.setCreator(userId);
+        item.setTitle(param.getTitle());
+        item.setListTitle(param.getListTitle());
+        item.setDescription(param.getDescription());
+        item.setLastEdited(param.getLastEdited());
+        item.setDeadLine(param.getDeadLine());
+        item.setAssignee(param.getAssignee());
+        item.setState(ItemState.OPEN);
+
+        this.entityManager.persist(item);
+
+        return new ResponseEntity<>(item, HttpStatus.CREATED);
     }
 
     @DeleteMapping(params = {"listTitle","itemTitle"},
