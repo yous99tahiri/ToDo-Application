@@ -9,6 +9,9 @@ import { SessionAuthService } from './session-auth.service';
 export class ItemService {
 
   private _authService: SessionAuthService;
+
+  //MAYBE NEEDED:
+  private headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
   
   public get authService(): SessionAuthService {
     return this._authService;
@@ -20,6 +23,7 @@ export class ItemService {
   constructor(private http: HttpClient,authService:SessionAuthService) {
     console.log("ItemService: created")
     this._authService = authService;
+    this.http = this._authService.getHTTPClient();
   }
 
   createTodoItem(todoItem:TodoItem): Observable<TodoItem> {

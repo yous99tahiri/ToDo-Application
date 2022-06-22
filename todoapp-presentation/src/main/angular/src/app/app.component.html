@@ -14,14 +14,14 @@
     <li class="nav-item" *ngIf="!isLoggedIn">
         <a class="nav-link" id="registerNavBtn" routerLink="/register" routerLinkActive="active">Register</a>
     </li>
-    <li class="nav-item" *ngIf="isLoggedIn">
+    <li class="nav-item" *ngIf="!isLoggedIn">
         <a class="nav-link" id="dashboardNavBtn" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
     </li>
-    <li class="nav-item" *ngIf="isLoggedIn">
+    <li class="nav-item" *ngIf="!isLoggedIn">
         <a class="nav-link" id="profileNavBtn" routerLink="/profile" routerLinkActive="active">Profile</a>
     </li>
   </ul>
-  <div class="col-12 text-right" *ngIf="isLoggedIn">
+  <div class="col-12 text-right" *ngIf="!isLoggedIn">
     <button class="btn btn-sm btn-outline-secondary" id="logoutBtn" style="float: right;" (click)="logout()">Logout</button>
   </div>
   <hr>

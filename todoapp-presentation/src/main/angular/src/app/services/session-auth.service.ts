@@ -7,15 +7,12 @@ import { environment as env } from 'src/environments/environment';
 @Injectable()
 export class SessionAuthService {
   private loggedIn: boolean = false;
-  private username: string = "";
-  private uuid:string = "";
   constructor(private http: HttpClient) {
     console.log("SessionAuthService: created")
   }
 
   login(userAccount:UserAccount): Observable<boolean> {
     console.log(`SessionAuthService: login called for user '${userAccount.username}'`)
-    this.username = userAccount.username
     const body = new HttpParams()
       .set('username', userAccount.username)
       .set('password', userAccount.password);
@@ -33,8 +30,7 @@ export class SessionAuthService {
     const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
     return this.http.get(`${this.getBaseUrl()}/profile`, {headers, responseType: 'text'}).pipe(
       map((obj) => {
-        this.uuid = `${obj}`;
-        return obj;
+        return `${obj}`;
       }
       )
     )
@@ -47,8 +43,6 @@ export class SessionAuthService {
         return err.status == 0 ? of([]) : throwError(err);
       }),
       map(() => {
-        this.username = "";
-        this.uuid = "";
         this.loggedIn = false;
         return true;
       })
@@ -61,14 +55,6 @@ export class SessionAuthService {
 
   getHTTPClient(): HttpClient {
     return this.http;
-  }
-
-  getUsername(): string {
-    return this.username;
-  }
-
-  getUUID(): string {
-    return this.uuid;
   }
 
   getBaseUrl(): string {

@@ -37,7 +37,6 @@ export class CreateTodoItemListComponent implements OnInit,OnDestroy {
       this.errorMessage = "Can not create list"
       return
     }
-    this.todoItemList.creator = this.itemService.authService.getUsername()
     this.todoItemList.lastEdited = new Date()
     this.itemService.createTodoItemList(this.todoItemList).subscribe({
       next: () => { 

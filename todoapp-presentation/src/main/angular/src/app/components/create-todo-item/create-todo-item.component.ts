@@ -31,22 +31,21 @@ export class CreateTodoItemComponent implements OnInit,OnDestroy {
 
   ngOnInit(): void {
     console.log("CreateTodoItemComponent: ngOnInit")
+    this.userService.readAllUserNames().subscribe({
+      next: (usernames) => { 
+        this.usernames = usernames; 
+      },
+      error: () => { 
+        console.error 
+        //TODO errormsg
+      }
+    })
+    this.usernames.push("None")
     this.filteredUsernames = this.myControl.valueChanges
       .pipe(
         startWith(''),
         map(val => this.filter(val))
       );
-      
-      this.userService.readAllUserNames().subscribe({
-        next: (usernames) => { 
-          this.usernames = usernames; 
-        },
-        error: () => { 
-          console.error 
-          //TODO errormsg
-        }
-      })
-      this.usernames.push("None")
   }
 
   ngOnDestroy() :void {
@@ -63,7 +62,6 @@ export class CreateTodoItemComponent implements OnInit,OnDestroy {
       this.errorMessage = "Can not create item"
       return
     }
-    this.todoItem.creator = this.itemService.authService.getUsername();
     this.todoItem.lastEdited = new Date()
     
     this.itemService.createTodoItem(this.todoItem).subscribe({

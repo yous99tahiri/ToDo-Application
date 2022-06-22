@@ -9,6 +9,8 @@ import { SessionAuthService } from './session-auth.service';
 export class UserService {
 
   private _authService: SessionAuthService;
+  //MAYBE NEEDED:
+  private headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
 
   public set authService(value: SessionAuthService) {
     this._authService = value;
@@ -19,6 +21,7 @@ export class UserService {
   constructor(private http: HttpClient,authService:SessionAuthService) {
     console.log("UserService: created")
     this._authService = authService
+    this.http = this._authService.getHTTPClient();
   }
 
   deleteUserAccount(username:string): Observable<UserAccount> {
@@ -31,12 +34,9 @@ export class UserService {
     );
   }
 
-  readUserAccount(username:string): Observable<UserAccount> {
-    console.log(`UserService: readUserAccount called for user '${username}'`)
-    const params = {
-      "username" : username
-    }
-    return this.http.get<any>(`${this._authService.getBaseUrl()}/user`, {headers: new HttpHeaders(),params : params}).pipe(
+  readUserAccount(): Observable<UserAccount> {
+    console.log(`UserService: readUserAccount called `)
+    return this.http.get<any>(`${this._authService.getBaseUrl()}/user`, {headers: new HttpHeaders()}).pipe(
       map(body => UserAccount.fromObject(body))
     );
   }
@@ -48,10 +48,9 @@ export class UserService {
     );
   }
 
-  readUserAssignedTodoItems(username:string): Observable<TodoItem[]> {
-    console.log(`ItemService: readUserAssignedTodoItems called for user '${username}'`)
-    const params = {"username" : username}
-    return this.http.get<any>(`${this._authService.getBaseUrl()}/user/items`, {headers: new HttpHeaders(),params : params}).pipe(
+  readUserAssignedTodoItems(): Observable<TodoItem[]> {
+    console.log(`ItemService: readUserAssignedTodoItems called`)
+    return this.http.get<any>(`${this._authService.getBaseUrl()}/user/items`, {headers: new HttpHeaders()}).pipe(
       map(body => body.items.map(obj=> {return TodoItem.fromObject(obj)}))
     );
   }
