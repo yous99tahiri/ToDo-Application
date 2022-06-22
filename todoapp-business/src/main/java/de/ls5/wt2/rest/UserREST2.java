@@ -2,6 +2,7 @@ package de.ls5.wt2.rest;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -52,7 +53,7 @@ public class UserREST2 {
             .setParameter("username", username)
             .getResultList();
 
-        if (users.size() != 0) {
+        if (users == null || users.size() != 0) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
@@ -121,9 +122,22 @@ public class UserREST2 {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        //TODO...implement, see AuthNewsREST.java in example06  
-        //get names of all users
-        //...
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        final CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
+        final CriteriaQuery<DBUserAccount> query = builder.createQuery(DBUserAccount.class);
+
+        final Root<DBUserAccount> from = query.from(DBUserAccount.class);
+
+        final Order order = builder.desc(from.get(DBUserAccount_.username));
+
+        query.select(from).orderBy(order);
+
+        final List<String> result = this.entityManager
+        .createQuery(query)
+        .getResultList()
+        .stream()
+        .map(DBUserAccount::getUsername)
+        .collect(Collectors.toList());
+
+        return ResponseEntity.ok(result);
     }
 }
