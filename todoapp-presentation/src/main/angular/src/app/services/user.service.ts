@@ -4,7 +4,7 @@ import { map, Observable } from 'rxjs';
 import { TodoItem } from '../entities/todo-item';
 import { UserAccount } from '../entities/user-account';
 import { SessionAuthService } from './session-auth.service';
-import { environment as env } from '../../environments/environment';
+
 @Injectable()
 export class UserService {
 
@@ -26,7 +26,7 @@ export class UserService {
     const params = {
       "username" : username
     }
-    return this.http.delete<any>(`${env.apiUrl}/user`, {headers: new HttpHeaders(),params : params}).pipe(
+    return this.http.delete<any>(`${this._authService.getBaseUrl()}/user`, {headers: new HttpHeaders(),params : params}).pipe(
       map(body => UserAccount.fromObject(body))
     );
   }
@@ -36,14 +36,14 @@ export class UserService {
     const params = {
       "username" : username
     }
-    return this.http.get<any>(`${env.apiUrl}/user`, {headers: new HttpHeaders(),params : params}).pipe(
+    return this.http.get<any>(`${this._authService.getBaseUrl()}/user`, {headers: new HttpHeaders(),params : params}).pipe(
       map(body => UserAccount.fromObject(body))
     );
   }
 
   readAllUserNames(): Observable<string[]> {
     console.log(`UserService: readAllUserNames called`)
-    return this.http.get<any>(`${env.apiUrl}/user/all`, {headers: new HttpHeaders()}).pipe(
+    return this.http.get<any>(`${this._authService.getBaseUrl()}/user/all`, {headers: new HttpHeaders()}).pipe(
       map(body => body.names )
     );
   }
@@ -51,7 +51,7 @@ export class UserService {
   readUserAssignedTodoItems(username:string): Observable<TodoItem[]> {
     console.log(`ItemService: readUserAssignedTodoItems called for user '${username}'`)
     const params = {"username" : username}
-    return this.http.get<any>(`${env.apiUrl}/user/items`, {headers: new HttpHeaders(),params : params}).pipe(
+    return this.http.get<any>(`${this._authService.getBaseUrl()}/user/items`, {headers: new HttpHeaders(),params : params}).pipe(
       map(body => body.items.map(obj=> {return TodoItem.fromObject(obj)}))
     );
   }

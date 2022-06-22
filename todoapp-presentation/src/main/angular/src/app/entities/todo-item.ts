@@ -38,8 +38,8 @@ export class TodoItem{
   }
   
   export const enum ITEM_STATE{
-    OPEN = "OPEN",
-    IN_PROGRESS = "IN PROGRESS",
-    FEEDBACK = "FEEDBACK",
-    DONE = "DONE"
+    OPEN,
+    IN_PROGRESS,
+    FEEDBACK,
+    DONE
   }

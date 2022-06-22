@@ -2,7 +2,7 @@ export class UserAccount{
     username: string ="";
     password: string ="";
     registrationDate: Date = null;
-    role:USER_ROLE = USER_ROLE.USER
+    role:USER_ROLE = USER_ROLE.REGULAR
   
     static fromObject(object: any): UserAccount {
       console.log(`UserAccount: fromObject called for ${JSON.stringify(object)}`)
@@ -27,9 +27,8 @@ export class UserAccount{
 }
 
 export const enum USER_ROLE{
-  USER = "USER",
-  MODERATOR = "MODERATOR",
-  ADMIN = "ADMIN"
+  REGULAR,
+  ADMIN
 }
 
 

@@ -21,8 +21,11 @@ export class AppComponent {
   }
 
   logout() {
-    this.authService.logout().subscribe();
-    this.router.navigate(["/login"])
+    this.authService.logout().subscribe( {
+      next:()=>{
+        this.router.navigate(["/login"])
+      }
+    });
   }
 
   get isLoggedIn(): boolean {

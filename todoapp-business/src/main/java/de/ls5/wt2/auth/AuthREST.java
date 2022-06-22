@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-@RequestMapping(path = {"rest/auth/session/profile"})
+@RequestMapping(path = {"rest/profile"})
 public class AuthREST {
     @GetMapping(produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<?> getProfile() {
 
         final Subject subject = SecurityUtils.getSubject();
 
-        if (!subject.isAuthenticated()) {
+        if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
