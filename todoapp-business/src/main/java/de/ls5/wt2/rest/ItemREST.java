@@ -122,9 +122,14 @@ public class ItemREST {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        //TODO...implement, see AuthNewsREST.java in example06
-        /*TODO get all lists, sort by lastEdited?*/
-        //...
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        final CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
+        final CriteriaQuery<DBTodoItemList> query = builder.createQuery(DBTodoItemList.class);
+
+        final Root<DBTodoItemList> from = query.from(DBTodoItemList.class);
+
+        query.select(from);
+
+        final List<DBTodoItemList> result = this.entityManager.createQuery(query).getResultList();
+        return ResponseEntity.ok(result);
     }
 }
