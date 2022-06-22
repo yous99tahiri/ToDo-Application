@@ -43,7 +43,7 @@ export class ItemService {
   
   createTodoItemList(todoItemList:TodoItemList): Observable<TodoItemList> {
     console.log(`ItemService: createTodoItemList called for list '${todoItemList.title}'`)
-    return this.http.post<any>(`${this._authService.getBaseUrl()}/list`, todoItemList.toObject(), {headers: new HttpHeaders()}).pipe(
+    return this.http.post<any>(`${this._authService.getBaseUrl()}/item/list`, todoItemList.toObject(), {headers: new HttpHeaders()}).pipe(
       map(body => TodoItemList.fromObject(body))
     );
   }
@@ -52,15 +52,8 @@ export class ItemService {
   readTodoItemList(listTitle:string): Observable<TodoItemList> {
     console.log(`ItemService: readTodoItemList called for list '${listTitle}'`)
     const params = {"listTitle" : listTitle}
-    return this.http.get<any>(`${this._authService.getBaseUrl()}/list`, {headers: new HttpHeaders(),params : params}).pipe(
+    return this.http.get<any>(`${this._authService.getBaseUrl()}/item/list`, {headers: new HttpHeaders(),params : params}).pipe(
       map(body => TodoItemList.fromObject(body))
-    );
-  }
-
-  readAllTodoItemLists(): Observable<TodoItemList[]> {
-    console.log(`ItemService: readTodoItemList called`)
-    return this.http.get<any>(`${this._authService.getBaseUrl()}/list/all`, {headers: new HttpHeaders()}).pipe(
-      map(body => body.lists.map(obj => { return TodoItemList.fromObject(obj)}))
     );
   }
 
@@ -69,8 +62,15 @@ export class ItemService {
     const params = {
       "listTitle" : listTitle
     }
-    return this.http.delete<any>(`${this._authService.getBaseUrl()}/list`, {headers: new HttpHeaders(),params : params}).pipe(
+    return this.http.delete<any>(`${this._authService.getBaseUrl()}/item/list`, {headers: new HttpHeaders(),params : params}).pipe(
       map(body => TodoItemList.fromObject(body))
+    );
+  }
+
+  readAllTodoItemLists(): Observable<TodoItemList[]> {
+    console.log(`ItemService: readTodoItemList called`)
+    return this.http.get<any>(`${this._authService.getBaseUrl()}/item/list/all`, {headers: new HttpHeaders()}).pipe(
+      map(body => body.lists.map(obj => { return TodoItemList.fromObject(obj)}))
     );
   }
 

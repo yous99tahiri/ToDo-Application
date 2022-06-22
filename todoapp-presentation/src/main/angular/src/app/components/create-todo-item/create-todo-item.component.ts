@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
 import { TodoItem } from 'src/app/entities/todo-item';
 import {FormControl} from '@angular/forms';
 import { Observable,startWith,map } from 'rxjs';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA,MatDialogRef } from '@angular/material/dialog';
 import { ItemService } from 'src/app/services/item.service';
 import { UserService } from 'src/app/services/user.service';
 @Component({
@@ -21,11 +21,12 @@ export class CreateTodoItemComponent implements OnInit,OnDestroy {
   public errorMessage = ''; //TODO add error messaging in component
   private itemCreated:boolean = false;
   
-  constructor(
+  constructor(@Inject(MAT_DIALOG_DATA) data:string,
     private matDialogRef:MatDialogRef<CreateTodoItemComponent>,
     private itemService:ItemService,
     private userService:UserService) {
       console.log("CreateTodoItemComponent: created")
+      this.todoItem.listTitle = data;
    }
 
   ngOnInit(): void {

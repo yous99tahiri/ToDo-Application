@@ -117,7 +117,6 @@ public class UserREST2 {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        final String userId = subject.getPrincipal().toString();
         //TODO...implement, see AuthNewsREST.java in example06  
         //get names of all users
         //...

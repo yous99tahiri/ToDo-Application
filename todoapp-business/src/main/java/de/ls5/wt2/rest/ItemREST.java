@@ -49,6 +49,8 @@ public class ItemREST {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+        final String userId = subject.getPrincipal().toString();
+        param.setCreator(userId);
         //TODO...implement
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
@@ -75,6 +77,8 @@ public class ItemREST {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+        final String userId = subject.getPrincipal().toString();
+        param.setCreator(userId);
         //TODO...implement, see AuthNewsREST.java in example06
         /*TODO persist param*/
         //...
@@ -110,7 +114,7 @@ public class ItemREST {
     //get all itemlists path="/list/all"
     @GetMapping(path = "list/all",
     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DBTodoItemList> readAllLists() {
+    public ResponseEntity<List<DBTodoItemList>> readAllLists() {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

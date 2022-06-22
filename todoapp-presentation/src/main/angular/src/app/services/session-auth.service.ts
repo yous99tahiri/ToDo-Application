@@ -59,6 +59,10 @@ export class SessionAuthService {
     return this.loggedIn;
   }
 
+  getHTTPClient(): HttpClient {
+    return this.http;
+  }
+
   getUsername(): string {
     return this.username;
   }
