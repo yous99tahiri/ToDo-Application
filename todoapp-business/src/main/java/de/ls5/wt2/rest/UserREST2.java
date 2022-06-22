@@ -56,14 +56,17 @@ public class UserREST2 {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-        param.setRegistrationDate(new Date());
-        param.setUserRole(UserRole.REGULAR);
+        final DBUserAccount acc = new DBUserAccount();
+        acc.setUsername(param.getUsername());
+        acc.setPassword(param.getPassword());
+        acc.setRegistrationDate(new Date());
+        acc.setUserRole(UserRole.REGULAR);
 
-        this.entityManager.persist(param);
+        this.entityManager.persist(acc);
 
-        param.setPassword("x");
+        acc.setPassword("x");
 
-        return new ResponseEntity<>(param, HttpStatus.CREATED);
+        return new ResponseEntity<>(acc, HttpStatus.CREATED);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
