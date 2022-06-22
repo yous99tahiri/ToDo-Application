@@ -18,7 +18,7 @@ export class RegisterService {
 
   createAccount(userAccount: UserAccount): Observable<UserAccount> {
     console.log(`RegisterService: createUser called for user '${userAccount.username}'`)
-    const url = `${env.apiUrl}/register`
+    const url = `${env.apiUrl}/user`
     return this.http.post<any>(url, userAccount.toObject(), {headers: this.defaultHeaders}).pipe(
       map(body => UserAccount.fromObject(body))
     );

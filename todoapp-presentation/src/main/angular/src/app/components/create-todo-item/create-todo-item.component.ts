@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Inject } from '@angular/core';
 import { TodoItem } from 'src/app/entities/todo-item';
 import {FormControl} from '@angular/forms';
 import { Observable,startWith,map } from 'rxjs';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA,MatDialogRef } from '@angular/material/dialog';
 import { ItemService } from 'src/app/services/item.service';
 import { UserService } from 'src/app/services/user.service';
 @Component({
@@ -21,31 +21,31 @@ export class CreateTodoItemComponent implements OnInit,OnDestroy {
   public errorMessage = ''; //TODO add error messaging in component
   private itemCreated:boolean = false;
   
-  constructor(
+  constructor(@Inject(MAT_DIALOG_DATA) data:string,
     private matDialogRef:MatDialogRef<CreateTodoItemComponent>,
     private itemService:ItemService,
     private userService:UserService) {
       console.log("CreateTodoItemComponent: created")
+      this.todoItem.listTitle = data;
    }
 
   ngOnInit(): void {
     console.log("CreateTodoItemComponent: ngOnInit")
+    this.userService.readAllUserNames().subscribe({
+      next: (usernames) => { 
+        this.usernames = usernames; 
+      },
+      error: () => { 
+        console.error 
+        //TODO errormsg
+      }
+    })
+    this.usernames.push("None")
     this.filteredUsernames = this.myControl.valueChanges
       .pipe(
         startWith(''),
         map(val => this.filter(val))
       );
-      
-      this.userService.readAllUserNames().subscribe({
-        next: (usernames) => { 
-          this.usernames = usernames; 
-        },
-        error: () => { 
-          console.error 
-          //TODO errormsg
-        }
-      })
-      this.usernames.push("None")
   }
 
   ngOnDestroy() :void {
@@ -62,7 +62,6 @@ export class CreateTodoItemComponent implements OnInit,OnDestroy {
       this.errorMessage = "Can not create item"
       return
     }
-    this.todoItem.creator = this.itemService.authService.getUsername();
     this.todoItem.lastEdited = new Date()
     
     this.itemService.createTodoItem(this.todoItem).subscribe({

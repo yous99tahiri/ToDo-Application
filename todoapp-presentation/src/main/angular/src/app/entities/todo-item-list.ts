@@ -1,4 +1,4 @@
-import { TodoItem } from "./todo-item";
+import { ITEM_STATE, TodoItem } from "./todo-item";
 
 export class TodoItemList{
     title: string = "";
@@ -16,7 +16,7 @@ export class TodoItemList{
       n.title = object.title;
       n.description = object.description;
       n.lastEdited = new Date(object.lastEdited);
-      n.todoItems = (new Array(object.todoItems)).map(obj => TodoItem.fromObject(obj));
+      n.todoItems = object.todoItems.map(obj => TodoItem.fromObject(obj));
       n.deadLine = new Date(object.deadLine);
       n.creator = object.creator;
       //comments
@@ -28,8 +28,8 @@ export class TodoItemList{
       const obj = {
         "title" : this.title,
         "description" : this.description,
-        "lastEdited" : this.lastEdited.toString(),
-        "deadLine" : this.deadLine.toString(),
+        "lastEdited" : this.lastEdited.toISOString(),
+        "deadLine" : this.deadLine.toISOString(),
         "todoItems" : this.todoItems.map(item => { return item.toObject()} ),
         "creator" : this.creator
       }
@@ -37,4 +37,4 @@ export class TodoItemList{
       return obj;
     }
   }
-  
+

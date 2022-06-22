@@ -3,6 +3,7 @@ import { TodoItemList } from 'src/app/entities/todo-item-list';
 import { MatDialog } from '@angular/material/dialog'; 
 import { CreateTodoItemListComponent } from '../create-todo-item-list/create-todo-item-list.component';
 import { ItemService } from 'src/app/services/item.service';
+import { ITEM_STATE, TodoItem } from 'src/app/entities/todo-item';
 @Component({
   selector: 'wt2-dashboard',
   templateUrl: './dashboard.component.html',
@@ -24,7 +25,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     console.log("Dashboard: created")
     this.loadItemLists();
-  }
+}
 
   loadItemLists():void {
     console.log("Dashboard: load item lists")

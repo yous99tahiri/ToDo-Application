@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { TodoItem } from 'src/app/entities/todo-item';
+import { ITEM_STATE, TodoItem } from 'src/app/entities/todo-item';
 import { TodoItemDetailsComponent } from '../todo-item-details/todo-item-details.component';
 import {FormControl} from '@angular/forms';
 import { Observable,startWith,map } from 'rxjs';
@@ -33,6 +33,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("ProfileComponent: ngOnInit")
+
     this.loadUserAccount()
     this.loadAssignedItems()
     this.loadUsernames()
@@ -45,7 +46,7 @@ export class ProfileComponent implements OnInit {
 
   loadUserAccount():void {
     console.log("ProfileComponent: loadUserAccount")
-    this.userService.readUserAccount(this.userService.authService.getUsername()).subscribe({
+    this.userService.readUserAccount().subscribe({
       next: (userAccount) => { 
         this.userAccount = userAccount; 
       },
@@ -75,7 +76,7 @@ export class ProfileComponent implements OnInit {
 
   loadAssignedItems():void {
     console.log("ProfileComponent: load assigned items")
-    this.userService.readUserAssignedTodoItems(this.userService.authService.getUsername()).subscribe({
+    this.userService.readUserAssignedTodoItems().subscribe({
       next: (todoItems) => { 
         this.todoItems = todoItems; 
       },

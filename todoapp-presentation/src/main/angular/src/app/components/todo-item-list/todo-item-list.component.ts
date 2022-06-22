@@ -25,7 +25,7 @@ export class TodoItemListComponent implements OnInit {
   constructor(
     private matDialog:MatDialog,
     private itemService:ItemService) {
-    console.log(`TodoItemListComponent '${this.todoItemList.title}': created`)
+    console.log(`TodoItemListComponent created`)
   }
 
   ngOnInit(): void {
@@ -54,7 +54,7 @@ export class TodoItemListComponent implements OnInit {
   addItem(e: Event): void {
     console.log(`TodoItemListComponent '${this.todoItemList.title}': Add item button clicked`) 
     e.preventDefault();
-    let dialogRef = this.matDialog.open(CreateTodoItemComponent)
+    let dialogRef = this.matDialog.open(CreateTodoItemComponent, {data : this.todoItemList.title})
     dialogRef.afterClosed().subscribe(
       createdItem => {
         if(!createdItem){

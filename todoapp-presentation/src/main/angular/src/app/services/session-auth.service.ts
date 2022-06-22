@@ -3,19 +3,16 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HttpHeaders, HttpParams, HttpClient } from '@angular/common/http';
 import { UserAccount } from '../entities/user-account';
-
+import { environment as env } from 'src/environments/environment';
 @Injectable()
 export class SessionAuthService {
   private loggedIn: boolean = false;
-  private username: string = "";
-
   constructor(private http: HttpClient) {
     console.log("SessionAuthService: created")
   }
 
   login(userAccount:UserAccount): Observable<boolean> {
     console.log(`SessionAuthService: login called for user '${userAccount.username}'`)
-    this.username = userAccount.username
     const body = new HttpParams()
       .set('username', userAccount.username)
       .set('password', userAccount.password);
@@ -27,6 +24,16 @@ export class SessionAuthService {
         return true;
       })
     );
+  }
+
+  readProfile(): Observable<string>{
+    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
+    return this.http.get(`${this.getBaseUrl()}/profile`, {headers, responseType: 'text'}).pipe(
+      map((obj) => {
+        return `${obj}`;
+      }
+      )
+    )
   }
 
   logout(): Observable<boolean> {
@@ -46,7 +53,11 @@ export class SessionAuthService {
     return this.loggedIn;
   }
 
-  getUsername(): string {
-    return this.username;
+  getHTTPClient(): HttpClient {
+    return this.http;
+  }
+
+  getBaseUrl(): string {
+    return `${env.apiUrl}`
   }
 }
