@@ -5,7 +5,7 @@ import java.util.Collections;
 
 import javax.persistence.EntityManager;
 
-import de.ls5.wt2.conf.auth.permission.ReadNewsItemPermission;
+import de.ls5.wt2.conf.auth.permission.ReadTodoItemListPermission;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -50,7 +50,7 @@ public class WT2Realm extends AuthorizingRealm implements Realm {
 
             @Override
             public Collection<Permission> getObjectPermissions() {
-                return Collections.singleton(new ReadNewsItemPermission());
+                return Collections.singleton(new ReadTodoItemListPermission());
             }
         };
     }

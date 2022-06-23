@@ -10,7 +10,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 
-import de.ls5.wt2.conf.auth.permission.ViewFirstFiveNewsItemsPermission;
 import de.ls5.wt2.entity.DBTodoItem;
 import de.ls5.wt2.entity.DBTodoItem_;
 import de.ls5.wt2.entity.DBUserAccount;
@@ -61,7 +60,7 @@ public class UserREST2 {
         acc.setUsername(param.getUsername());
         acc.setPassword(param.getPassword());
         acc.setRegistrationDate(new Date());
-        acc.setUserRole(UserRole.REGULAR);
+        acc.setUserRole(UserRole.REGULAR.toString());
 
         this.entityManager.persist(acc);
 
@@ -100,7 +99,7 @@ public class UserREST2 {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        subject.checkRole(UserRole.ADMIN.toString()); //"admin" ?
+        //subject.checkRole(UserRole.ADMIN.toString()); //"admin" ?
         //TODO...implement 
         //set attribute "assignee" of items, that are assigned to given username, to "None"
         //same for attribute "creator" of items and item lists, where creator equals given username

@@ -14,7 +14,7 @@ public class DBUserAccount extends DBIdentified{
     private String username;
     private String password;
     private Date registrationDate;
-    private UserRole userRole;
+    private String userRole;
 
     public void setUsername(String username) {
         this.username = username;
@@ -28,7 +28,7 @@ public class DBUserAccount extends DBIdentified{
         this.registrationDate = registrationDate;
     }
 
-    public void setUserRole(UserRole userRole) {
+    public void setUserRole(String userRole) {
         this.userRole = userRole;
     }
 
@@ -40,7 +40,7 @@ public class DBUserAccount extends DBIdentified{
         return this.password;
     }
 
-    public UserRole getUserRole() {
+    public String getUserRole() {
         return this.userRole;
     }
 

@@ -18,7 +18,7 @@ public class DBTodoItem extends DBIdentified {
     Date deadLine ;
     String creator= "";
     String assignee = "None";
-    ItemState state = ItemState.OPEN;
+    String state = ItemState.OPEN.toString();
     
     public String getListTitle(){
         return this.listTitle;
@@ -29,11 +29,11 @@ public class DBTodoItem extends DBIdentified {
     }
 
     public String getTitle(){
-        return this.description;
+        return this.title;
     }
 
-    public void setTitle(String description){
-        this.description = description;
+    public void setTitle(String title){
+        this.title = title;
     }
 
     @Column(length=255)
@@ -81,11 +81,11 @@ public class DBTodoItem extends DBIdentified {
         this.assignee = assignee;
     }
     
-    public ItemState getState(){
+    public String getState(){
         return this.state;
     }
 
-    public void setState(ItemState state){
+    public void setState(String state){
         this.state = state;
     }
 }

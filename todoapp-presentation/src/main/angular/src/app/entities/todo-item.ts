@@ -8,7 +8,7 @@ export class TodoItem{
     creator: string = "";
     assignee: string = "None";
     //comments
-    state:ITEM_STATE = ITEM_STATE.OPEN
+    state:string = ITEM_STATE.OPEN.toString()
     
     static fromObject(object: any): TodoItem {
       console.log(`TodoItem: fromObject called for ${JSON.stringify(object)}`)
@@ -44,8 +44,8 @@ export class TodoItem{
   }
   
   export const enum ITEM_STATE{
-    OPEN,
-    IN_PROGRESS,
-    FEEDBACK,
-    DONE
+    OPEN = "OPEN",
+    IN_PROGRESS = "IN_PROGRESS",
+    FEEDBACK = "FEEDBACK",
+    DONE = "DONE"
   }

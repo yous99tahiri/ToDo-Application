@@ -3,7 +3,7 @@ export class UserAccount{
     username: string ="";
     password: string ="";
     registrationDate: Date = null;
-    role:USER_ROLE = USER_ROLE.REGULAR
+    userRole:string = USER_ROLE.REGULAR.toString()
   
     static fromObject(object: any): UserAccount {
       console.log(`UserAccount: fromObject called for ${JSON.stringify(object)}`)
@@ -12,7 +12,7 @@ export class UserAccount{
       n.username = object.username;
       n.password = object.password;
       n.registrationDate = new Date(object.registrationDate);
-      n.role = object.role;
+      n.userRole = object.userRole;
       return n;
     }
 
@@ -22,7 +22,7 @@ export class UserAccount{
         "username" : this.username,
         "password" : this.password,
         "registrationDate" : this.registrationDate != null ? this.registrationDate.toISOString() : "null",
-        "role":this.role
+        "userRole":this.userRole
       }
       console.log(`UserAccount: toObject called for ${JSON.stringify(obj)}`);
       return obj;
@@ -30,8 +30,8 @@ export class UserAccount{
 }
 
 export const enum USER_ROLE{
-  REGULAR,
-  ADMIN
+  REGULAR = "REGULAR",
+  ADMIN = "ADMIN"
 }
 
 

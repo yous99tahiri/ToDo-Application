@@ -34,22 +34,16 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     console.log("ProfileComponent: ngOnInit")
 
-    this.loadUsernames()
-    this.loadUserAccount()
-    this.loadAssignedItems()
-    
-    this.filteredUsernames = this.myControl.valueChanges
+    this.userService.readUserAccount().subscribe({
+      next: (userAccount) => { 
+        this.userAccount = userAccount; 
+        this.loadAssignedItems()
+        this.loadUsernames()
+        this.filteredUsernames = this.myControl.valueChanges
       .pipe(
         startWith(''),
         map(val => this.filter(val))
     );
-  }
-
-  loadUserAccount():void {
-    console.log("ProfileComponent: loadUserAccount")
-    this.userService.readUserAccount().subscribe({
-      next: (userAccount) => { 
-        this.userAccount = userAccount; 
       },
       error: () => { 
         console.error 
@@ -142,6 +136,6 @@ export class ProfileComponent implements OnInit {
   }
 
   get isAdmin (){
-    return this.userAccount.role === USER_ROLE.ADMIN;
+    return this.userAccount.userRole == USER_ROLE.ADMIN.toString();
   }
 }

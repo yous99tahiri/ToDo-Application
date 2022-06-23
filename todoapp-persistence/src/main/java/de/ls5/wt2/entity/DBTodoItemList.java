@@ -5,12 +5,11 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 public class DBTodoItemList extends DBIdentified{
@@ -18,15 +17,15 @@ public class DBTodoItemList extends DBIdentified{
     String description = "";
     Date lastEdited;
     Date deadLine ;
-    List<DBTodoItem> todoItems;
+    Set<DBTodoItem> todoItems;
     String creator= "";
     
     public String getTitle(){
-        return this.description;
+        return this.title;
     }
 
-    public void setTitle(String description){
-        this.description = description;
+    public void setTitle(String title){
+        this.title = title;
     }
 
     @Column(length=255)
@@ -66,12 +65,12 @@ public class DBTodoItemList extends DBIdentified{
         this.creator = creator;
     }
 
-    public void setDBTodoItems(List<DBTodoItem> todoItems){
+    public void setDBTodoItems(Set<DBTodoItem> todoItems){
         this.todoItems = todoItems;
     }
 
     @OneToMany
-    public List<DBTodoItem> getDBTodoItems(){
+    public Set<DBTodoItem> getDBTodoItems(){
         return this.todoItems;
     }
 }

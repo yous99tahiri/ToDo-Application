@@ -1,7 +1,5 @@
 package de.ls5.wt2.rest;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,7 +8,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 
-import de.ls5.wt2.conf.auth.permission.ViewFirstFiveNewsItemsPermission;
 import de.ls5.wt2.entity.DBTodoItem;
 import de.ls5.wt2.entity.DBTodoItemList;
 import de.ls5.wt2.entity.DBTodoItemList_;
@@ -64,7 +61,7 @@ public class ItemREST {
         item.setLastEdited(param.getLastEdited());
         item.setDeadLine(param.getDeadLine());
         item.setAssignee(param.getAssignee());
-        item.setState(ItemState.OPEN);
+        item.setState(ItemState.OPEN.toString());
 
         this.entityManager.persist(item);
 
