@@ -39,11 +39,6 @@ export class ProfileComponent implements OnInit {
         this.userAccount = userAccount; 
         this.loadAssignedItems()
         this.loadUsernames()
-        this.filteredUsernames = this.myControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(val => this.filter(val))
-    );
       },
       error: () => { 
         console.error 
@@ -63,6 +58,11 @@ export class ProfileComponent implements OnInit {
     this.userService.readAllUserNames().subscribe({
       next: (usernames) => { 
         this.usernames = usernames; 
+        this.filteredUsernames = this.myControl.valueChanges
+        .pipe(
+        startWith(''),
+        map(val => this.filter(val))
+    );
       },
       error: () => { 
         console.error 
