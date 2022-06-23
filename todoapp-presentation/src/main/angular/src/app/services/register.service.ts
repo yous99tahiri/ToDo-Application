@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment as env } from '../../environments/environment';
 import { map } from 'rxjs/operators';
-import { NewUserAccount } from '../entities/new-user-account';
+import { UserAccount } from '../entities/user-account';
 
 @Injectable()
 export class RegisterService {
@@ -12,11 +12,15 @@ export class RegisterService {
     'Content-Type': 'application/json'
   });
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    console.log("RegisterService: created")
+  }
 
-  create(username: string, password: string): Observable<NewUserAccount> {
-    return this.http.post<any>(`${env.apiUrl}/register`, {username, password}, {headers: this.defaultHeaders}).pipe(
-      map(body => NewUserAccount.fromObject(body))
+  createAccount(userAccount: UserAccount): Observable<UserAccount> {
+    console.log(`RegisterService: createUser called for user '${userAccount.username}'`)
+    const url = `${env.apiUrl}/user`
+    return this.http.post<any>(url, userAccount.toObject(), {headers: this.defaultHeaders}).pipe(
+      map(body => UserAccount.fromObject(body))
     );
   }
 }

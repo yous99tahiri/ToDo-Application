@@ -1,32 +1,31 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from './services/auth.service';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { SessionAuthService } from './services/session-auth.service';
 
 @Component({
   selector: 'wt2-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass'],
-  providers: []
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
-  authService: AuthService;
+  authService: SessionAuthService;
 
-  constructor(private http: HttpClient,
-              /*private authNewsService: AuthNewsService*/) {
-    this.authService = new SessionAuthService(this.http);
-    //this.authNewsService.authService = this.authService;
-  }
-
-  ngOnInit() {
+  constructor(private http: HttpClient,authService:SessionAuthService, private router:Router) {
+    console.log("AppComponent created")
+    this.authService = authService;
   }
 
   load(): void {
   }
 
   logout() {
-    this.authService.logout().subscribe();
+    this.authService.logout().subscribe( {
+      next:()=>{
+        this.router.navigate(["/login"])
+      }
+    });
   }
 
   get isLoggedIn(): boolean {

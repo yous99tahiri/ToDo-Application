@@ -1,4 +1,8 @@
 <form (submit)="createTodoItem($event)">
+    <div class="alert alert-danger alert-dismissible" *ngIf="errorMessage !== ''">
+        {{errorMessage}}
+        <button type="button" id="closeAlertBtn" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="errorMessage = ''"></button>
+    </div>
     <div class="mb-3">
         <label class="form-label">Title</label>
         <input name="title" id="titleInput" class="form-control" type="text" required [(ngModel)]="todoItem.title" placeholder="Enter a title">
@@ -8,12 +12,18 @@
         <input name="description" id="descriptionInput" class="form-control" type="text" required [(ngModel)]="todoItem.description" placeholder="Enter a description">
     </div>
     <div class="mb-3">
-        <label class="form-label">Assignees (usernames seperated by ',') (TODO: make selection model with usernames from db)</label>
-        <input name="assignees" id="assigneesInput" class="form-control" type="text" required [(ngModel)]="usernames" placeholder="Enter usernames">
+        <input name="assignee" id="assigneeInput" class="form-control" type="text" required [(ngModel)]="todoItem.assignee" placeholder="Pick a username"matInput [formControl]="myControl" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let username of filteredUsernames | async" [value]="username">
+                {{ username }}
+            </mat-option>
+        </mat-autocomplete>
     </div>
     <div class="mb-3">
-        <label class="form-label">Deadline (TODO: use Datepicker)</label>
-        <input name="deadline" id="deadlineInput" class="form-control" type="text" required [(ngModel)]="todoItem.deadLine" placeholder="Enter a deadline (TODO: use Datepicker)">
+        <label class="form-label" for="deadLineInput" >Deadline</label>
+        <input name="deadLine" class="form-control" id="deadLineInput" class="form-control" type="date" required [(ngModel)]="todoItem.deadLine">
     </div>
     <button class="btn w-100 btn-outline-primary" id="submitBtn" type="submit">Create Item</button>
+    <hr>
+    <button class="btn w-100 btn-outline-primary" (click)="closeDialog()" id="closeDialogBtn" type="button">Close</button>
 </form>

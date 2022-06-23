@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,7 +13,14 @@ import { TodoItemListComponent } from './components/todo-item-list/todo-item-lis
 import { TodoItemDetailsComponent } from './components/todo-item-details/todo-item-details.component';
 import { CreateTodoItemComponent } from './components/create-todo-item/create-todo-item.component';
 import { CreateTodoItemListComponent } from './components/create-todo-item-list/create-todo-item-list.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+//Mat
+import { MatDialogModule } from '@angular/material/dialog';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { SessionAuthService } from './services/session-auth.service';
+import { ItemService } from './services/item.service';
+import { UserService } from './services/user.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,9 +38,13 @@ import { CreateTodoItemListComponent } from './components/create-todo-item-list/
     AppRoutingModule,
     NgbModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatDialogModule,
+    MatAutocompleteModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [SessionAuthService,ItemService,UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

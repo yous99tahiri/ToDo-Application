@@ -9,12 +9,12 @@ import javax.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-
 @Entity
 public class DBUserAccount extends DBIdentified{
     private String username;
     private String password;
     private Date registrationDate;
+    private UserRole userRole;
 
     public void setUsername(String username) {
         this.username = username;
@@ -28,6 +28,10 @@ public class DBUserAccount extends DBIdentified{
         this.registrationDate = registrationDate;
     }
 
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
+    }
+
     public String getUsername() {
         return this.username;
     }
@@ -36,31 +40,13 @@ public class DBUserAccount extends DBIdentified{
         return this.password;
     }
 
+    public UserRole getUserRole() {
+        return this.userRole;
+    }
+
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(iso = ISO.DATE_TIME)
     public Date getRegistrationDate() {
         return this.registrationDate;
     }
-    /* 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<DBRole> roles = new HashSet<>();
-    public void addRole(DBRole role) {
-        this.roles.add(role);
-    }
-    public Set<DBRole> getRoles (){
-        return this.roles ;
-    }
-    public void setRoles (Set<DBRole> roles ){
-        this.roles = roles ;
-    }
-    */
-
-
-
-
 }

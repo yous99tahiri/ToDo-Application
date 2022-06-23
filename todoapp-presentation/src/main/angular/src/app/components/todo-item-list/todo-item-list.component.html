@@ -5,12 +5,20 @@
 <button class="btn btn-sm btn-outline-secondary" id="deleteListBtn" (click)="deleteList($event)">Delete List</button>
 <div class="alert alert-info" *ngIf="todoItemList.todoItems.length === 0">No items available</div>
 <div class="list-group" *ngIf="todoItemList.todoItems.length > 0">
-    <p>Items:</p>
-    <div class="list-group-item d-flex" *ngFor="let todoItem of todoItemList.todoItems; let i = index">
-        <p>Item Title: {{todoItem.title}}</p>
-        <p>Item Deadline: {{todoItem.deadLine}}</p>
-        <button class="btn btn-sm btn-outline-secondary" id="itemDetailsBtn" (click)="seeItemDetails($event,todoItem)">Item Details</button>
-        <button class="btn btn-sm btn-outline-secondary" id="deleteItemBtn" (click)="deleteItem($event,todoItem)">Delete Item</button>
+    <div class="alert alert-danger alert-dismissible" *ngIf="errorMessage !== ''">
+        {{errorMessage}}
+        <button type="button" id="closeAlertBtn" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="errorMessage = ''"></button>
     </div>
+    <p>Items:</p>
+    <hr>
+    <table *ngFor="let todoItem of todoItemList.todoItems; let i = index">
+        <tr><p>Item Title: {{todoItem.title}}</p></tr>
+        <tr><p>Item Deadline: {{todoItem.deadLine}}</p></tr>
+        <tr>
+            <th><button class="btn btn-sm btn-outline-secondary" id="itemDetailsBtn" (click)="seeItemDetails($event,todoItem)">Item Details</button></th>
+            <th><button class="btn btn-sm btn-outline-secondary" id="deleteItemBtn" (click)="deleteItem($event,todoItem)">Delete Item</button></th>
+        </tr>
+        <hr>
+    </table>
 </div>
   
