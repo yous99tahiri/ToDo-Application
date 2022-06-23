@@ -2,7 +2,7 @@
   "version": "3.0.0",
   "type": "project",
   "project": {
-    "name": "Example06 REST",
+    "name": "tuDoApp REST",
     "environments": [
       {
         "name": "Production",
