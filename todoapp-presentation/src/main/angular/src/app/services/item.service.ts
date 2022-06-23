@@ -33,6 +33,13 @@ export class ItemService {
     );
   }
 
+  updateTodoItem(todoItem:TodoItem): Observable<TodoItem> {
+    console.log(`ItemService: createTodoItem called for item '${todoItem.title}'`)
+    return this.http.put<any>(`${this._authService.getBaseUrl()}/item`, todoItem.toObject(), {headers: new HttpHeaders()}).pipe(
+      map(body => TodoItem.fromObject(body))
+    );
+  }
+
   // "/item"
   deleteTodoItem(listTitle:string,itemTitle:string): Observable<TodoItem> {
     console.log(`ItemService: deleteTodoItem called for item '${itemTitle}' in list '${listTitle}'`)

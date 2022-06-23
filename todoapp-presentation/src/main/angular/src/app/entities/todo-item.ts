@@ -1,4 +1,5 @@
 export class TodoItem{
+    id:number = 0;
     listTitle:string = "";
     title: string = "";
     description: string = "";
@@ -12,6 +13,7 @@ export class TodoItem{
     static fromObject(object: any): TodoItem {
       console.log(`TodoItem: fromObject called for ${JSON.stringify(object)}`)
       const n = new TodoItem();
+      n.id = object.id;
       n.listTitle = object.listTitle;
       n.title = object.title;
       n.description = object.description;
@@ -26,6 +28,7 @@ export class TodoItem{
 
     toObject() : any {
       const obj = {
+        "id":this.id,
         "listTitle":this.listTitle,
         "title" : this.title,
         "description" : this.description,

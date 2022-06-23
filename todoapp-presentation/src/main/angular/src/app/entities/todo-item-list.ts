@@ -1,6 +1,7 @@
 import { ITEM_STATE, TodoItem } from "./todo-item";
 
 export class TodoItemList{
+    id:number = 0;
     title: string = "";
     description: string= "";
     lastEdited: Date;
@@ -13,6 +14,7 @@ export class TodoItemList{
     static fromObject(object: any): TodoItemList {
       console.log(`TodoItemList: fromObject called for ${JSON.stringify(object)}`)
       const n = new TodoItemList();
+      n.id = object.id;
       n.title = object.title;
       n.description = object.description;
       n.lastEdited = new Date(object.lastEdited);
@@ -26,6 +28,7 @@ export class TodoItemList{
 
     toObject() : any {
       const obj = {
+        "id":this.id,
         "title" : this.title,
         "description" : this.description,
         "lastEdited" : this.lastEdited.toISOString(),
