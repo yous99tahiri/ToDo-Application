@@ -55,8 +55,8 @@ export class UserService {
   }
 
   readUserAssignedTodoItems(): Observable<TodoItem[]> {
-    console.log(`ItemService: readUserAssignedTodoItems called`)
-    return this._authService.getHTTPClient().get<TodoItem[]>(`${this._authService.getBaseUrl()}/user/items`, {headers: new HttpHeaders()}).pipe(
+    console.log(`UserService: readUserAssignedTodoItems called`)
+    return this._authService.getHTTPClient().get<any[]>(`${this._authService.getBaseUrl()}/user/items`, {headers: new HttpHeaders()}).pipe(
       map(body => {
         console.log("--------------")
         console.log("Received body on readUserAssignedTodoItems:", body)

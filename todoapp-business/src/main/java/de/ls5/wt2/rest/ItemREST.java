@@ -79,7 +79,6 @@ public class ItemREST {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        final String userId = subject.getPrincipal().toString();
         this.entityManager.refresh(param);
         return ResponseEntity.ok(param);
     }

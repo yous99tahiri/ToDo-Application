@@ -30,7 +30,7 @@ export class ItemService {
   }
 
   updateTodoItem(todoItem:TodoItem): Observable<TodoItem> {
-    console.log(`ItemService: createTodoItem called for item '${todoItem.title}'`)
+    console.log(`ItemService: updateTodoItem called for item '${todoItem.title}'`)
     return this._authService.getHTTPClient().put<any>(`${this._authService.getBaseUrl()}/item`, todoItem.toObject(), {headers: new HttpHeaders()}).pipe(
       map(body => TodoItem.fromObject(body))
     );
@@ -76,7 +76,7 @@ export class ItemService {
 
   readAllTodoItemLists(): Observable<TodoItemList[]> {
     console.log(`ItemService: readTodoItemList called`)
-    return this._authService.getHTTPClient().get<TodoItemList[]>(`${this._authService.getBaseUrl()}/item/list/all`, {headers: new HttpHeaders()}).pipe(
+    return this._authService.getHTTPClient().get<any[]>(`${this._authService.getBaseUrl()}/item/list/all`, {headers: new HttpHeaders()}).pipe(
       map(body => {
         console.log("--------------")
         console.log("Received body on readAllTodoItemLists:", body)

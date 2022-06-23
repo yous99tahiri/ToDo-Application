@@ -34,9 +34,10 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     console.log("ProfileComponent: ngOnInit")
 
+    this.loadUsernames()
     this.loadUserAccount()
     this.loadAssignedItems()
-    this.loadUsernames()
+    
     this.filteredUsernames = this.myControl.valueChanges
       .pipe(
         startWith(''),
@@ -52,6 +53,7 @@ export class ProfileComponent implements OnInit {
       },
       error: () => { 
         console.error 
+        console.log("TODO fix UserRest2.readUser")
       }
     })
   }
@@ -59,6 +61,7 @@ export class ProfileComponent implements OnInit {
   loadUsernames():void {
     console.log("ProfileComponent: load usernames")
     if(this.isAdmin == false){
+      console.log("no admin, not loading usernames for admin area!")
       //no errormsg necessary, this is just to be more secure, Admin Area should not be rendered, if user is not admin
       return;
     }
@@ -90,7 +93,17 @@ export class ProfileComponent implements OnInit {
   seeItemDetails(e: Event,item:TodoItem): void {
     console.log("ProfileComponent: Item Details Button clicked")
     e.preventDefault();
-    this.matDialog.open(TodoItemDetailsComponent, {data : item}) 
+    let dialogRef = this.matDialog.open(TodoItemDetailsComponent, {data : item}) 
+    dialogRef.afterClosed().subscribe(
+      itemUpdated => {
+        if(!itemUpdated){
+          console.log("Profile: Item details dialog closed. No changes.")
+          return;
+        }
+        console.log("Profile: Item details dialog closed. Item changed.")
+        this.loadAssignedItems();
+      }
+    );
   }
 
   public deleteUser(e: Event): void {
@@ -103,11 +116,6 @@ export class ProfileComponent implements OnInit {
     }
     if(this.userAccount.username == this.deleteUsername){
       //TODO errormsg admin area "nice try but you can not delete yourself"
-
-      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      //Wie genau bau ich an so einer Stelle hier eine Error-Message? Kannst mir da einmal nen Beispiel geben? Dann krieg ich das denke ich für den Rest hin
-      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
       return
     }
     //we could check if the deleteUsername is in the list of usernames, but we can also skip that, lets make use of status codes :D

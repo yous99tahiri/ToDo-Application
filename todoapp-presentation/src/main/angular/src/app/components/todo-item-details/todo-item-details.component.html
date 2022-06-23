@@ -1,13 +1,33 @@
-<div class="card">
-    <hr>
-    <h4 class="title">{{todoItem.title}}</h4>
-    <div class="card-body">
-        <p>Description: {{todoItem.description}}</p>
-        <p>Deadline: {{todoItem.deadLine}}</p>
-        <p>Last edited: {{todoItem.lastEdited}}</p>
-        <p>Creator: {{todoItem.creator}}</p>
-        <p>Assignee: <span>{{todoItem.assignee}}</span></p>
+<form (submit)="updateTodoItem($event)">
+    <div class="alert alert-danger alert-dismissible" *ngIf="errorMessage !== ''">
+        {{errorMessage}}
+        <button type="button" id="closeAlertBtn" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="errorMessage = ''"></button>
     </div>
+    <div class="alert alert-success alert-dismissible" *ngIf="successMessage !== ''">
+        {{successMessage}}
+        <button type="button" id="closeAlertBtn_suc" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="successMessage = ''"></button>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input name="title" id="titleInput" class="form-control" type="text" required [(ngModel)]="todoItem.title" placeholder="Enter a title">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <input name="description" id="descriptionInput" class="form-control" type="text" required [(ngModel)]="todoItem.description" placeholder="Enter a description">
+    </div>
+    <div class="mb-3">
+        <input name="assignee" id="assigneeInput" class="form-control" type="text" required [(ngModel)]="todoItem.assignee" placeholder="Pick a username"matInput [formControl]="myControl" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let username of filteredUsernames | async" [value]="username">
+                {{ username }}
+            </mat-option>
+        </mat-autocomplete>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="deadLineInput" >Deadline</label>
+        <input name="deadLine" class="form-control" id="deadLineInput" class="form-control" type="date" required [(ngModel)]="todoItem.deadLine">
+    </div>
+    <button class="btn w-100 btn-outline-primary" id="submitBtn" type="submit">Change item</button>
     <hr>
     <button class="btn w-100 btn-outline-primary" (click)="closeDialog()" id="closeDialogBtn" type="button">Close</button>
-</div>
+</form>

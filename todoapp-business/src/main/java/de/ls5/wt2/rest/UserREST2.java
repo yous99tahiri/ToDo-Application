@@ -77,10 +77,18 @@ public class UserREST2 {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         final String userId = subject.getPrincipal().toString();
-        DBUserAccount account = this.entityManager.find(DBUserAccount.class, userId);
-        if (account == null) { 
+        List<DBUserAccount> users = this.entityManager
+        .createQuery(
+            "SELECT u from DBUserAccount u WHERE u.username = :username",
+                DBUserAccount.class
+            )
+        .setParameter("username", userId)
+        .getResultList();
+        
+        if (users == null || users.size() != 1) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        DBUserAccount account = users.get(0);
         account.setPassword("x");
         return ResponseEntity.ok(account);
     }

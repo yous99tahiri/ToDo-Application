@@ -49,6 +49,16 @@ export class TodoItemListComponent implements OnInit {
     console.log(`TodoItemListComponent '${this.todoItemList.title}': Item Details button clicked`)
     e.preventDefault();
     let dialogRef = this.matDialog.open(TodoItemDetailsComponent, {data : item})
+    dialogRef.afterClosed().subscribe(
+      itemUpdated => {
+        if(!itemUpdated){
+          console.log("TodoItemListComponent: Item details dialog closed. No changes.")
+          return;
+        }
+        console.log("TodoItemListComponent: Item details dialog closed. Item changed.")
+        this.loadListItems();
+      }
+    );
   }
 
   addItem(e: Event): void {
