@@ -1,27 +1,27 @@
-# Example 06
+# tuDO
 
-A small web application, that serves as a reference point for the concepts presented in the lecture.
+Eine kleine WebApp, die eine ganz grundlegende To-Do-Verwaltung mit Benutzern darstellt.
 
 
-## Structure
+## Die Struktur
 
-The application follows a basic 3 layer structure, separating the persistence, business and presentation layer.
+Die App folgt einer 3 schichtigen Struktur, bestehend aus den Teilen persistence, business und presentation-
 
-* **persistence**: A maven module to manage the database entities of the application.
+* **persistence**: Ein Maven Modul, was die Datenbank der App bereitstellt.
 
   Contrary to examples 04 and 05, the `persistence.xml` no longer contains any significant configuration, because the persistence provider will be managed by the application server rather than us.
   Its mere purpose of existence is to trigger the meta-model generator.
-  The majority of the settings are applied to the application server and can be found in the `application.properties` file in the `example06-presentation` module.
+  The majority of the settings are applied to the application server and can be found in the `application.properties` file in the `todoapp-presentation` module.
 
 
-* **business**: A maven module containing the RESTful application interface.
+* **business**: Ein Maven Modul was eine RESTful API bereitstellt.
 
   The `NewsREST` class (in the `de.ls5.wt2.rest` package) is an exemplary class for handling resource requests using the tools of the Spring-Web specification presented in the lecture.
   The other packages contain other REST endpoints for the different topics of the lecture (auth and security).
   Additionally a startup bean (`StartupBean`) is provided, that allows to create some dummy data during the application startup.
 
 
-* **presentation**: A maven module for the web resources accessed by the users browser:
+* **presentation**: A maven module for the web resources accessed by the users browser. Ein Maven Modul, was die Webressourcen mit denen der Benutzer interagiert bereitstellt:
 
   This module holds the resources for the Angular frontend.
   By default the Angular app will be ignored during the build, so that only the backend part of the application is built (for details on the Angular app, see the corresponding section below).
@@ -33,7 +33,7 @@ The application follows a basic 3 layer structure, separating the persistence, b
 
 
 Spring Boot provides a Maven plugin (`spring-boot-maven-plugin`) that allows to build executable Java archives.
-Thus, after running a `mvn package` on the parent project, there will be a .war file located at `example06-presentation/target/example06-presentation-0.1.SNAPSHOT.war`.
+Thus, after running a `mvn package` on the parent project, there will be a .war file located at `todoapp-presentation/target/example06-presentation-0.1.SNAPSHOT.war`.
 By simply running `java -jar /path/to/war` you are able to start the backend server.
 
 Alternatively, you can also start the application from your IDE by simply invoking the `main` method of the `Application` class. This approach is useful when trying to debug your application, because it allows to conveniently attach you IDE debugger to the backend server process.
@@ -45,7 +45,7 @@ Once the application server successfully started, the provided resources should 
 ## Angular
 
 
-The Angular project is located in `example06-presentation/src/main/angular`.
+The Angular project is located in `todoapp-presentation/src/main/angular`.
 In order to build/develop the frontend, two alternatives exist:
 
 * **development mode**:
@@ -53,7 +53,7 @@ In order to build/develop the frontend, two alternatives exist:
   This is useful during development of the frontend and may be used completely independent or paired with a running backend to test/develop the backend REST calls.
 
 * **production mode**:
-  Building the example application with the `with-frontend` profile (`-Pwith-frontend`) executes the above steps in the default Maven lifecycle and compiles the Angular project to the `target` directory of the `example06-presentation` module.
+  Building the example application with the `with-frontend` profile (`-Pwith-frontend`) executes the above steps in the default Maven lifecycle and compiles the Angular project to the `target` directory of the `todoapp-presentation` module.
   Consequently, both backend and frontend code will be packaged in the `.war` archive for easy deployment in a single application server.
 
   **Note for production mode**: Since routing in Angular apps is handled by Angular itself, we need to make sure that any request that is not a REST request is redirect to the main `index.html` of the Angular app.
