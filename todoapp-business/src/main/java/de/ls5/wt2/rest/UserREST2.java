@@ -12,10 +12,9 @@ import javax.persistence.criteria.Root;
 
 import de.ls5.wt2.conf.auth.permission.ViewFirstFiveNewsItemsPermission;
 import de.ls5.wt2.entity.DBTodoItem;
-//import de.ls5.wt2.entity.DBTodoItem_;
-import de.ls5.wt2.entity.DBTodoItemList;
+import de.ls5.wt2.entity.DBTodoItem_;
 import de.ls5.wt2.entity.DBUserAccount;
-//import de.ls5.wt2.entity.DBUserAccount_;
+import de.ls5.wt2.entity.DBUserAccount_;
 import de.ls5.wt2.entity.UserRole;
 
 import org.apache.shiro.SecurityUtils;
@@ -107,29 +106,7 @@ public class UserREST2 {
         //same for attribute "creator" of items and item lists, where creator equals given username
         //delete user with given username
         //...
-        DBUserAccount user = this.entityManager.createQuery("SELECT u from DBUserAccount u WHERE u.username = :username ",DBUserAccount.class).
-                setParameter("username", username).getSingleResult();
-        if (user==null){
-            System.out.println("!!!!!!");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        List<DBTodoItem> itemassi = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE u.assignee = :username ",DBTodoItem.class).
-                setParameter("username", username).getResultList();
-                for (int i=0 ; i<itemassi.size();i++) {
-                    itemassi.get(i).setAssignee("None");
-                }
-        List<DBTodoItem> itemcre = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE u.creator = :username ",DBTodoItem.class).
-                setParameter("username", username).getResultList();
-        for (int j=0 ; j<itemcre.size();j++) {
-            itemcre.get(j).setCreator("None");
-        }
-        List<DBTodoItemList> itemlistcre = this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE u.creator = :username ",DBTodoItemList.class).
-                setParameter("username", username).getResultList();
-        for (int z=0 ; z<itemlistcre.size();z++) {
-            itemlistcre.get(z).setCreator("None");
-        }
-        this.entityManager.remove(user);
-        return new ResponseEntity<>(user,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     @GetMapping(path = "items",
@@ -143,14 +120,7 @@ public class UserREST2 {
         //TODO...implement, see AuthNewsREST.java in example06  
         //get all items that have "assignee" = userId/username <-get by id
         //...
-        DBUserAccount account = this.entityManager.find(DBUserAccount.class, userId);
-        String username = account.getUsername();
-        List <DBTodoItem> listItems = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE u.assignee = :username ",DBTodoItem.class).
-                setParameter("username", username).getResultList();
-        if (listItems.size()==0){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(listItems,HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     @GetMapping(path = "all",
@@ -164,10 +134,10 @@ public class UserREST2 {
         final CriteriaQuery<DBUserAccount> query = builder.createQuery(DBUserAccount.class);
 
         final Root<DBUserAccount> from = query.from(DBUserAccount.class);
-       // sorry ich muss das nochmal kommentieren bis ich den fehler behoben haben DBUserAccount_ wird nicht erkannt
-       // final Order order = builder.desc(from.get(DBUserAccount_.username));
 
-       // query.select(from).orderBy(order);
+        final Order order = builder.desc(from.get(DBUserAccount_.username));
+
+        query.select(from).orderBy(order);
 
         final List<String> result = this.entityManager
         .createQuery(query)

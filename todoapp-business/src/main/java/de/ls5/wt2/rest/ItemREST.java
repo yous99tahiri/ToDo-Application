@@ -1,7 +1,5 @@
 package de.ls5.wt2.rest;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -12,12 +10,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 
-import de.ls5.wt2.Exception.ResourceAlreadyExistsException;
 import de.ls5.wt2.conf.auth.permission.ViewFirstFiveNewsItemsPermission;
 import de.ls5.wt2.entity.DBTodoItem;
 import de.ls5.wt2.entity.DBTodoItemList;
-//import de.ls5.wt2.entity.DBTodoItemList_;
-//import de.ls5.wt2.entity.DBTodoItem_;
+import de.ls5.wt2.entity.DBTodoItemList_;
+import de.ls5.wt2.entity.DBTodoItem_;
 import de.ls5.wt2.entity.ItemState;
 
 import org.apache.shiro.SecurityUtils;
@@ -57,21 +54,8 @@ public class ItemREST {
         }
         final String userId = subject.getPrincipal().toString();
 
-
-
         //TODO: check if in db an item with param.getTitle() in the SAME LIST (param.getListTitle() !) already exists, 
         //=>return ALREADY_EXISTS
-        // yous : select all the items from db with param.getTitel , then checking if one of this  items the same listTitle like param.listTitle has
-        String title = param.getTitle();
-        List <DBTodoItem> list = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE  u.title=: title",DBTodoItem.class ).setParameter("title", title).getResultList();
-        if(list.size()>0 ){
-            for (int i=0; i< list.size();i++){
-                if(list.get(i).getListTitle().equals(param.getListTitle())){
-                    return  new ResponseEntity<>(param,HttpStatus.CONFLICT) ;
-                }
-            }
-
-        }
         final DBTodoItem item = new DBTodoItem();
         item.setCreator(userId);
         item.setTitle(param.getTitle());
@@ -109,28 +93,8 @@ public class ItemREST {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         //TODO...implement
-        //... get the TodoItem with the itemTitle = itemTitle(param) , then check if one of this Items the same listTitle have if yes then remove it
-        // then remove the item from the Itemlist
-
-
-        List <DBTodoItem >itemlist = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE  u.title =: itemTitle",DBTodoItem.class )
-                .setParameter("itemTitle",itemTitle).getResultList();
-        System.out.println("ssssssss");
-        for (int i=0 ; i< itemlist.size();i++) {
-            if (itemlist.get(i).getListTitle().equals(listTitle)) {
-                DBTodoItemList listitems = this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle", DBTodoItemList.class).
-                        setParameter("listTitle", listTitle).getSingleResult();
-                List<DBTodoItem> list = listitems.getDBTodoItems();
-                list.remove(itemlist);
-                listitems.setDBTodoItems(list);
-                this.entityManager.remove(itemlist.get(i));
-                System.out.println("11111111111");
-                return new ResponseEntity<>(itemlist.get(i), HttpStatus.OK);
-            }
-        }
-
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        //...
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     //create,get,delete itemlist path="/list":
@@ -145,40 +109,11 @@ public class ItemREST {
         }
         final String userId = subject.getPrincipal().toString();
         param.setCreator(userId);
-
-
-
-
-        // cheching in the db if a Itemlist with the same Title
-        String listTitle = param.getTitle();
-        List <DBTodoItemList> listitems = this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class)
-                .setParameter("listTitle",listTitle).getResultList();
-        if(listitems.size()>0){
-            return new ResponseEntity<>(param,HttpStatus.CONFLICT);
-        }
-        DBTodoItemList result = new DBTodoItemList();
-        result.setTitle(param.getTitle());
-        result.setDescription(param.getDescription());
-        result.setDBTodoItems(param.getDBTodoItems());
-
-        List<DBTodoItem> Itemlist =  new ArrayList<DBTodoItem>();
-        for (int i=0 ; i< param.getDBTodoItems().size();i++){
-            Itemlist.add(param.getDBTodoItems().get(i));
-        }
-        result.setDBTodoItems(Itemlist);
-
-
-
-
-        result.setDeadLine(param.getDeadLine());
-        result.setLastEdited(param.getLastEdited());
-        result.setCreator(param.getCreator());
-        this.entityManager.persist(result);
         //TODO...implement, see AuthNewsREST.java in example06
         //TODO how to persist a list of DBTodoItem objects ?!
         /*TODO persist param*/
         //...
-        return new ResponseEntity<>(result,HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     @GetMapping(path = "list",
@@ -189,18 +124,13 @@ public class ItemREST {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-
-
-       // DBTodoItemList list = this.entityManager.find(DBTodoItemList.class, listTitle);
+        DBTodoItemList list = this.entityManager.find(DBTodoItemList.class, listTitle); 
         //TODO: better use ids instead of listTitles, but they should be unique anyway
 
-        // yous: read Itemlist with the listTitle = listTitle(param) from the db
-          DBTodoItemList liste =  this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class)
-                  .setParameter("listTitle", listTitle).getSingleResult();
-        if (liste == null) {
+        if (list == null) { 
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return  new ResponseEntity<>(liste,HttpStatus.ACCEPTED);
+        return ResponseEntity.ok(list);
     }
 
     //TODO
@@ -214,20 +144,7 @@ public class ItemREST {
         }
         //TODO...implement
         //...
-        // select the Itemlist with the listTitle=listTitle(param) then remove it
-        DBTodoItemList liste =  this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class).
-                setParameter("listTitle", listTitle).getSingleResult();
-        if (liste == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-       // alle items in this List loeschen ?
-        List <DBTodoItem> itemlist = liste.getDBTodoItems();
-        for (int i=0;i<itemlist.size();i++){
-            this.entityManager.remove(itemlist.get(i));
-        }
-
-        this.entityManager.remove(liste);
-        return new ResponseEntity<>(liste,HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     //get all itemlists path="/list/all"
@@ -243,10 +160,9 @@ public class ItemREST {
 
         final Root<DBTodoItemList> from = query.from(DBTodoItemList.class);
 
-       // kommantar : Order nicht benutzt weil das metamodell bzw DBTodoItemList_ bei mir  nicht erkannt wird
-       // final Order order = builder.desc(from.get(DBTodoItemList_.lastEdited));
+        final Order order = builder.desc(from.get(DBTodoItemList_.lastEdited));
 
-       // query.select(from).orderBy(order);
+        query.select(from).orderBy(order);
 
         final List<DBTodoItemList> result = this.entityManager.createQuery(query).getResultList();
         return ResponseEntity.ok(result);
