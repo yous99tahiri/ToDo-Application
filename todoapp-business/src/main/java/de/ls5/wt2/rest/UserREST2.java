@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-@RequestMapping(path = {"rest/user2"})
+@RequestMapping(path = {"rest/user"})
 public class UserREST2 {
 
     @Autowired

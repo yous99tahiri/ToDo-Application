@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Transactional
 @RestController
-@RequestMapping(path = "rest/user")
+@RequestMapping(path = "rest/user2")
 public class UserREST {
     @Autowired
     private EntityManager entityManager;

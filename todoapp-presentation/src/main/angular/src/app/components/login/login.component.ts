@@ -27,14 +27,12 @@ export class LoginComponent {
     if (this.canLogin) {
       this.authService.login(this.userAccount).subscribe({
         next : () => { 
-          this.authService.readProfile().subscribe({
-            next : (obj) => {
-              this.router.navigate(["/dashboard"]);
-            },
-            error: () => console.error
-          })
+          this.router.navigate(["/dashboard"]);
         },
-        error: () => this.errorMessage = 'Failed to login'
+        error: () => {
+          console.error
+          this.errorMessage = 'Failed to login'
+      }
       });
     }
   }

@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-@RequestMapping(path = {"rest/item2"})
+@RequestMapping(path = {"rest/item"})
 public class ItemREST {
 
     @Autowired

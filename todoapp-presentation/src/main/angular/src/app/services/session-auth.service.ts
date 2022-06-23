@@ -26,16 +26,6 @@ export class SessionAuthService {
     );
   }
 
-  readProfile(): Observable<string>{
-    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
-    return this.http.get(`${this.getBaseUrl()}/profile`, {headers, responseType: 'text'}).pipe(
-      map((obj) => {
-        return `${obj}`;
-      }
-      )
-    )
-  }
-
   logout(): Observable<boolean> {
     console.log(`SessionAuthService: logout called`)
     return this.http.get(`/logout`).pipe(
