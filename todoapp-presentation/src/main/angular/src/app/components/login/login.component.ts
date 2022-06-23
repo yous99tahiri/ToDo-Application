@@ -31,7 +31,7 @@ export class LoginComponent {
         },
         error: () => {
           console.error
-          this.errorMessage = 'Failed to login'
+          this.errorMessage = 'Login fehlgeschlagen. Bitte überprüfe deinen Benutzernamen bzw. dein Passwort!'
       }
       });
     }

@@ -65,12 +65,14 @@ export class ProfileComponent implements OnInit {
       //no errormsg necessary, this is just to be more secure, Admin Area should not be rendered, if user is not admin
       return;
     }
+    this.adminAreaErrorMessage = ""
     this.userService.readAllUserNames().subscribe({
       next: (usernames) => { 
         this.usernames = usernames; 
       },
       error: () => { 
         console.error 
+        this.adminAreaErrorMessage = "Beim Anzeigen der Benutzernamen ist leider ein Fehler aufgetreten. Versuch es morgen noch mal!"
         //TODO errormsg admin area
       }
     })
@@ -79,12 +81,14 @@ export class ProfileComponent implements OnInit {
 
   loadAssignedItems():void {
     console.log("ProfileComponent: load assigned items")
+    this.itemsAreaErrorMessage = ""
     this.userService.readUserAssignedTodoItems().subscribe({
       next: (todoItems) => { 
         this.todoItems = todoItems; 
       },
       error: () => { 
         console.error 
+        this.itemsAreaErrorMessage = "Beim laden der dir zugewiesenen Items ist leider ein Fehler aufgetreten. Versuche es später erneut!"
         //TODO errormsg item area
       }
     })
@@ -109,13 +113,14 @@ export class ProfileComponent implements OnInit {
   public deleteUser(e: Event): void {
     console.log("ProfileComponent: Delete User Button clicked") 
     e.preventDefault();
+    this.adminAreaErrorMessage = ""
     if(this.isAdmin == false){
       //no errormsg necessary, this is just to be more secure, Admin Area should not be rendered, if user is not admin
       //NOTE: to enhance security we can also require the password for deletion
       return;
     }
     if(this.userAccount.username == this.deleteUsername){
-      //TODO errormsg admin area "nice try but you can not delete yourself"
+      this.adminAreaErrorMessage = "Wenn ein Administrator sich selbst löschen könnte, wäre das schon iwo blöd. Vor allem, wenn da am Ende niemand mit Admin-Rechten übrig bleibt."
       return
     }
     //we could check if the deleteUsername is in the list of usernames, but we can also skip that, lets make use of status codes :D
@@ -125,7 +130,7 @@ export class ProfileComponent implements OnInit {
       },
       error: () => { 
         console.error 
-        //TODO errormsg admin area
+        this.adminAreaErrorMessage = "Oops. Da ist was schief gegangen."
       }
     }) 
   }
