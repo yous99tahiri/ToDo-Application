@@ -96,6 +96,7 @@ public class ItemREST {
 
     //create,get,delete itemlist path="/list":
 
+    //TODO
     @PostMapping(path = "list",
     consumes=MediaType.APPLICATION_JSON_VALUE,
     produces = MediaType.APPLICATION_JSON_VALUE)
@@ -113,6 +114,7 @@ public class ItemREST {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
+    //TODO fix? maybe will not work because listTitle != id, id can be send from client so just change param to id
     @GetMapping(path = "list",
     params = { "listTitle" }, 
     produces = MediaType.APPLICATION_JSON_VALUE)
@@ -144,6 +146,7 @@ public class ItemREST {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
+    //TODO fix
     //get all itemlists path="/list/all"
     @GetMapping(path = "list/all",
     produces = MediaType.APPLICATION_JSON_VALUE)

@@ -92,6 +92,7 @@ public class UserREST2 {
         return ResponseEntity.ok(account);
     }
 
+    //TODO
     @DeleteMapping(params = { "username" }, 
         produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DBUserAccount> deleteUser(@RequestParam final String username) {
@@ -100,6 +101,7 @@ public class UserREST2 {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         //subject.checkRole(UserRole.ADMIN.toString()); //"admin" ?
+        //TODO look into user roles offered by shiro (see WT2Realm.java)
         //TODO...implement 
         //set attribute "assignee" of items, that are assigned to given username, to "None"
         //same for attribute "creator" of items and item lists, where creator equals given username
@@ -108,6 +110,7 @@ public class UserREST2 {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
+    //TODO
     @GetMapping(path = "items",
     produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DBTodoItem>> readAssignedItems() {
