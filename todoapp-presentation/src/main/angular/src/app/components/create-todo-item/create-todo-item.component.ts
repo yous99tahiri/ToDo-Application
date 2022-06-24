@@ -34,18 +34,18 @@ export class CreateTodoItemComponent implements OnInit,OnDestroy {
     this.userService.readAllUserNames().subscribe({
       next: (usernames) => { 
         this.usernames = usernames; 
+        this.usernames.push("None")
+        this.filteredUsernames = this.myControl.valueChanges
+          .pipe(
+            startWith(''),
+            map(val => this.filter(val))
+          );
       },
       error: () => { 
         console.error 
         //TODO errormsg
       }
     })
-    this.usernames.push("None")
-    this.filteredUsernames = this.myControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(val => this.filter(val))
-      );
   }
 
   ngOnDestroy() :void {
@@ -67,16 +67,13 @@ export class CreateTodoItemComponent implements OnInit,OnDestroy {
     this.itemService.createTodoItem(this.todoItem).subscribe({
       next: () => { 
         this.itemCreated = true; 
+        this.ngOnDestroy()
       },
       error: () => { 
         console.error 
         //TODO errormsg
       }
     })
-    if(!this.itemCreated) {
-      return;
-    }
-    this.ngOnDestroy()
   }
 
   //TODO improve checks

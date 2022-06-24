@@ -41,16 +41,13 @@ export class CreateTodoItemListComponent implements OnInit,OnDestroy {
     this.itemService.createTodoItemList(this.todoItemList).subscribe({
       next: () => { 
         this.listCreated = true; 
+        this.ngOnDestroy()
       },
       error: () => { 
         console.error 
         //TODO errormsg
       }
     })
-    if(!this.listCreated) {
-      return;
-    }
-    this.ngOnDestroy()
   }
 
   //TODO: improve checks
