@@ -12,6 +12,7 @@ import javax.persistence.criteria.Root;
 
 import de.ls5.wt2.entity.DBTodoItem;
 import de.ls5.wt2.entity.DBTodoItem_;
+import de.ls5.wt2.entity.DBTodoItemList;
 import de.ls5.wt2.entity.DBUserAccount;
 import de.ls5.wt2.entity.DBUserAccount_;
 import de.ls5.wt2.entity.UserRole;
@@ -101,13 +102,37 @@ public class UserREST2 {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         //subject.checkRole(UserRole.ADMIN.toString()); //"admin" ?
+
+        subject.checkRole("admin"); // die methode soll ein UNAUTHORIZED exception falls der user kein admin ist
         //TODO look into user roles offered by shiro (see WT2Realm.java)
         //TODO...implement 
         //set attribute "assignee" of items, that are assigned to given username, to "None"
         //same for attribute "creator" of items and item lists, where creator equals given username
         //delete user with given username
         //...
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        DBUserAccount user = this.entityManager.createQuery("SELECT u from DBUserAccount u WHERE u.username = :username ",DBUserAccount.class).
+                setParameter("username", username).getSingleResult();
+        if (user==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        List<DBTodoItem> itemassi = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE u.assignee = :username ",DBTodoItem.class).
+                setParameter("username", username).getResultList();
+        for (int i=0 ; i<itemassi.size();i++) {
+            itemassi.get(i).setAssignee("None");
+        }
+        List<DBTodoItem> itemcre = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE u.creator = :username ",DBTodoItem.class).
+                setParameter("username", username).getResultList();
+        for (int j=0 ; j<itemcre.size();j++) {
+            itemcre.get(j).setCreator("None");
+        }
+        List<DBTodoItemList> itemlistcre = this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE u.creator = :username ",DBTodoItemList.class).
+                setParameter("username", username).getResultList();
+        for (int z=0 ; z<itemlistcre.size();z++) {
+            itemlistcre.get(z).setCreator("None");
+        }
+        this.entityManager.remove(user);
+        return new ResponseEntity<>(user,HttpStatus.ACCEPTED);
+        //TODO done
     }
 
     //TODO
@@ -122,7 +147,17 @@ public class UserREST2 {
         //TODO...implement, see AuthNewsREST.java in example06  
         //get all items that have "assignee" = userId/username <-get by id
         //...
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        DBUserAccount account = this.entityManager.createQuery("SELECT u from DBUserAccount u WHERE u.username = :userId ",DBUserAccount.class).
+                setParameter("userId",userId ).getSingleResult();
+        String username = account.getUsername();
+        List <DBTodoItem> listItems = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE u.assignee = :username ",DBTodoItem.class).
+                setParameter("username", username).getResultList();
+        if (listItems.size()==0){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(listItems,HttpStatus.OK);
+        //TODO done
+
     }
 
     @GetMapping(path = "all",

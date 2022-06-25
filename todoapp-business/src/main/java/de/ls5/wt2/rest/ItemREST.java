@@ -1,6 +1,6 @@
 package de.ls5.wt2.rest;
 
-import java.util.List;
+import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -8,6 +8,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 
+import de.ls5.wt2.Exception.ResourceAlreadyExistsException;
 import de.ls5.wt2.entity.DBTodoItem;
 import de.ls5.wt2.entity.DBTodoItemList;
 import de.ls5.wt2.entity.DBTodoItemList_;
@@ -53,6 +54,20 @@ public class ItemREST {
 
         //TODO: check if in db an item with param.getTitle() in the SAME LIST (param.getListTitle() !) already exists, 
         //=>return ALREADY_EXISTS
+        // muss nicht diese Item auch in der TitleList hinzugefügt werden ?
+
+        String title = param.getTitle();
+        List <DBTodoItem> list = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE  u.title=: title",DBTodoItem.class ).setParameter("title", title).getResultList();
+        if(list.size()>0 ){
+            for (int i=0; i< list.size();i++){
+                if(list.get(i).getListTitle().equals(param.getListTitle())){
+                    throw new ResourceAlreadyExistsException("Item with the  Title "+title + " and the ListTitle  "+
+                            param.getListTitle()+" is already Exists" );
+                }
+            }
+
+        }
+        // TODO done
         final DBTodoItem item = new DBTodoItem();
         item.setCreator(userId);
         item.setTitle(param.getTitle());
@@ -90,8 +105,23 @@ public class ItemREST {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         //TODO...implement
-        //...
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+        //... kann jeder eine Item löschen ?
+        List <DBTodoItem >itemlist = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE  u.title =: itemTitle",DBTodoItem.class )
+                .setParameter("itemTitle",itemTitle).getResultList();
+        for (int i=0 ; i< itemlist.size();i++) {
+            if (itemlist.get(i).getListTitle().equals(listTitle)) {
+                DBTodoItemList listitems = this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle", DBTodoItemList.class).
+                        setParameter("listTitle", listTitle).getSingleResult();
+                Set<DBTodoItem> list = listitems.getDBTodoItems();
+                list.remove(itemlist);
+                listitems.setDBTodoItems(list);
+                this.entityManager.remove(itemlist.get(i));
+                return new ResponseEntity<>(itemlist.get(i), HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        //TODO done
     }
 
     //create,get,delete itemlist path="/list":
@@ -111,7 +141,24 @@ public class ItemREST {
         //TODO how to persist a list of DBTodoItem objects ?!
         /*TODO persist param*/
         //...
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        // cheching in the db if a Itemlist with the same Title
+        String listTitle = param.getTitle();
+        List <DBTodoItemList> listitems = this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class)
+                .setParameter("listTitle",listTitle).getResultList();
+        if(listitems.size()>0){
+            return new ResponseEntity<>(param,HttpStatus.CONFLICT);
+        }
+        DBTodoItemList result = new DBTodoItemList();
+        result.setTitle(param.getTitle());
+        result.setDescription(param.getDescription());
+        Set<DBTodoItem> Itemlist =  new HashSet<>(param.getDBTodoItems()) ;
+        result.setDBTodoItems(Itemlist);
+        result.setDeadLine(param.getDeadLine());
+        result.setLastEdited(param.getLastEdited());
+        result.setCreator(userId);
+        this.entityManager.persist(result);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+        //TODO done
     }
 
     //TODO fix? maybe will not work because listTitle != id, id can be send from client so just change param to id
@@ -123,13 +170,16 @@ public class ItemREST {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        DBTodoItemList list = this.entityManager.find(DBTodoItemList.class, listTitle); 
+        //DBTodoItemList list = this.entityManager.find(DBTodoItemList.class, listTitle);
         //TODO: better use ids instead of listTitles, but they should be unique anyway
-
+        // yous: read Itemlist with the listTitle = listTitle(param) from the db
+        DBTodoItemList list =  this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class)
+                .setParameter("listTitle", listTitle).getSingleResult();
         if (list == null) { 
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(list);
+        //TODO done
     }
 
     //TODO
@@ -143,7 +193,22 @@ public class ItemREST {
         }
         //TODO...implement
         //...
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        // select the Itemlist with the listTitle=listTitle(param) then remove it
+        DBTodoItemList liste =  this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class).
+                setParameter("listTitle", listTitle).getSingleResult();
+        if (liste == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        // alle items in this List loeschen ?
+        Set <DBTodoItem> itemlist = liste.getDBTodoItems();
+        Iterator it = itemlist.iterator();
+        while(it.hasNext()) {
+                this.entityManager.remove(it.next());
+        }
+        // remove the list
+        this.entityManager.remove(liste);
+        return new ResponseEntity<>(liste,HttpStatus.OK);
+        //TODO done
     }
 
     //TODO fix
