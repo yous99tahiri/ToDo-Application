@@ -4,7 +4,7 @@ export class TodoItemList{
     id:number = 0;
     title: string = "";
     description: string= "";
-    lastEdited: Date;
+    lastEdited: Date = new Date();
     deadLine: Date;
     todoItems: TodoItem[] = [];
     creator: string = "";

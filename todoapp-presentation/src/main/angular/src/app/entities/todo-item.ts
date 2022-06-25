@@ -3,7 +3,7 @@ export class TodoItem{
     listTitle:string = "";
     title: string = "";
     description: string = "";
-    lastEdited: Date;
+    lastEdited: Date = new Date();
     deadLine: Date;
     creator: string = "";
     assignee: string = "None";

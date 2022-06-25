@@ -62,7 +62,6 @@ export class CreateTodoItemComponent implements OnInit,OnDestroy {
       this.errorMessage = "Can not create item"
       return
     }
-    this.todoItem.lastEdited = new Date()
     
     this.itemService.createTodoItem(this.todoItem).subscribe({
       next: () => { 
