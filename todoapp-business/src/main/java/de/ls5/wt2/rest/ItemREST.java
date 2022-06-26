@@ -206,10 +206,9 @@ public class ItemREST {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        List<DBTodoItemList> lists =  this.entityManager
-        .createQuery("SELECT * from DBTodoItemList",DBTodoItemList.class).getResultList();
+        List<DBTodoItemList> lists =  this.entityManager.createQuery("SELECT * from DBTodoItemList",DBTodoItemList.class).getResultList();
         if (lists == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            lists = new ArrayList<DBTodoItemList>();
         }
         //TODO sort by lastEdited?!
         return ResponseEntity.ok(lists);
