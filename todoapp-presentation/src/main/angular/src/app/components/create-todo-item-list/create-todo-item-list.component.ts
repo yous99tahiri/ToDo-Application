@@ -19,6 +19,7 @@ export class CreateTodoItemListComponent implements OnInit,OnDestroy {
     private matDialogRef:MatDialogRef<CreateTodoItemListComponent>,
     private itemService:ItemService) {
     console.log("CreateTodoItemListComponent: created")
+    this.deadLine = new Date().toISOString().split('T')[0]
   }
 
   ngOnInit(): void {
@@ -39,6 +40,7 @@ export class CreateTodoItemListComponent implements OnInit,OnDestroy {
       return
     }
     this.todoItemList.lastEdited = new Date()
+    console.log("CreateTodoItemListComponent: value of deadLine: ", this.deadLine)
     this.todoItemList.deadLine = new Date(this.deadLine);
     this.itemService.createTodoItemList(this.todoItemList).subscribe({
       next: () => { 

@@ -29,6 +29,7 @@ export class CreateTodoItemComponent implements OnInit,OnDestroy {
     private userService:UserService) {
       console.log("CreateTodoItemComponent: created")
       this.todoItem.listTitle = data;
+      this.deadLine = new Date().toISOString().split('T')[0]
    }
 
   ngOnInit(): void {
@@ -65,6 +66,7 @@ export class CreateTodoItemComponent implements OnInit,OnDestroy {
       return
     }
     this.todoItem.lastEdited = new Date();
+    console.log("CreateTodoItemComponent: value of deadLine: ", this.deadLine)
     this.todoItem.deadLine = new Date(this.deadLine);
     this.itemService.createTodoItem(this.todoItem).subscribe({
       next: () => { 
