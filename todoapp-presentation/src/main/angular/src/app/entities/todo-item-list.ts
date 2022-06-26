@@ -4,8 +4,8 @@ export class TodoItemList{
     id:number = 0;
     title: string = "";
     description: string= "";
-    lastEdited: Date = new Date();
-    deadLine: Date;
+    lastEdited: Date = null;
+    deadLine: Date = null;
     todoItems: TodoItem[] = [];
     creator: string = "";
     //comments
@@ -31,8 +31,8 @@ export class TodoItemList{
         "id":this.id,
         "title" : this.title,
         "description" : this.description,
-        "lastEdited" : this.lastEdited.toISOString(),
-        "deadLine" : this.deadLine.toISOString(),
+        "lastEdited" : this.lastEdited != null ? this.lastEdited.toISOString() : new Date().toISOString(),
+        "deadLine" : this.deadLine != null ? this.deadLine.toISOString() : new Date().toISOString(),
         "todoItems" : this.todoItems.map(item => { return item.toObject()} ),
         "creator" : this.creator
       }

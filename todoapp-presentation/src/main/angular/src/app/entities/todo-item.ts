@@ -3,8 +3,8 @@ export class TodoItem{
     listTitle:string = "";
     title: string = "";
     description: string = "";
-    lastEdited: Date = new Date();
-    deadLine: Date;
+    lastEdited: Date = null;
+    deadLine: Date =null;
     creator: string = "";
     assignee: string = "None";
     //comments
@@ -32,8 +32,8 @@ export class TodoItem{
         "listTitle":this.listTitle,
         "title" : this.title,
         "description" : this.description,
-        "lastEdited" : this.lastEdited.toISOString(),
-        "deadLine" : this.deadLine.toISOString(),
+        "lastEdited" : this.lastEdited != null ? this.lastEdited.toISOString() : new Date().toISOString(),
+        "deadLine" : this.deadLine != null ? this.deadLine.toISOString() : new Date().toISOString(),
         "creator" : this.creator,
         "assignee" : this.assignee,
         "state":this.state

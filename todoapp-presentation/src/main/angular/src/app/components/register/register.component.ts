@@ -54,7 +54,6 @@ export class RegisterComponent implements OnInit{
     console.log("RegisterComponent: Create Account Button clicked") 
     e.preventDefault();
     if (this.canCreateAccount()) {
-      this.newUserAccount.registrationDate = new Date()
       this.registerService.createAccount(this.newUserAccount).subscribe({
         next: () => {
           this.errorMessage = '' 
