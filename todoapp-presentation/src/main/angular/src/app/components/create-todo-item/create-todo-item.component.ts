@@ -18,6 +18,8 @@ export class CreateTodoItemComponent implements OnInit,OnDestroy {
   public filteredUsernames: Observable<string[]>;
 
   public todoItem: TodoItem = new TodoItem();
+  public deadLine:string = "";
+
   public errorMessage = ''; //TODO add error messaging in component
   private itemCreated:boolean = false;
   
@@ -62,7 +64,8 @@ export class CreateTodoItemComponent implements OnInit,OnDestroy {
       this.errorMessage = "Can not create item"
       return
     }
-    
+    this.todoItem.lastEdited = new Date();
+    this.todoItem.deadLine = new Date(this.deadLine);
     this.itemService.createTodoItem(this.todoItem).subscribe({
       next: () => { 
         this.itemCreated = true; 

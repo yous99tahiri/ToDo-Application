@@ -11,6 +11,7 @@ import { ItemService } from 'src/app/services/item.service';
 export class CreateTodoItemListComponent implements OnInit,OnDestroy {
 
   public todoItemList: TodoItemList = new TodoItemList();
+  public deadLine:string = "";
   public errorMessage:string = '';  //TODO add error messaging in component
   private listCreated:boolean = false;
   
@@ -38,6 +39,7 @@ export class CreateTodoItemListComponent implements OnInit,OnDestroy {
       return
     }
     this.todoItemList.lastEdited = new Date()
+    this.todoItemList.deadLine = new Date(this.deadLine);
     this.itemService.createTodoItemList(this.todoItemList).subscribe({
       next: () => { 
         this.listCreated = true; 
