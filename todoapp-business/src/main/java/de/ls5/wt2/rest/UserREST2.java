@@ -1,5 +1,6 @@
 package de.ls5.wt2.rest;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -142,8 +143,8 @@ public class UserREST2 {
         String username = account.getUsername();
         List <DBTodoItem> listItems = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE u.assignee = :username ",DBTodoItem.class).
                 setParameter("username", username).getResultList();
-        if (listItems == null){ //TODO throw error?
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (listItems == null){
+            listItems = new ArrayList<DBTodoItem>();
         }
 
         //it is ok to return empty list, means: no items assigned
