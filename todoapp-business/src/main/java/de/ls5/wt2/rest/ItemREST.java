@@ -206,16 +206,12 @@ public class ItemREST {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        final CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
-        final CriteriaQuery<DBTodoItemList> query = builder.createQuery(DBTodoItemList.class);
-
-        final Root<DBTodoItemList> from = query.from(DBTodoItemList.class);
-
-        final Order order = builder.desc(from.get(DBTodoItemList_.lastEdited));
-
-        query.select(from).orderBy(order);
-
-        final List<DBTodoItemList> result = this.entityManager.createQuery(query).getResultList();
-        return ResponseEntity.ok(result);
+        List<DBTodoItemList> lists =  this.entityManager
+        .createQuery("SELECT * from DBTodoItemList",DBTodoItemList.class).getResultList();
+        if (lists == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        //TODO sort by lastEdited?!
+        return ResponseEntity.ok(lists);
     }
 }
