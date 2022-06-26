@@ -149,7 +149,7 @@ public class ItemREST {
         DBTodoItemList result = new DBTodoItemList();
         result.setTitle(param.getTitle());
         result.setDescription(param.getDescription());
-        result.setDBTodoItems(param.getDBTodoItems());
+        result.setDBTodoItems(new HashSet<DBTodoItem>());
         result.setDeadLine(param.getDeadLine());
         result.setLastEdited(param.getLastEdited());
         result.setCreator(userId);
