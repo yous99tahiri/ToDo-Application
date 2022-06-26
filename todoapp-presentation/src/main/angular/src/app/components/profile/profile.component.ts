@@ -83,7 +83,6 @@ export class ProfileComponent implements OnInit {
       error: () => { 
         console.error 
         this.itemsAreaErrorMessage = "Beim laden der dir zugewiesenen Items ist leider ein Fehler aufgetreten. Versuche es später erneut!"
-        //TODO errormsg item area
       }
     })
   }
