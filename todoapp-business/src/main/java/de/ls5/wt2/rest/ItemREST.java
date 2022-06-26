@@ -74,6 +74,7 @@ public class ItemREST {
         item.setDeadLine(param.getDeadLine());
         item.setAssignee(param.getAssignee());
         item.setState(ItemState.OPEN.toString());
+        this.entityManager.persist(item);
         // add the item in the  ItemList with the listTitel
         String listTitel= param.getListTitle();
         DBTodoItemList itemlist = this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title=: title",DBTodoItemList.class )
@@ -84,8 +85,9 @@ public class ItemREST {
         Set<DBTodoItem> neuitemList = new HashSet<>(itemlist.getDBTodoItems());
         neuitemList.add(item);
         itemlist.setDBTodoItems(neuitemList);
-        this.entityManager.refresh(itemlist);
-        this.entityManager.persist(item); //TODO maybe first persist item?
+        this.entityManager.remove(itemlist);
+        this.entityManager.persist(itemlist);
+
 
         return new ResponseEntity<>(item, HttpStatus.CREATED);
     }

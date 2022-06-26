@@ -3,11 +3,7 @@ package de.ls5.wt2.entity;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
@@ -69,7 +65,7 @@ public class DBTodoItemList extends DBIdentified{
         this.dbtodoItems = dbtodoItems;
     }
 
-    @OneToMany
+    @OneToMany(targetEntity = DBTodoItem.class,fetch = FetchType.EAGER)
     public Set<DBTodoItem> getDBTodoItems(){
         return this.dbtodoItems;
     }
