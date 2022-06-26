@@ -93,7 +93,6 @@ public class UserREST2 {
         return ResponseEntity.ok(account);
     }
 
-    //TODO
     @DeleteMapping(params = { "username" }, 
         produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DBUserAccount> deleteUser(@RequestParam final String username) {
@@ -101,15 +100,10 @@ public class UserREST2 {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        //subject.checkRole(UserRole.ADMIN.toString()); //"admin" ?
+        //subject.checkRole(UserRole.ADMIN.toString()); //"admin" ? <- TODO needed for Rolecheck ?!
 
-        subject.checkRole("admin"); // die methode soll ein UNAUTHORIZED exception falls der user kein admin ist
-        //TODO look into user roles offered by shiro (see WT2Realm.java)
-        //TODO...implement 
-        //set attribute "assignee" of items, that are assigned to given username, to "None"
-        //same for attribute "creator" of items and item lists, where creator equals given username
-        //delete user with given username
-        //...
+        subject.checkRole("admin"); 
+
         DBUserAccount user = this.entityManager.createQuery("SELECT u from DBUserAccount u WHERE u.username = :username ",DBUserAccount.class).
                 setParameter("username", username).getSingleResult();
         if (user==null){
@@ -132,10 +126,8 @@ public class UserREST2 {
         }
         this.entityManager.remove(user);
         return new ResponseEntity<>(user,HttpStatus.ACCEPTED);
-        //TODO done
     }
 
-    //TODO
     @GetMapping(path = "items",
     produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DBTodoItem>> readAssignedItems() {
@@ -144,9 +136,7 @@ public class UserREST2 {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         final String userId = subject.getPrincipal().toString();
-        //TODO...implement, see AuthNewsREST.java in example06  
-        //get all items that have "assignee" = userId/username <-get by id
-        //...
+
         DBUserAccount account = this.entityManager.createQuery("SELECT u from DBUserAccount u WHERE u.username = :userId ",DBUserAccount.class).
                 setParameter("userId",userId ).getSingleResult();
         String username = account.getUsername();
@@ -156,7 +146,6 @@ public class UserREST2 {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(listItems,HttpStatus.OK);
-        //TODO done
 
     }
 

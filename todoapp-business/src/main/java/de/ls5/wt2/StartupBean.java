@@ -52,6 +52,7 @@ public class StartupBean implements ApplicationListener<ContextRefreshedEvent> {
             this.entityManager.persist(_deleteMe);
         }
 
+        /* 
         final DBTodoItemList exampleList = this.entityManager.find(DBTodoItemList.class, 1L);
         if (exampleList == null) {
             final DBTodoItemList _exampleList = new DBTodoItemList();
@@ -74,7 +75,7 @@ public class StartupBean implements ApplicationListener<ContextRefreshedEvent> {
 
             this.entityManager.persist(_item1);
             this.entityManager.persist(_exampleList);
-        }
+        }*/
     }
 
 }

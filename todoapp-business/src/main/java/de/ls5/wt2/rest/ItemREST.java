@@ -53,10 +53,6 @@ public class ItemREST {
         }
         final String userId = subject.getPrincipal().toString();
 
-        //TODO: check if in db an item with param.getTitle() in the SAME LIST (param.getListTitle() !) already exists, 
-        //=>return ALREADY_EXISTS
-
-
         String title = param.getTitle();
         List <DBTodoItem> list = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE  u.title=: title",DBTodoItem.class ).setParameter("title", title).getResultList();
         if(list.size()>0 ){
@@ -68,7 +64,7 @@ public class ItemREST {
             }
 
         }
-        // TODO done
+
         final DBTodoItem item = new DBTodoItem();
         item.setCreator(userId);
         item.setTitle(param.getTitle());
@@ -89,7 +85,7 @@ public class ItemREST {
         neuitemList.add(item);
         itemlist.setDBTodoItems(neuitemList);
         this.entityManager.refresh(itemlist);
-        this.entityManager.persist(item);
+        this.entityManager.persist(item); //TODO maybe first persist item?
 
         return new ResponseEntity<>(item, HttpStatus.CREATED);
     }
@@ -106,7 +102,6 @@ public class ItemREST {
         return ResponseEntity.ok(param);
     }
 
-    //TODO
     @DeleteMapping(params = {"listTitle","itemTitle"},
         produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DBTodoItem> deleteItem(@RequestParam final String listTitle,
@@ -115,9 +110,7 @@ public class ItemREST {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        //TODO...implement
 
-        //... kann jeder eine Item löschen ?
         List <DBTodoItem >itemlist = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE  u.title =: itemTitle",DBTodoItem.class )
                 .setParameter("itemTitle",itemTitle).getResultList();
         for (int i=0 ; i< itemlist.size();i++) {
@@ -133,12 +126,9 @@ public class ItemREST {
             }
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        //TODO done
     }
 
     //create,get,delete itemlist path="/list":
-
-    //TODO
     @PostMapping(path = "list",
     consumes=MediaType.APPLICATION_JSON_VALUE,
     produces = MediaType.APPLICATION_JSON_VALUE)
@@ -149,11 +139,7 @@ public class ItemREST {
         }
         final String userId = subject.getPrincipal().toString();
         param.setCreator(userId);
-        //TODO...implement, see AuthNewsREST.java in example06
-        //TODO how to persist a list of DBTodoItem objects ?!
-        /*TODO persist param*/
-        //...
-        // cheching in the db if a Itemlist with the same Title exists
+
         String listTitle = param.getTitle();
         List <DBTodoItemList> listitems = this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class)
                 .setParameter("listTitle",listTitle).getResultList();
@@ -169,10 +155,8 @@ public class ItemREST {
         result.setCreator(userId);
         this.entityManager.persist(result);
         return new ResponseEntity<>(HttpStatus.CREATED);
-        //TODO done
     }
 
-    //TODO fix? maybe will not work because listTitle != id, id can be send from client so just change param to id
     @GetMapping(path = "list",
     params = { "listTitle" }, 
     produces = MediaType.APPLICATION_JSON_VALUE)
@@ -181,16 +165,12 @@ public class ItemREST {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        //DBTodoItemList list = this.entityManager.find(DBTodoItemList.class, listTitle);
-        //TODO: better use ids instead of listTitles, but they should be unique anyway
-        // yous: read Itemlist with the listTitle = listTitle(param) from the db
         DBTodoItemList list =  this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class)
                 .setParameter("listTitle", listTitle).getSingleResult();
         if (list == null) { 
             throw  new ResourceNotFoundException(" The list with the Titel : "+ listTitle+" is  dont exist");
         }
         return ResponseEntity.ok(list);
-        //TODO done
     }
 
     //TODO
@@ -202,28 +182,23 @@ public class ItemREST {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        //TODO...implement
-        //...
-        // select the Itemlist with the listTitle=listTitle(param) then remove it
+
         DBTodoItemList liste =  this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class).
                 setParameter("listTitle", listTitle).getSingleResult();
         if (liste == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        // alle items in this List loeschen ?
+
         Set <DBTodoItem> itemlist = liste.getDBTodoItems();
-        Iterator it = itemlist.iterator();
+        Iterator<DBTodoItem> it = itemlist.iterator();
         while(it.hasNext()) {
                 this.entityManager.remove(it.next());
         }
-        // remove the list
+
         this.entityManager.remove(liste);
         return new ResponseEntity<>(liste,HttpStatus.OK);
-        //TODO done
     }
 
-    //TODO fix
-    //get all itemlists path="/list/all"
     @GetMapping(path = "list/all",
     produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DBTodoItemList>> readAllLists() {
