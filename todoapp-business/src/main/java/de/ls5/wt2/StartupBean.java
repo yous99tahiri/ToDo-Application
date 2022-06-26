@@ -2,6 +2,7 @@ package de.ls5.wt2;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -52,7 +53,7 @@ public class StartupBean implements ApplicationListener<ContextRefreshedEvent> {
             this.entityManager.persist(_deleteMe);
         }
 
-        /* 
+
         final DBTodoItemList exampleList = this.entityManager.find(DBTodoItemList.class, 1L);
         if (exampleList == null) {
             final DBTodoItemList _exampleList = new DBTodoItemList();
@@ -62,7 +63,24 @@ public class StartupBean implements ApplicationListener<ContextRefreshedEvent> {
             _exampleList.setDeadLine(new Date());
             _exampleList.setLastEdited(new Date());
             _exampleList.setCreator("tuDominator");
+            _exampleList.setDBTodoItems(new HashSet<DBTodoItem>());
+            this.entityManager.persist(_exampleList);
 
+        }
+        final DBTodoItemList exampleList2 = this.entityManager.find(DBTodoItemList.class, 2L);
+
+        if (exampleList2 == null) {
+            final DBTodoItemList _exampleList2 = new DBTodoItemList();
+
+            _exampleList2.setTitle("I am an example list Title 2");
+            _exampleList2.setDescription("My Description 2");
+            _exampleList2.setDeadLine(new Date());
+            _exampleList2.setLastEdited(new Date());
+            _exampleList2.setCreator("tuDominator2");
+            _exampleList2.setDBTodoItems(new HashSet<DBTodoItem>());
+            this.entityManager.persist(_exampleList2);
+        }
+        /*
             final DBTodoItem _item1 = new DBTodoItem();
             _item1.setTitle("Item 1 example");
             _item1.setDescription("Item 1 Description");
@@ -74,8 +92,8 @@ public class StartupBean implements ApplicationListener<ContextRefreshedEvent> {
             _item1.setState(ItemState.OPEN.toString());
 
             this.entityManager.persist(_item1);
-            this.entityManager.persist(_exampleList);
-        }*/
+
+        */
     }
 
 }
