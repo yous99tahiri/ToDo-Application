@@ -9,6 +9,7 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 
 import de.ls5.wt2.Exception.ResourceAlreadyExistsException;
+import de.ls5.wt2.Exception.ResourceNotFoundException;
 import de.ls5.wt2.entity.DBTodoItem;
 import de.ls5.wt2.entity.DBTodoItemList;
 import de.ls5.wt2.entity.DBTodoItemList_;
@@ -54,15 +55,15 @@ public class ItemREST {
 
         //TODO: check if in db an item with param.getTitle() in the SAME LIST (param.getListTitle() !) already exists, 
         //=>return ALREADY_EXISTS
-        // muss nicht diese Item auch in der TitleList hinzugefügt werden ?
+
 
         String title = param.getTitle();
         List <DBTodoItem> list = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE  u.title=: title",DBTodoItem.class ).setParameter("title", title).getResultList();
         if(list.size()>0 ){
             for (int i=0; i< list.size();i++){
                 if(list.get(i).getListTitle().equals(param.getListTitle())){
-                    throw new ResourceAlreadyExistsException("Item with the  Title "+title + " and the ListTitle  "+
-                            param.getListTitle()+" is already Exists" );
+                    throw new ResourceAlreadyExistsException("Item with the  Title : "+title
+                            +" is already Exists in the List : "+ param.getListTitle() );
                 }
             }
 
@@ -77,7 +78,17 @@ public class ItemREST {
         item.setDeadLine(param.getDeadLine());
         item.setAssignee(param.getAssignee());
         item.setState(ItemState.OPEN.toString());
-
+        // add the item in the  ItemList with the listTitel
+        String listTitel= param.getListTitle();
+        DBTodoItemList itemlist = this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title=: title",DBTodoItemList.class )
+                .setParameter("title", listTitel).getSingleResult();
+        if (itemlist == null){
+            return new ResponseEntity<>(param,HttpStatus.NOT_ACCEPTABLE);
+        }
+        Set<DBTodoItem> neuitemList = new HashSet<>(itemlist.getDBTodoItems());
+        neuitemList.add(item);
+        itemlist.setDBTodoItems(neuitemList);
+        this.entityManager.refresh(itemlist);
         this.entityManager.persist(item);
 
         return new ResponseEntity<>(item, HttpStatus.CREATED);
@@ -113,9 +124,10 @@ public class ItemREST {
             if (itemlist.get(i).getListTitle().equals(listTitle)) {
                 DBTodoItemList listitems = this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle", DBTodoItemList.class).
                         setParameter("listTitle", listTitle).getSingleResult();
-                Set<DBTodoItem> list = listitems.getDBTodoItems();
-                list.remove(itemlist);
+                Set<DBTodoItem> list = new HashSet<>(listitems.getDBTodoItems());
+                list.remove(itemlist.get(i));
                 listitems.setDBTodoItems(list);
+                this.entityManager.refresh(listitems);
                 this.entityManager.remove(itemlist.get(i));
                 return new ResponseEntity<>(itemlist.get(i), HttpStatus.OK);
             }
@@ -141,7 +153,7 @@ public class ItemREST {
         //TODO how to persist a list of DBTodoItem objects ?!
         /*TODO persist param*/
         //...
-        // cheching in the db if a Itemlist with the same Title
+        // cheching in the db if a Itemlist with the same Title exists
         String listTitle = param.getTitle();
         List <DBTodoItemList> listitems = this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class)
                 .setParameter("listTitle",listTitle).getResultList();
@@ -151,8 +163,7 @@ public class ItemREST {
         DBTodoItemList result = new DBTodoItemList();
         result.setTitle(param.getTitle());
         result.setDescription(param.getDescription());
-        Set<DBTodoItem> Itemlist =  new HashSet<>(param.getDBTodoItems()) ;
-        result.setDBTodoItems(Itemlist);
+        result.setDBTodoItems(param.getDBTodoItems());
         result.setDeadLine(param.getDeadLine());
         result.setLastEdited(param.getLastEdited());
         result.setCreator(userId);
@@ -176,7 +187,7 @@ public class ItemREST {
         DBTodoItemList list =  this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class)
                 .setParameter("listTitle", listTitle).getSingleResult();
         if (list == null) { 
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw  new ResourceNotFoundException(" The list with the Titel : "+ listTitle+" is  dont exist");
         }
         return ResponseEntity.ok(list);
         //TODO done
