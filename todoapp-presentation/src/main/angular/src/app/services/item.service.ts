@@ -75,7 +75,7 @@ export class ItemService {
   }
 
   readAllTodoItemLists(): Observable<TodoItemList[]> {
-    console.log(`ItemService: readTodoItemList called`)
+    console.log(`ItemService: readAllTodoItemList called`)
     return this._authService.getHTTPClient().get<any[]>(`${this._authService.getBaseUrl()}/item/list/all`, {headers: new HttpHeaders()}).pipe(
       map(body => {
         console.log("--------------")

@@ -8,7 +8,7 @@ import { ItemService } from 'src/app/services/item.service';
   styleUrls: ['./create-todo-item-list.component.sass']
 })
 //TODO use textfield html object for descirption field!
-export class CreateTodoItemListComponent implements OnInit,OnDestroy {
+export class CreateTodoItemListComponent implements OnInit {
 
   public todoItemList: TodoItemList = new TodoItemList();
   public deadLine:string = "";
@@ -25,10 +25,6 @@ export class CreateTodoItemListComponent implements OnInit,OnDestroy {
   ngOnInit(): void {
     console.log("CreateTodoItemListComponent: ngOnInit")
   }
-  ngOnDestroy() :void {
-    console.log("CreateTodoItemListComponent: ngOnDestroy")
-    this.matDialogRef.close(this.listCreated)
-  }
 
   public createTodoItemList(e: Event): void { 
     console.log("CreateTodoItemListComponent: Create List Button clicked")
@@ -36,20 +32,18 @@ export class CreateTodoItemListComponent implements OnInit,OnDestroy {
     this.errorMessage = ""
     if(!this.canCreateTodoItemList()){
       //TODO errormsg
-      this.errorMessage = "Can not create list"
+      this.errorMessage = "Could not create list."
       return
     }
     this.todoItemList.lastEdited = new Date()
-    console.log("CreateTodoItemListComponent: value of deadLine: ", this.deadLine)
     this.todoItemList.deadLine = new Date(this.deadLine);
     this.itemService.createTodoItemList(this.todoItemList).subscribe({
       next: () => { 
-        this.listCreated = true; 
-        this.ngOnDestroy()
+        this.listCreated = true;
+        this.closeDialog()
       },
-      error: () => { 
-        console.error 
-        //TODO errormsg
+      error: (err) => { 
+        this.errorMessage = `Could not create list: ${err}`
       }
     })
   }
@@ -60,6 +54,6 @@ export class CreateTodoItemListComponent implements OnInit,OnDestroy {
   }
 
   closeDialog(): void{
-    this.ngOnDestroy()
+    this.matDialogRef.close(this.listCreated)
   }
 }

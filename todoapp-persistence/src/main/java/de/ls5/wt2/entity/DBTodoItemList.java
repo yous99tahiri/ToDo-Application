@@ -17,7 +17,7 @@ public class DBTodoItemList extends DBIdentified{
     String description = "";
     Date lastEdited;
     Date deadLine ;
-    Set<DBTodoItem> todoItems;
+    Set<DBTodoItem> dbtodoItems;
     String creator= "";
     
     public String getTitle(){
@@ -65,12 +65,12 @@ public class DBTodoItemList extends DBIdentified{
         this.creator = creator;
     }
 
-    public void setDBTodoItems(Set<DBTodoItem> todoItems){
-        this.todoItems = todoItems;
+    public void setDBTodoItems(Set<DBTodoItem> dbtodoItems){
+        this.dbtodoItems = dbtodoItems;
     }
 
     @OneToMany
     public Set<DBTodoItem> getDBTodoItems(){
-        return this.todoItems;
+        return this.dbtodoItems;
     }
 }

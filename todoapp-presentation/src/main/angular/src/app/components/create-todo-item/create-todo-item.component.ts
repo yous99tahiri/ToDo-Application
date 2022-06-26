@@ -11,7 +11,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./create-todo-item.component.sass']
 })
 //TODO use textfield html object for descirption field!
-export class CreateTodoItemComponent implements OnInit,OnDestroy {
+export class CreateTodoItemComponent implements OnInit {
 
   myControl: FormControl = new FormControl();
   public usernames:string[] =[] 
@@ -51,31 +51,25 @@ export class CreateTodoItemComponent implements OnInit,OnDestroy {
     })
   }
 
-  ngOnDestroy() :void {
-    console.log("CreateTodoItemComponent: ngOnDestroy")
-    this.matDialogRef.close(this.itemCreated)
-  }
-
   public createTodoItem(e: Event): void { 
     console.log("CreateTodoItemComponent: Create item button clicked")
     e.preventDefault();
     this.errorMessage = ""
     if(!this.canCreateTodoItem()){
       //TODO errormsg
-      this.errorMessage = "Can not create item"
+      this.errorMessage = "Could not create item"
       return
     }
     this.todoItem.lastEdited = new Date();
-    console.log("CreateTodoItemComponent: value of deadLine: ", this.deadLine)
     this.todoItem.deadLine = new Date(this.deadLine);
     this.itemService.createTodoItem(this.todoItem).subscribe({
       next: () => { 
         this.itemCreated = true; 
-        this.ngOnDestroy()
+        this.closeDialog()
       },
-      error: () => { 
-        console.error 
+      error: (err) => { 
         //TODO errormsg
+        this.errorMessage = `Could not create item: ${err}`
       }
     })
   }
@@ -91,6 +85,6 @@ export class CreateTodoItemComponent implements OnInit,OnDestroy {
   }
 
   closeDialog(): void{
-    this.ngOnDestroy()
+    this.matDialogRef.close(this.itemCreated)
   }
 }

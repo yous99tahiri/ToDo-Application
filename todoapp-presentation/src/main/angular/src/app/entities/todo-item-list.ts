@@ -6,7 +6,7 @@ export class TodoItemList{
     description: string= "";
     lastEdited: Date = null;
     deadLine: Date = null;
-    todoItems: TodoItem[] = [];
+    dbtodoItems: TodoItem[] = [];
     creator: string = "";
     //comments
     //state (open, in progress, feedback, done)
@@ -18,7 +18,7 @@ export class TodoItemList{
       n.title = object.title;
       n.description = object.description;
       n.lastEdited = new Date(object.lastEdited);
-      n.todoItems = object.todoItems.map(obj => TodoItem.fromObject(obj));
+      n.dbtodoItems = Array.from(object.dbtodoItems).map(obj => TodoItem.fromObject(obj));
       n.deadLine = new Date(object.deadLine);
       n.creator = object.creator;
       //comments
@@ -33,7 +33,7 @@ export class TodoItemList{
         "description" : this.description,
         "lastEdited" : this.lastEdited != null ? this.lastEdited.toISOString() : new Date().toISOString(),
         "deadLine" : this.deadLine != null ? this.deadLine.toISOString() : new Date().toISOString(),
-        "todoItems" : this.todoItems.map(item => { return item.toObject()} ),
+        "dbtodoItems" : this.dbtodoItems.map(item => { return item.toObject()} ),
         "creator" : this.creator
       }
       console.log(`TodoItemList: toObject called for ${JSON.stringify(obj)}`);

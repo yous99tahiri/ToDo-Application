@@ -105,8 +105,9 @@ public class UserREST2 {
 
         subject.checkRole("admin"); 
 
-        DBUserAccount user = this.entityManager.createQuery("SELECT u from DBUserAccount u WHERE u.username = :username ",DBUserAccount.class).
-                setParameter("username", username).getSingleResult();
+        DBUserAccount user = this.entityManager.createQuery("SELECT u from DBUserAccount u WHERE u.username = :username ",DBUserAccount.class)
+        .setParameter("username", username)
+        .getSingleResult();
         if (user==null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
