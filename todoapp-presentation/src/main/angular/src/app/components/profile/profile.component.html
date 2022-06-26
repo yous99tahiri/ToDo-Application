@@ -19,19 +19,19 @@
             {{itemsAreaErrorMessage}}
             <button type="button" id="closeAlertBtn_items" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="itemsAreaErrorMessage = ''"></button>
         </div>
-        <div class="card-body">
+        <mat-grid-list cols="2" rowHeight="2:1" >
             <div class="alert alert-info" *ngIf="todoItems.length === 0">No items available</div>
             <div class="list-group" *ngIf="todoItems.length > 0">
                 <p>Items:</p> 
-                <hr>
-                <table *ngFor="let todoItem of todoItems; let i = index">
-                    <tr><p id="title">Item Title: {{todoItem.title}}</p></tr>
-                    <tr><p id="deadline">Item Deadline: {{todoItem.deadLine}}</p></tr>
-                    <tr><button class="btn btn-sm btn-outline-secondary" id="itemDetailsBtn" (click)="seeItemDetails($event,todoItem)">Item Details</button></tr>
-                    <hr>
-                </table>
+                <mat-grid-tile>
+                    <table *ngFor="let todoItem of todoItems; let i = index">
+                        <tr><p id="title">Item Title: {{todoItem.title}}</p></tr>
+                        <tr><p id="deadline">Item Deadline: {{todoItem.deadLine}}</p></tr>
+                        <tr><button class="btn btn-sm btn-outline-secondary" id="itemDetailsBtn" (click)="seeItemDetails($event,todoItem)">Item Details</button></tr>
+                    </table>
+                </mat-grid-tile>
             </div>
-        </div>
+        </mat-grid-list>
     </div>
     <div *ngIf="isAdmin" id="adminArea">
         <hr>

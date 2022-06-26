@@ -18,6 +18,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 //Mat
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatGridListModule} from '@angular/material/grid-list';
+
 import { SessionAuthService } from './services/session-auth.service';
 import { ItemService } from './services/item.service';
 import { UserService } from './services/user.service';
@@ -42,7 +44,8 @@ import { UserService } from './services/user.service';
     BrowserAnimationsModule,
     MatDialogModule,
     MatAutocompleteModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatGridListModule
   ],
   providers: [SessionAuthService,ItemService,UserService],
   bootstrap: [AppComponent]

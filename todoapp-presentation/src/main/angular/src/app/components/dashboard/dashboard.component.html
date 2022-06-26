@@ -13,12 +13,12 @@
         </div>
         <hr>
         <div class="alert alert-info" *ngIf="todoItemLists.length === 0">No item lists available</div>
-        <div class="list-group" *ngIf="todoItemLists.length > 0">
+        <mat-grid-list cols="2" rowHeight="2:1" *ngIf="todoItemLists.length > 0">
             <p>Lists:</p>
-            <div class="list-group-item d-flex" *ngFor="let itemList of todoItemLists; let i = index">
+            <mat-grid-tile *ngFor="let itemList of todoItemLists; let i = index" [style.background]="'black'">
                 <wt2-todo-item-list [todoItemList]="itemList" (listDeletedEvent)="onListDeleted($event)"></wt2-todo-item-list>
-            </div>
-        </div>
+            </mat-grid-tile>
+        </mat-grid-list>
     </div>
 </div>
   

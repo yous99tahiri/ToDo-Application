@@ -24,6 +24,7 @@ export class TodoItemDetailsComponent implements OnInit, OnDestroy {
   private itemUpdated:boolean = false;
 
   public todoItem: TodoItem = new TodoItem();
+  public deadLine:string="";
 
   constructor( 
     @Inject(MAT_DIALOG_DATA) data:TodoItem,
@@ -31,6 +32,7 @@ export class TodoItemDetailsComponent implements OnInit, OnDestroy {
       private itemService:ItemService,
       private userService:UserService) { 
     this.todoItem = data;
+    this.deadLine = this.todoItem.deadLine.toISOString().split('T')[0]
     console.log("TodoItemDetailsComponent: created") 
   }
 
@@ -69,7 +71,7 @@ export class TodoItemDetailsComponent implements OnInit, OnDestroy {
       return
     }
     this.todoItem.lastEdited = new Date()
-    
+    this.todoItem.deadLine = new Date(this.deadLine);
     this.itemService.updateTodoItem(this.todoItem).subscribe({
       next: () => { 
         this.itemUpdated = true; 

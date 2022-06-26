@@ -25,7 +25,7 @@
     </div>
     <div class="mb-3">
         <label class="form-label" for="deadLineInput" >Deadline</label>
-        <input name="deadLine" class="form-control" id="deadLineInput" class="form-control" type="date" required [(ngModel)]="todoItem.deadLine">
+        <input name="deadLine" class="form-control" id="deadLineInput" type="date" [value]="deadLine | date:'yyyy-MM-dd'"/>
     </div>
     <button class="btn w-100 btn-outline-primary" id="submitBtn" type="submit">Change item</button>
     <hr>

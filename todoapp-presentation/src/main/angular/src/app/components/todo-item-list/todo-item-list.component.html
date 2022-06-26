@@ -4,21 +4,21 @@
 <button class="btn btn-sm btn-outline-secondary" id="addItemBtn" (click)="addItem($event)">Add Item</button>
 <button class="btn btn-sm btn-outline-secondary" id="deleteListBtn" (click)="deleteList($event)">Delete List</button>
 <div class="alert alert-info" *ngIf="todoItemList.dbtodoItems.length === 0">No items available</div>
-<div class="list-group" *ngIf="todoItemList.dbtodoItems.length > 0">
+<mat-grid-list cols="2" rowHeight="2:1"  *ngIf="todoItemList.dbtodoItems.length > 0">
     <div class="alert alert-danger alert-dismissible" *ngIf="errorMessage !== ''">
         {{errorMessage}}
         <button type="button" id="closeAlertBtn" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="errorMessage = ''"></button>
     </div>
     <p>Items:</p>
-    <hr>
-    <table *ngFor="let todoItem of todoItemList.dbtodoItems; let i = index">
-        <tr><p>Item Title: {{todoItem.title}}</p></tr>
-        <tr><p>Item Deadline: {{todoItem.deadLine}}</p></tr>
-        <tr>
-            <th><button class="btn btn-sm btn-outline-secondary" id="itemDetailsBtn" (click)="seeItemDetails($event,todoItem)">Item Details</button></th>
-            <th><button class="btn btn-sm btn-outline-secondary" id="deleteItemBtn" (click)="deleteItem($event,todoItem)">Delete Item</button></th>
-        </tr>
-        <hr>
-    </table>
-</div>
+    <mat-grid-tile [style.background]="'grey'">>
+        <table *ngFor="let todoItem of todoItemList.dbtodoItems; let i = index">
+            <tr><p>Item Title: {{todoItem.title}}</p></tr>
+            <tr><p>Item Deadline: {{todoItem.deadLine}}</p></tr>
+            <tr>
+                <th><button class="btn btn-sm btn-outline-secondary" id="itemDetailsBtn" (click)="seeItemDetails($event,todoItem)">Item Details</button></th>
+                <th><button class="btn btn-sm btn-outline-secondary" id="deleteItemBtn" (click)="deleteItem($event,todoItem)">Delete Item</button></th>
+            </tr>
+        </table>
+    </mat-grid-tile>
+</mat-grid-list>
   

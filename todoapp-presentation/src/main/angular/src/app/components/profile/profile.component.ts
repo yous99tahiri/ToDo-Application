@@ -42,7 +42,6 @@ export class ProfileComponent implements OnInit {
       },
       error: () => { 
         console.error 
-        console.log("TODO fix UserRest2.readUser")
       }
     })
   }
