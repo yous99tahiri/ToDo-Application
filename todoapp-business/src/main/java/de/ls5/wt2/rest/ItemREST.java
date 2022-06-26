@@ -154,7 +154,7 @@ public class ItemREST {
         result.setLastEdited(param.getLastEdited());
         result.setCreator(userId);
         this.entityManager.persist(result);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(result,HttpStatus.CREATED);
     }
 
     @GetMapping(path = "list",
