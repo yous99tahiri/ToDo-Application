@@ -5,23 +5,26 @@
     <p class="mb-1">The future of ticket systems.</p>
   </div>
   <hr>
-
+  <div class="alert alert-danger alert-dismissible" *ngIf="errorMessage !== ''">
+    {{errorMessage}}
+    <button type="button" id="closeAlertBtn_err" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="errorMessage = ''"></button>
+  </div>
   <!-- navigation tabs -->
   <ul class="nav nav-tabs">
-    <li class="nav-item" *ngIf="!isLoggedIn">
-      <a class="nav-link" id="loginNavBtn" routerLink="/login" routerLinkActive="active">Login</a>
+    <li class="nav-item" >
+      <a class="nav-link" id="loginNavBtn" routerLink="/loginc" routerLinkActive="active">Login</a>
     </li>
-    <li class="nav-item" *ngIf="!isLoggedIn">
+    <li class="nav-item">
         <a class="nav-link" id="registerNavBtn" routerLink="/register" routerLinkActive="active">Register</a>
     </li>
-    <li class="nav-item" *ngIf="isLoggedIn">
+    <li class="nav-item">
         <a class="nav-link" id="dashboardNavBtn" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
     </li>
-    <li class="nav-item" *ngIf="isLoggedIn">
+    <li class="nav-item">
         <a class="nav-link" id="profileNavBtn" routerLink="/profile" routerLinkActive="active">Profile</a>
     </li>
   </ul>
-  <div class="col-12 text-right" *ngIf="isLoggedIn">
+  <div class="col-12 text-right">
     <button class="btn btn-sm btn-outline-secondary" id="logoutBtn" style="float: right;" (click)="logout()">Logout</button>
   </div>
   <hr>

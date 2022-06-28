@@ -25,15 +25,23 @@ export class LoginComponent {
     e.preventDefault();
     this.errorMessage = '';
     if (this.canLogin) {
-      this.authService.login(this.userAccount).subscribe({
-        next : () => { 
-          this.router.navigate(["/dashboard"]);
-        },
-        error: () => {
-          console.error
-          this.errorMessage = 'Login fehlgeschlagen. Bitte überprüfe deinen Benutzernamen bzw. dein Passwort!'
-      }
-      });
+      this.authService.getIsLoggedIn().subscribe({
+        next: (loggedIn) => {
+          if(loggedIn){
+            this.errorMessage = 'Login fehlgeschlagen. Bereits eingeloggt'
+            return
+          }
+          this.authService.login(this.userAccount).subscribe({
+            next : () => { 
+              this.router.navigate(["/dashboard"]);
+            },
+            error: () => {
+              console.error
+              this.errorMessage = 'Login fehlgeschlagen. Bitte überprüfe deinen Benutzernamen bzw. dein Passwort!'
+            }
+          });
+        }
+      })
     }
   }
 

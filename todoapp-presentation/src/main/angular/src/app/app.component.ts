@@ -11,24 +11,28 @@ import { SessionAuthService } from './services/session-auth.service';
 export class AppComponent {
 
   authService: SessionAuthService;
-
+  _isLoggedIn:boolean=false;
+  errorMessage:string=""
   constructor(private http: HttpClient,authService:SessionAuthService, private router:Router) {
     console.log("AppComponent created")
     this.authService = authService;
   }
 
-  load(): void {
-  }
-
   logout() {
-    this.authService.logout().subscribe( {
-      next:()=>{
-        this.router.navigate(["/login"])
+    this.authService.getIsLoggedIn().subscribe({
+      next: (loggedIn) => {
+        if(!loggedIn){
+          //TODO errormsg
+          this.errorMessage = 'Logout fehlgeschlagen. Nicht eingeloggt'
+          return
+        }
+        this.authService.logout().subscribe( {
+          next:()=>{
+            this.router.navigate(["/loginc"])
+          }
+        });
       }
-    });
-  }
-
-  get isLoggedIn(): boolean {
-    return this.authService.isLoggedIn;
+    })
+    
   }
 }

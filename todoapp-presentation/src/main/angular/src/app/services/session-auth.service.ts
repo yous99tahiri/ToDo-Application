@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {  Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HttpHeaders, HttpParams, HttpClient } from '@angular/common/http';
@@ -6,7 +6,11 @@ import { UserAccount } from '../entities/user-account';
 import { environment as env } from 'src/environments/environment';
 @Injectable()
 export class SessionAuthService {
-  private loggedIn: boolean = false;
+  private _loggedIn: boolean = false;
+  public get loggedIn(): boolean {
+    //console.log(`SessionAuthService: loggedIn accessed`)
+    return this._loggedIn;
+  }
   constructor(private http: HttpClient) {
     console.log("SessionAuthService: created")
   }
@@ -20,8 +24,8 @@ export class SessionAuthService {
     const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
     return this.http.post(`/login.jsp`, body.toString(), {headers, responseType: 'text'}).pipe(
       map(() => {
-        this.loggedIn = true;
-        return true;
+        this._loggedIn = true;
+        return this._loggedIn;
       })
     );
   }
@@ -33,14 +37,16 @@ export class SessionAuthService {
         return err.status == 0 ? of([]) : throwError(err);
       }),
       map(() => {
-        this.loggedIn = false;
-        return true;
+        this._loggedIn = false;
+        return this._loggedIn;
       })
     );
   }
 
-  get isLoggedIn(): boolean {
-    return this.loggedIn;
+
+  getIsLoggedIn():Observable<boolean>{
+    console.log(`SessionAuthService: getIsLoggedIn called`)
+    return of(this._loggedIn);
   }
 
   getHTTPClient(): HttpClient {
