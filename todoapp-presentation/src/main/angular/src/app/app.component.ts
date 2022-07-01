@@ -1,4 +1,4 @@
-import { Component, OnChanges } from '@angular/core';
+import { Component, DoCheck, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { SessionAuthService } from './services/session-auth.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -10,7 +10,7 @@ import { MessageBoxParent } from './components2/message-box/message-box-parent';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass'],
 })
-export class AppComponent extends MessageBoxParent implements OnChanges {
+export class AppComponent extends MessageBoxParent implements DoCheck {
 
   private _isLoggedIn: boolean = false;
   public get isLoggedIn(): boolean {
@@ -55,11 +55,11 @@ export class AppComponent extends MessageBoxParent implements OnChanges {
       shareReplay()
   );
 
-  ngOnChanges():void{
+  ngDoCheck():void{
     this.authService.getIsLoggedIn().subscribe({
       next: (loggedIn) => { 
         this._isLoggedIn = loggedIn;
-        console.log("AppComponent: ngOnChanges called, _isLoggedIn: ", this._isLoggedIn)
+        console.log("AppComponent: ngDoCheck called, _isLoggedIn: ", this._isLoggedIn)
       } 
   })}
 }
