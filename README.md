@@ -1,4 +1,6 @@
-# tuDO
+# eventDO
+
+!(logo.png)
 
 Eine kleine WebApp, die eine ganz grundlegende To-Do-Verwaltung mit Benutzern darstellt.
 
