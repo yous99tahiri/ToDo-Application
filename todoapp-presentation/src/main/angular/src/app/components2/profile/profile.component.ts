@@ -106,7 +106,7 @@ export class ProfileComponent extends DialogParent implements OnInit{
   }
 
   showSelectedItem():void{
-    if(this.selectedUsername == this.userAccount.username){
+    if(this.selectedItem == null){
       this.showDangerMessage(`Failed to show selected item: item is null`)
       return;
     }
