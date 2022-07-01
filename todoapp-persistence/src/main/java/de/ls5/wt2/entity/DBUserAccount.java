@@ -16,6 +16,9 @@ public class DBUserAccount extends DBIdentified{
     private Date registrationDate;
     private String userRole;
 
+    @OneToMany(targetEntity = DBTodoItemList.class, fetch = FetchType.EAGER, mappedBy = "creator")
+    private Set<DBTodoItemList> lists;
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -42,6 +45,14 @@ public class DBUserAccount extends DBIdentified{
 
     public String getUserRole() {
         return this.userRole;
+    }
+
+    public Set<DBTodoItemList> getLists() {
+        return this.lists;
+    }
+
+    public void setLists(Set<DBTodoItemList> lists) {
+        this.lists = lists;
     }
 
     @Temporal(TemporalType.TIMESTAMP)

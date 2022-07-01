@@ -8,14 +8,16 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-public class DBTodoItemList extends DBIdentified{
-    String title = "";
-    String description = "";
-    Date lastEdited;
-    Date deadLine ;
-    Set<DBTodoItem> dbtodoItems;
-    String creator= "";
-    
+public class DBTodoItemList extends DBIdentified {
+    private String title = "";
+    private String description = "";
+    private Date lastEdited;
+    private Date deadLine;
+    @OneToMany(targetEntity = DBTodoItem.class, fetch = FetchType.EAGER, mappedBy = "list")
+    private Set<DBTodoItem> todoItems;
+    @ManyToOne(targetEntity = DBUserAccount.class, fetch = FetchType.EAGER)
+    private DBUserAccount creator;
+
     public String getTitle(){
         return this.title;
     }
@@ -53,20 +55,19 @@ public class DBTodoItemList extends DBIdentified{
         this.deadLine = deadLine;
     }
 
-    public String getCreator(){
+    public DBUserAccount getCreator(){
         return this.creator;
     }
 
-    public void setCreator(String creator){
+    public void setCreator(DBUserAccount creator){
         this.creator = creator;
     }
 
-    public void setDBTodoItems(Set<DBTodoItem> dbtodoItems){
-        this.dbtodoItems = dbtodoItems;
+    public void setDBTodoItems(Set<DBTodoItem> todoItems){
+        this.todoItems = todoItems;
     }
 
-    @OneToMany(targetEntity = DBTodoItem.class,fetch = FetchType.EAGER)
     public Set<DBTodoItem> getDBTodoItems(){
-        return this.dbtodoItems;
+        return this.todoItems;
     }
 }
