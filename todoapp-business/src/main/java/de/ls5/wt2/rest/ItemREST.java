@@ -10,11 +10,7 @@ import javax.persistence.criteria.Root;
 
 import de.ls5.wt2.Exception.ResourceAlreadyExistsException;
 import de.ls5.wt2.Exception.ResourceNotFoundException;
-import de.ls5.wt2.entity.DBTodoItem;
-import de.ls5.wt2.entity.DBTodoItemList;
-import de.ls5.wt2.entity.DBTodoItemList_;
-import de.ls5.wt2.entity.DBTodoItem_;
-import de.ls5.wt2.entity.ItemState;
+import de.ls5.wt2.entity.*;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.Permission;
@@ -37,65 +33,47 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = {"rest/item"})
 public class ItemREST {
-
     @Autowired
     private EntityManager entityManager;
 
     //create,delete item:
 
-    @PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(
+        consumes=MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<DBTodoItem> createItem(@RequestBody final DBTodoItem param) {
-        
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+
         final String userId = subject.getPrincipal().toString();
 
         String title = param.getTitle();
         List <DBTodoItem> list = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE  u.title=: title",DBTodoItem.class ).setParameter("title", title).getResultList();
-        if(list.size()>0 ){
-            for (int i=0; i< list.size();i++){
-                if(list.get(i).getListTitle().equals(param.getListTitle())){
-                    throw new ResourceAlreadyExistsException("Item with the  Title : "+title
-                            +" is already Exists in the List : "+ param.getListTitle() );
-                }
-            }
-
-        }
 
         final DBTodoItem item = new DBTodoItem();
-        item.setCreator(userId);
+        item.setCreator(DBUserAccount.getById(userId));
         item.setTitle(param.getTitle());
-        item.setListTitle(param.getListTitle());
+        item.setList(param.getList()); // ToDo: I doubt this works. Maybe get by id somehow
         item.setDescription(param.getDescription());
         item.setLastEdited(param.getLastEdited());
         item.setDeadLine(param.getDeadLine());
         item.setAssignee(param.getAssignee());
-        item.setState(ItemState.OPEN.toString());
-        this.entityManager.persist(item);
-        // add the item in the  ItemList with the listTitel
-        String listTitel= param.getListTitle();
-        DBTodoItemList itemlist = this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title=: title",DBTodoItemList.class )
-                .setParameter("title", listTitel).getSingleResult();
-        if (itemlist == null){
-            return new ResponseEntity<>(param,HttpStatus.NOT_ACCEPTABLE);
-        }
-        Set<DBTodoItem> neuitemList = new HashSet<>(itemlist.getDBTodoItems());
-        neuitemList.add(item);
-        itemlist.setDBTodoItems(neuitemList);
-        this.entityManager.remove(itemlist);
-        this.entityManager.persist(itemlist);
+        item.setState(ItemState.OPEN);
 
+        this.entityManager.persist(item);
 
         return new ResponseEntity<>(item, HttpStatus.CREATED);
     }
 
-    @PutMapping(consumes=MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(
+        consumes=MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<DBTodoItem> updateItem(@RequestBody final DBTodoItem param) {
-        
+
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -104,63 +82,84 @@ public class ItemREST {
         return ResponseEntity.ok(param);
     }
 
-    @DeleteMapping(params = {"listTitle","itemTitle"},
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DBTodoItem> deleteItem(@RequestParam final String listTitle,
-    @RequestParam final String itemTitle) {
+    @DeleteMapping(
+        params = {"listId","itemId"},
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<DBTodoItem> deleteItem(
+        @RequestParam final String listId,
+        @RequestParam final String itemId
+    ) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        List <DBTodoItem >itemlist = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE  u.title =: itemTitle",DBTodoItem.class )
-                .setParameter("itemTitle",itemTitle).getResultList();
-        for (int i=0 ; i< itemlist.size();i++) {
-            if (itemlist.get(i).getListTitle().equals(listTitle)) {
-                DBTodoItemList listitems = this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle", DBTodoItemList.class).
-                        setParameter("listTitle", listTitle).getSingleResult();
+        List <DBTodoItem> itemlist = this.entityManager
+                .createQuery("SELECT u from DBTodoItem u WHERE u.id =: itemId", DBTodoItem.class)
+                .setParameter("itemId", itemId)
+                .getResultList();
+
+        for (DBTodoItem dbTodoItem : itemlist) {
+            if (dbTodoItem.getList().getId() == Long.parseLong(listId)) {
+                DBTodoItemList listitems = this.entityManager
+                        .createQuery("SELECT u from DBTodoItemList u WHERE u.id =: listId", DBTodoItemList.class)
+                        .setParameter("listId", listId)
+                        .getSingleResult();
+
                 Set<DBTodoItem> list = new HashSet<>(listitems.getDBTodoItems());
-                list.remove(itemlist.get(i));
+                list.remove(dbTodoItem);
                 listitems.setDBTodoItems(list);
+
                 this.entityManager.refresh(listitems);
-                this.entityManager.remove(itemlist.get(i));
-                return new ResponseEntity<>(itemlist.get(i), HttpStatus.OK);
+                this.entityManager.remove(dbTodoItem);
+
+                return new ResponseEntity<>(dbTodoItem, HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //create,get,delete itemlist path="/list":
-    @PostMapping(path = "list",
-    consumes=MediaType.APPLICATION_JSON_VALUE,
-    produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(
+        path = "list",
+        consumes=MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<DBTodoItemList> createList(@RequestBody final DBTodoItemList param) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+
         final String userId = subject.getPrincipal().toString();
-        param.setCreator(userId);
+        param.setCreator(DBUserAccount.getById(userId));
 
         String listTitle = param.getTitle();
-        List <DBTodoItemList> listitems = this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class)
-                .setParameter("listTitle",listTitle).getResultList();
-        if(listitems.size()>0){
+
+        List <DBTodoItemList> listitems = this.entityManager
+                .createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class)
+                .setParameter("listTitle",listTitle)
+                .getResultList();
+
+        if(listitems.size() > 0){
             return new ResponseEntity<>(param,HttpStatus.CONFLICT);
         }
+
         DBTodoItemList result = new DBTodoItemList();
         result.setTitle(param.getTitle());
         result.setDescription(param.getDescription());
         result.setDBTodoItems(new HashSet<DBTodoItem>());
         result.setDeadLine(param.getDeadLine());
         result.setLastEdited(param.getLastEdited());
-        result.setCreator(userId);
+        result.setCreator(DBUserAccount.getById(userId));
+
         this.entityManager.persist(result);
+
         return new ResponseEntity<>(result,HttpStatus.CREATED);
     }
 
     @GetMapping(path = "list",
-    params = { "listTitle" }, 
+    params = { "listTitle" },
     produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DBTodoItemList> readList(@RequestParam final String listTitle) {
         final Subject subject = SecurityUtils.getSubject();
@@ -169,7 +168,7 @@ public class ItemREST {
         }
         DBTodoItemList list =  this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class)
                 .setParameter("listTitle", listTitle).getSingleResult();
-        if (list == null) { 
+        if (list == null) {
             throw  new ResourceNotFoundException(" The list with the Titel : "+ listTitle+" is  dont exist");
         }
         return ResponseEntity.ok(list);
@@ -177,7 +176,7 @@ public class ItemREST {
 
     //TODO
     @DeleteMapping(path = "list",
-    params = { "listTitle" }, 
+    params = { "listTitle" },
     produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DBTodoItemList> deleteList(@RequestParam final String listTitle) {
         final Subject subject = SecurityUtils.getSubject();
