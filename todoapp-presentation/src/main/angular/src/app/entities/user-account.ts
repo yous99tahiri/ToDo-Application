@@ -30,8 +30,8 @@ export class UserAccount{
 }
 
 export const enum USER_ROLE{
-  REGULAR = "REGULAR",
-  ADMIN = "ADMIN"
+  REGULAR = "regular",
+  ADMIN = "admin"
 }
 
 

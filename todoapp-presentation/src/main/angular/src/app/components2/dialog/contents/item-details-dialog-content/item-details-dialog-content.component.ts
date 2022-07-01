@@ -17,6 +17,7 @@ export class ItemDetailsDialogContentComponent extends MessageBoxParent{
     title: [this.data.item.title, Validators.required],
     description: [this.data.item.description, Validators.required]
   });
+  selectedUsername:string=this.data.item.assignee.username;
   usernames:string[]=[]
   ret:ItemDetailsDialogOutputData =  {changed:false}
   minDate:Date=new Date();

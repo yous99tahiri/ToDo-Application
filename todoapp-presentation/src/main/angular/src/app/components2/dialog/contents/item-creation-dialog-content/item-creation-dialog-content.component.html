@@ -7,7 +7,7 @@
   
         <wt2-message-box [messageModel]="messageModel"></wt2-message-box>
         
-        <p>List: {{data.listTitle}}</p>
+        <p>List: {{data.list.title}}</p>
 
         <mat-form-field class="full-width">
           <input matInput placeholder="Title:" formControlName="title">
@@ -27,7 +27,7 @@
           <mat-label>Select a username (assignee)</mat-label>
           <mat-select [(value)]="selectedUsername">
             <mat-option *ngFor="let username of usernames" [value]="usernames">
-              {{usernames}}
+              {{username}}
             </mat-option>
           </mat-select>
           <mat-error *ngIf="selectedUsername === ''">

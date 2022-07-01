@@ -4,7 +4,6 @@ import { TodoItem } from 'src/app/entities/todo-item';
 import { UserAccount } from 'src/app/entities/user-account';
 import { ItemService } from 'src/app/services/item.service';
 import { UserService } from 'src/app/services/user.service';
-import { ItemDetailsDialogContentComponent, ItemDetailsDialogInputData, ItemDetailsDialogOutputData } from '../dialog/contents/item-details-dialog-content/item-details-dialog-content.component';
 import { DialogParent } from '../dialog/dialog-parent';
 
 @Component({
