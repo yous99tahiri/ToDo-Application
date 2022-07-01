@@ -6,11 +6,15 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Entity
 public class DBUserAccount extends DBIdentified{
+    @Autowired
+    static EntityManager entityManager;
+
     private String username;
     private String password;
     private Date registrationDate;
@@ -59,5 +63,15 @@ public class DBUserAccount extends DBIdentified{
     @DateTimeFormat(iso = ISO.DATE_TIME)
     public Date getRegistrationDate() {
         return this.registrationDate;
+    }
+
+    public static DBUserAccount getById(String userId) {
+        DBUserAccount user = DBUserAccount.entityManager.find(DBUserAccount.class, userId);
+
+        if(user == null) {
+            throw new NoResultException("There is no user with the id " + userId);
+        }
+
+        return user;
     }
 }
