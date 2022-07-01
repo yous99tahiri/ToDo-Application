@@ -18,7 +18,7 @@ export class UserService {
     const params = {
       "username" : username
     }
-    return this.authService.getHTTPClient().delete<any>(`${this.authService.getBaseUrl()}/user`, {headers: new HttpHeaders(),params : params}).pipe(
+    return this.authService.getHTTPClient().delete<any>(`${this.authService.getBaseUrl()}/auth/profile`, {headers: new HttpHeaders(),params : params}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),
@@ -30,7 +30,7 @@ export class UserService {
 
   readUserAccount(): Observable<UserAccount> {
     console.log(`UserService: readUserAccount called `)
-    return this.authService.getHTTPClient().get<any>(`${this.authService.getBaseUrl()}/user`, {headers: new HttpHeaders()}).pipe(
+    return this.authService.getHTTPClient().get<any>(`${this.authService.getBaseUrl()}/auth/profile`, {headers: new HttpHeaders()}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),
@@ -42,7 +42,7 @@ export class UserService {
 
   readAllUserNames(): Observable<string[]> {
     console.log(`UserService: readAllUserNames called`)
-    return this.authService.getHTTPClient().get<string[]>(`${this.authService.getBaseUrl()}/user/all`, {headers: new HttpHeaders()}).pipe(
+    return this.authService.getHTTPClient().get<string[]>(`${this.authService.getBaseUrl()}/auth/profile/all`, {headers: new HttpHeaders()}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),
@@ -55,7 +55,7 @@ export class UserService {
 
   readUserAssignedTodoItems(): Observable<TodoItem[]> {
     console.log(`UserService: readUserAssignedTodoItems called`)
-    return this.authService.getHTTPClient().get<any[]>(`${this.authService.getBaseUrl()}/user/items`, {headers: new HttpHeaders()}).pipe(
+    return this.authService.getHTTPClient().get<any[]>(`${this.authService.getBaseUrl()}/auth/profile/items`, {headers: new HttpHeaders()}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),
