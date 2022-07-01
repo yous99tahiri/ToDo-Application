@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MessageBoxParent } from 'src/app/components2/message-box/message-box-parent';
+import { TodoItemList } from 'src/app/entities/todo-item-list';
 import { ItemService } from 'src/app/services/item.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -57,7 +58,7 @@ export class ItemCreationDialogContentComponent extends MessageBoxParent {
 
 //<D>
 export type ItemCreationDialogInputData = {
-  listTitle:string
+  list:TodoItemList
   //...
 }
 

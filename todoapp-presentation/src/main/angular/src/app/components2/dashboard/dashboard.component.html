@@ -17,7 +17,7 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #listMenu="matMenu" xPosition="before">
-                <button mat-menu-item (click)="createItem(card.list.title)">Delete List</button>
+                <button mat-menu-item (click)="createItem(card.list)">Create Item</button>
                 <button mat-menu-item (click)="deleteList(card.list)">Delete List</button>
               </mat-menu>
             </mat-card-title>
@@ -30,7 +30,7 @@
               <p>Description: {{card.list.description}}</p>
               <!-- Todo item list here -->
               <mat-selection-list  [multiple]="false">
-                <mat-list-option *ngFor="let item of card.list.dbtodoItems">
+                <mat-list-option *ngFor="let item of card.list.todoItems">
                   <div>
                     <span (click)="showItem(item)" class="item-title">{{item.title}}</span>
                     <span> 

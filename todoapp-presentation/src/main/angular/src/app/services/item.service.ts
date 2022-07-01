@@ -40,10 +40,10 @@ export class ItemService {
   }
 
   // "/item"
-  deleteTodoItem(listTitle:string,itemTitle:string): Observable<TodoItem> {
+  deleteTodoItem(listId:string,itemId:string): Observable<TodoItem> {
     const params = {
-      "listTitle" : listTitle,
-      "itemTitle" : itemTitle
+      "listId" : listId,
+      "itemId" : itemId
     }
     console.log(`ItemService: deleteTodoItem called with params:`,params)
     return this.authService.getHTTPClient().delete<any>(`${this.authService.getBaseUrl()}/item`, {headers: new HttpHeaders(),params : params}).pipe(
@@ -71,9 +71,9 @@ export class ItemService {
   }
 
   // "/list"
-  readTodoItemList(listTitle:string): Observable<TodoItemList> {
-    console.log(`ItemService: readTodoItemList called for list '${listTitle}'`)
-    const params = {"listTitle" : listTitle}
+  readTodoItemList(listId:string): Observable<TodoItemList> {
+    console.log(`ItemService: readTodoItemList called for list '${listId}'`)
+    const params = {"listId" : listId}
     return this.authService.getHTTPClient().get<any>(`${this.authService.getBaseUrl()}/item/list`, {headers: new HttpHeaders(),params : params}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
@@ -84,10 +84,10 @@ export class ItemService {
     );
   }
 
-  deleteTodoItemList(listTitle:string): Observable<TodoItemList> {
-    console.log(`ItemService: deleteTodoItemList called for list '${listTitle}'`)
+  deleteTodoItemList(listId:string): Observable<TodoItemList> {
+    console.log(`ItemService: deleteTodoItemList called for list '${listId}'`)
     const params = {
-      "listTitle" : listTitle
+      "listId" : listId
     }
     return this.authService.getHTTPClient().delete<any>(`${this.authService.getBaseUrl()}/item/list`, {headers: new HttpHeaders(),params : params}).pipe(
       catchError(err => {

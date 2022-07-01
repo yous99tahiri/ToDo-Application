@@ -61,7 +61,7 @@ public class ItemREST {
         final String userId = subject.getPrincipal().toString();
 
         String title = param.getTitle();
-        List <DBTodoItem> list = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE  u.title=: title",DBTodoItem.class ).setParameter("title", title).getResultList();
+        List <DBTodoItem> list = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE u.title=: title",DBTodoItem.class ).setParameter("title", title).getResultList();
 
         final DBTodoItem item = new DBTodoItem();
         item.setCreator(this.getByUserById(userId));
@@ -147,7 +147,7 @@ public class ItemREST {
         String listTitle = param.getTitle();
 
         List <DBTodoItemList> listitems = this.entityManager
-                .createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class)
+                .createQuery("SELECT u from DBTodoItemList u WHERE u.title =: listTitle",DBTodoItemList.class)
                 .setParameter("listTitle",listTitle)
                 .getResultList();
 
@@ -169,33 +169,33 @@ public class ItemREST {
     }
 
     @GetMapping(path = "list",
-    params = { "listTitle" },
+    params = { "listId" },
     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DBTodoItemList> readList(@RequestParam final String listTitle) {
+    public ResponseEntity<DBTodoItemList> readList(@RequestParam final String listId) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        DBTodoItemList list =  this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class)
-                .setParameter("listTitle", listTitle).getSingleResult();
+        DBTodoItemList list =  this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE u.id =: listId",DBTodoItemList.class)
+                .setParameter("listId", listId).getSingleResult();
         if (list == null) {
-            throw  new ResourceNotFoundException(" The list with the Titel : "+ listTitle+" is  dont exist");
+            throw  new ResourceNotFoundException(" The list with the id : "+ listId+" is  dont exist");
         }
         return ResponseEntity.ok(list);
     }
 
     //TODO
     @DeleteMapping(path = "list",
-    params = { "listTitle" },
+    params = { "listId" },
     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DBTodoItemList> deleteList(@RequestParam final String listTitle) {
+    public ResponseEntity<DBTodoItemList> deleteList(@RequestParam final String listId) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        DBTodoItemList liste =  this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE  u.title =: listTitle",DBTodoItemList.class).
-                setParameter("listTitle", listTitle).getSingleResult();
+        DBTodoItemList liste =  this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE u.id =: listId",DBTodoItemList.class).
+                setParameter("listId", listId).getSingleResult();
         if (liste == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
