@@ -1,6 +1,6 @@
 # eventDO
 
-!(/logo.png)
+![Logo](/logo.png "Logo")
 
 Eine kleine WebApp, die eine ganz grundlegende To-Do-Verwaltung mit Benutzern darstellt.
 
