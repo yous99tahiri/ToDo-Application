@@ -4,8 +4,10 @@ import java.util.Collection;
 import java.util.Collections;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 import de.ls5.wt2.conf.auth.permission.ReadTodoItemListPermission;
+import de.ls5.wt2.entity.DBUserAccount;
 import de.ls5.wt2.entity.UserRole;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -25,19 +27,52 @@ public class WT2Realm extends AuthorizingRealm implements Realm {
     @Autowired
     private EntityManager entityManager;
 
+    public DBUserAccount getByUserById(String userId) {
+        DBUserAccount user = this.entityManager.find(DBUserAccount.class, userId);
+
+        if(user == null) {
+            throw new NoResultException("There is no user with the id " + userId);
+        }
+
+        return user;
+    }
+
+
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        final String user = (String) token.getPrincipal();
-        return new SimpleAccount(user, user.toCharArray(), WT2Realm.REALM);
+        final String userId = token.getPrincipal().toString();
+
+        if(userId.isEmpty()) {
+            throw new AuthenticationException();
+        }
+
+        DBUserAccount user = getByUserById(userId);
+
+        System.out.println(userId);
+
+        return new SimpleAccount(userId, user.getPassword(), WT2Realm.REALM);
     }
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         return new AuthorizationInfo() {
 
+            @Autowired
+            private EntityManager entityManager;
+
+            public DBUserAccount getByUserById(String userId) {
+                DBUserAccount user = this.entityManager.find(DBUserAccount.class, userId);
+
+                if(user == null) {
+                    throw new NoResultException("There is no user with the id " + userId);
+                }
+
+                return user;
+            }
+
             @Override
             public Collection<String> getRoles() {
-                if (UserRole.ADMIN.equals(principals.getPrimaryPrincipal())) {
+                if (UserRole.ADMIN.equals(this.getByUserById(principals.getPrimaryPrincipal().toString()).getUserRole())) {
                     return Collections.singleton(UserRole.ADMIN);
                 }
 
