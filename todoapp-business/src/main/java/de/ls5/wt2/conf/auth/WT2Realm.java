@@ -6,6 +6,7 @@ import java.util.Collections;
 import javax.persistence.EntityManager;
 
 import de.ls5.wt2.conf.auth.permission.ReadTodoItemListPermission;
+import de.ls5.wt2.entity.UserRole;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -36,8 +37,8 @@ public class WT2Realm extends AuthorizingRealm implements Realm {
 
             @Override
             public Collection<String> getRoles() {
-                if ("admin".equals(principals.getPrimaryPrincipal())) {
-                    return Collections.singleton("admin");
+                if (UserRole.ADMIN.equals(principals.getPrimaryPrincipal())) {
+                    return Collections.singleton(UserRole.ADMIN);
                 }
 
                 return Collections.emptyList();

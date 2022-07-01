@@ -5,17 +5,18 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-public class DBTodoItemList extends DBIdentified{
-    String title = "";
-    String description = "";
-    Date lastEdited;
-    Date deadLine ;
-    Set<DBTodoItem> dbtodoItems;
-    String creator= "";
-    
+public class DBTodoItemList extends DBIdentified {
+    private String title = "";
+    private String description = "";
+    private Date lastEdited;
+    private Date deadLine;
+    private List<DBTodoItem> todoItems;
+    private DBUserAccount creator;
+
     public String getTitle(){
         return this.title;
     }
@@ -53,20 +54,21 @@ public class DBTodoItemList extends DBIdentified{
         this.deadLine = deadLine;
     }
 
-    public String getCreator(){
+    @ManyToOne(targetEntity = DBUserAccount.class, fetch = FetchType.EAGER)
+    public DBUserAccount getCreator(){
         return this.creator;
     }
 
-    public void setCreator(String creator){
+    public void setCreator(DBUserAccount creator){
         this.creator = creator;
     }
 
-    public void setDBTodoItems(Set<DBTodoItem> dbtodoItems){
-        this.dbtodoItems = dbtodoItems;
+    public void setDBTodoItems(List<DBTodoItem> todoItems){
+        this.todoItems = todoItems;
     }
 
-    @OneToMany(targetEntity = DBTodoItem.class,fetch = FetchType.EAGER)
-    public Set<DBTodoItem> getDBTodoItems(){
-        return this.dbtodoItems;
+    @OneToMany(targetEntity = DBTodoItem.class, fetch = FetchType.EAGER, mappedBy = "list")
+    public List<DBTodoItem> getDBTodoItems(){
+        return this.todoItems;
     }
 }

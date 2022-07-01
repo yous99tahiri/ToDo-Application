@@ -1,7 +1,6 @@
 package de.ls5.wt2.entity;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -15,6 +14,8 @@ public class DBUserAccount extends DBIdentified{
     private String password;
     private Date registrationDate;
     private String userRole;
+
+    private Set<DBTodoItemList> lists;
 
     public void setUsername(String username) {
         this.username = username;
@@ -42,6 +43,15 @@ public class DBUserAccount extends DBIdentified{
 
     public String getUserRole() {
         return this.userRole;
+    }
+
+    @OneToMany(targetEntity = DBTodoItemList.class, fetch = FetchType.EAGER, mappedBy = "creator")
+    public Set<DBTodoItemList> getLists() {
+        return this.lists;
+    }
+
+    public void setLists(Set<DBTodoItemList> lists) {
+        this.lists = lists;
     }
 
     @Temporal(TemporalType.TIMESTAMP)
