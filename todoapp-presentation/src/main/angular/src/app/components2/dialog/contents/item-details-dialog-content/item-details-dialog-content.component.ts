@@ -4,6 +4,8 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MessageBoxParent } from 'src/app/components2/message-box/message-box-parent';
 import { TodoItem } from 'src/app/entities/todo-item';
+import { ItemService } from 'src/app/services/item.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'wt2-item-details-dialog-content',
@@ -22,7 +24,9 @@ export class ItemDetailsDialogContentComponent extends MessageBoxParent{
 
   constructor(public dialogRef: MatDialogRef<ItemDetailsDialogContentComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ItemDetailsDialogInputData,
-    private fb: FormBuilder) { 
+    private fb: FormBuilder,
+    private itemService:ItemService, 
+    private userService:UserService) { 
     super()
     console.log("ItemDetailsDialogContentComponent: created")
     console.log("Injected data: ",data)

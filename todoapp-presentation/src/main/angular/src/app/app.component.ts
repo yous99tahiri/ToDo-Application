@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { SessionAuthService } from './services/session-auth.service';
@@ -11,39 +10,43 @@ import { MessageBoxParent } from './components2/message-box/message-box-parent';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass'],
 })
-export class AppComponent extends MessageBoxParent /*implements OnChanges*/ {
+export class AppComponent extends MessageBoxParent implements OnChanges {
 
-  authService: SessionAuthService;
-  isLoggedIn:boolean=true;
-  errorMessage:string="";
+  private _isLoggedIn: boolean = false;
+  public get isLoggedIn(): boolean {
+    this._isLoggedIn = this.authService.loggedIn
+    return this._isLoggedIn;
+  }
 
-  constructor(
-    private http: HttpClient,
-    authService:SessionAuthService, 
+  constructor(private authService:SessionAuthService, 
     private router:Router,
     private breakpointObserver: BreakpointObserver) {
       super()
-      console.log("AppComponent created")
-    //this.authService = authService;
+      console.log("AppComponent: created")
+      console.log("AppComponent: authService null | undefined?", this.authService == null || this.authService == undefined)
+      console.log("AppComponent: router null | undefined?", this.router == null || this.router == undefined)
   }
 
   logout() {
-    this.isLoggedIn = false;
-    this.router.navigate(["/auth"])
-    /*this.authService.getIsLoggedIn().subscribe({
+    this.authService.getIsLoggedIn().subscribe({
       next: (loggedIn) => {
         if(!loggedIn){
-          //TODO errormsg
-          this.errorMessage = 'Logout fehlgeschlagen. Nicht eingeloggt'
+          this._isLoggedIn = false;
+          this.showDangerMessage("Logout failed. Not logged in. Illegal State!")
           return
         }
         this.authService.logout().subscribe( {
           next:()=>{
+            this._isLoggedIn = false;
+            console.log("Logout succeeded. Navigation to /auth")
             this.router.navigate(["/auth"])
+          },
+          error:(err)=>{
+            this.showDangerMessage(`Logout failed. Error: ${err}`)
           }
         });
       }
-    })*/
+    })
   }
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -51,4 +54,12 @@ export class AppComponent extends MessageBoxParent /*implements OnChanges*/ {
       map(result => result.matches),
       shareReplay()
   );
+
+  ngOnChanges():void{
+    this.authService.getIsLoggedIn().subscribe({
+      next: (loggedIn) => { 
+        this._isLoggedIn = loggedIn;
+        console.log("AppComponent: ngOnChanges called, _isLoggedIn: ", this._isLoggedIn)
+      } 
+  })}
 }

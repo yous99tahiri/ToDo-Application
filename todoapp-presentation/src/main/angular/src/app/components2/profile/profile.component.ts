@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TodoItem } from 'src/app/entities/todo-item';
 import { UserAccount } from 'src/app/entities/user-account';
+import { ItemService } from 'src/app/services/item.service';
+import { UserService } from 'src/app/services/user.service';
 import { ItemDetailsDialogContentComponent, ItemDetailsDialogInputData, ItemDetailsDialogOutputData } from '../dialog/contents/item-details-dialog-content/item-details-dialog-content.component';
 import { DialogParent } from '../dialog/dialog-parent';
 
@@ -56,7 +58,7 @@ export class ProfileComponent extends DialogParent{
     )
   }
 
-  constructor(public d:MatDialog) { 
+  constructor(public d:MatDialog,private itemService:ItemService, private userService:UserService) { 
     super(d)
   }
 

@@ -77,7 +77,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatToolbarModule,
     MatSidenavModule
   ],
-  providers: [SessionAuthService,ItemService,UserService],
+  providers: [SessionAuthService,UserService,ItemService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

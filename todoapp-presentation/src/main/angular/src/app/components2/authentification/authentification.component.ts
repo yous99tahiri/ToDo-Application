@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { UserAccount } from 'src/app/entities/user-account';
+import { SessionAuthService } from 'src/app/services/session-auth.service';
 import { MessageBoxParent } from '../message-box/message-box-parent';
 
 @Component({
@@ -15,13 +18,34 @@ export class AuthentificationComponent extends MessageBoxParent{
   hidePassword:boolean=true;
 
   canLogin():boolean{
-    return true;
+    return this.loginForm.valid
   }
   login(): void {
-    alert('Thanks!');
+    this.authService.getIsLoggedIn().subscribe({
+      next: (loggedIn) => {
+        if(loggedIn){
+          this.showDangerMessage("Login failed. Already logged in. Illegal State!")
+          return
+        }
+        let acc = new UserAccount()
+        acc.username = this.loginForm.get("username").value
+        acc.password = this.loginForm.get("password").value
+        this.authService.login(acc).subscribe( {
+          next:()=>{
+            console.log("Login succeeded. Navigation to /dashboard")
+            this.router.navigate(["/dashboard"])
+          },
+          error:(err)=>{
+            this.showDangerMessage(`Login failed. Error: ${err}`)
+          }
+        });
+      }
+    })
   }
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,private router:Router,private authService:SessionAuthService) {
     super()
+    console.log("AuthentificationComponent: crreated")
+    console.log("AuthentificationComponent: authService null | undefined?", this.authService == null || this.authService == undefined)
   }
 }
