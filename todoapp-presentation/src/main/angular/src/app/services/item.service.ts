@@ -1,6 +1,6 @@
-import { Observable } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { TodoItem } from '../entities/todo-item';
 import { TodoItemList } from '../entities/todo-item-list';
 import { SessionAuthService } from './session-auth.service';
@@ -8,50 +8,65 @@ import { HttpHeaders } from '@angular/common/http';
 @Injectable()
 export class ItemService {
 
-  private _authService: SessionAuthService;
-  
-  public get authService(): SessionAuthService {
-    return this._authService;
-  }
-  public set authService(value: SessionAuthService) {
-    this._authService = value;
-  }
-
-  constructor(authService:SessionAuthService) {
+  constructor(private authService:SessionAuthService) {
     console.log("ItemService: created")
-    this._authService = authService;
+    console.log("ItemService: authService null | undefined?", this.authService == null || this.authService == undefined)
   }
 
   createTodoItem(todoItem:TodoItem): Observable<TodoItem> {
-    console.log(`ItemService: createTodoItem called for item '${todoItem.title}'`)
-    return this._authService.getHTTPClient().post<any>(`${this._authService.getBaseUrl()}/item`, todoItem.toObject(), {headers: new HttpHeaders()}).pipe(
-      map(body => TodoItem.fromObject(body))
+    console.log(`ItemService: createTodoItem called for item`, todoItem)
+    return this.authService.getHTTPClient().post<any>(`${this.authService.getBaseUrl()}/item`, todoItem.toObject(), {headers: new HttpHeaders()}).pipe(
+      catchError(err => {
+        return err.status == 0 ? of([]) : throwError(err);
+      }),
+      map(body => {
+        console.log(`ItemService: createTodoItem response`, body)
+        return TodoItem.fromObject(body)
+      })
     );
   }
 
   updateTodoItem(todoItem:TodoItem): Observable<TodoItem> {
-    console.log(`ItemService: updateTodoItem called for item '${todoItem.title}'`)
-    return this._authService.getHTTPClient().put<any>(`${this._authService.getBaseUrl()}/item`, todoItem.toObject(), {headers: new HttpHeaders()}).pipe(
-      map(body => TodoItem.fromObject(body))
+    console.log(`ItemService: updateTodoItem called for item`, todoItem)
+    return this.authService.getHTTPClient().put<any>(`${this.authService.getBaseUrl()}/item`, todoItem.toObject(), {headers: new HttpHeaders()}).pipe(
+      catchError(err => {
+        return err.status == 0 ? of([]) : throwError(err);
+      }),
+      map(body => {
+        console.log(`ItemService: updateTodoItem response`, body)
+        return TodoItem.fromObject(body)
+      })
     );
   }
 
   // "/item"
   deleteTodoItem(listTitle:string,itemTitle:string): Observable<TodoItem> {
-    console.log(`ItemService: deleteTodoItem called for item '${itemTitle}' in list '${listTitle}'`)
     const params = {
       "listTitle" : listTitle,
       "itemTitle" : itemTitle
     }
-    return this._authService.getHTTPClient().delete<any>(`${this._authService.getBaseUrl()}/item`, {headers: new HttpHeaders(),params : params}).pipe(
-      map(body => TodoItem.fromObject(body))
+    console.log(`ItemService: deleteTodoItem called with params:`,params)
+    return this.authService.getHTTPClient().delete<any>(`${this.authService.getBaseUrl()}/item`, {headers: new HttpHeaders(),params : params}).pipe(
+      catchError(err => {
+        return err.status == 0 ? of([]) : throwError(err);
+      }),
+      map(body => {
+        console.log(`ItemService: deleteTodoItem response`, body)
+        return TodoItem.fromObject(body)
+      })
     );
   }
   
   createTodoItemList(todoItemList:TodoItemList): Observable<TodoItemList> {
-    console.log(`ItemService: createTodoItemList called for list '${todoItemList.title}'`)
-    return this._authService.getHTTPClient().post<any>(`${this._authService.getBaseUrl()}/item/list`, todoItemList.toObject(), {headers: new HttpHeaders()}).pipe(
-      map(body => TodoItemList.fromObject(body))
+    console.log(`ItemService: createTodoItemList called for list`,todoItemList)
+    return this.authService.getHTTPClient().post<any>(`${this.authService.getBaseUrl()}/item/list`, todoItemList.toObject(), {headers: new HttpHeaders()}).pipe(
+      catchError(err => {
+        return err.status == 0 ? of([]) : throwError(err);
+      }),
+      map(body => {
+        console.log(`ItemService: createTodoItemList response`, body)
+        return TodoItemList.fromObject(body)
+      })
     );
   }
 
@@ -59,8 +74,13 @@ export class ItemService {
   readTodoItemList(listTitle:string): Observable<TodoItemList> {
     console.log(`ItemService: readTodoItemList called for list '${listTitle}'`)
     const params = {"listTitle" : listTitle}
-    return this._authService.getHTTPClient().get<any>(`${this._authService.getBaseUrl()}/item/list`, {headers: new HttpHeaders(),params : params}).pipe(
-      map(body => TodoItemList.fromObject(body))
+    return this.authService.getHTTPClient().get<any>(`${this.authService.getBaseUrl()}/item/list`, {headers: new HttpHeaders(),params : params}).pipe(
+      catchError(err => {
+        return err.status == 0 ? of([]) : throwError(err);
+      }),
+      map(body => {
+        console.log(`ItemService: readTodoItemList response`, body)
+        return TodoItemList.fromObject(body)})
     );
   }
 
@@ -69,20 +89,24 @@ export class ItemService {
     const params = {
       "listTitle" : listTitle
     }
-    return this._authService.getHTTPClient().delete<any>(`${this._authService.getBaseUrl()}/item/list`, {headers: new HttpHeaders(),params : params}).pipe(
-      map(body => TodoItemList.fromObject(body))
+    return this.authService.getHTTPClient().delete<any>(`${this.authService.getBaseUrl()}/item/list`, {headers: new HttpHeaders(),params : params}).pipe(
+      catchError(err => {
+        return err.status == 0 ? of([]) : throwError(err);
+      }),
+      map(body => {
+        console.log(`ItemService: deleteTodoItemList response`, body)
+        return TodoItemList.fromObject(body)})
     );
   }
 
   readAllTodoItemLists(): Observable<TodoItemList[]> {
     console.log(`ItemService: readAllTodoItemList called`)
-    return this._authService.getHTTPClient().get<any[]>(`${this._authService.getBaseUrl()}/item/list/all`, {headers: new HttpHeaders()}).pipe(
+    return this.authService.getHTTPClient().get<any[]>(`${this.authService.getBaseUrl()}/item/list/all`, {headers: new HttpHeaders()}).pipe(
+      catchError(err => {
+        return err.status == 0 ? of([]) : throwError(err);
+      }),
       map(body => {
-        console.log("--------------")
-        console.log("Received body on readAllTodoItemLists:", body)
-        console.log("Body as json:", JSON.stringify(body))
-        console.log("typeof:", typeof(body))
-        console.log("--------------")
+        console.log(`ItemService: readAllTodoItemLists response`, body)
         return body.map(obj => { return TodoItemList.fromObject(obj)})
       })
     );

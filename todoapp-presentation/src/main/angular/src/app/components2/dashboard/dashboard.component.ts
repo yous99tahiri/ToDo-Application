@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ListCreationDialogContentComponent, ListCreationDialogInputData, ListCreationDialogOutputData } from '../dialog/contents/list-creation-dialog-content/list-creation-dialog-content.component';
 import { ItemCreationDialogContentComponent, ItemCreationDialogInputData, ItemCreationDialogOutputData } from '../dialog/contents/item-creation-dialog-content/item-creation-dialog-content.component';
 import { ItemDetailsDialogContentComponent, ItemDetailsDialogInputData, ItemDetailsDialogOutputData } from '../dialog/contents/item-details-dialog-content/item-details-dialog-content.component';
+import { ItemService } from 'src/app/services/item.service';
 
 @Component({
   selector: 'wt2-dashboard',
@@ -77,7 +78,8 @@ export class DashboardComponent extends DialogParent{
 
   }
   constructor(private breakpointObserver: BreakpointObserver,
-    public d:MatDialog) { 
+    public d:MatDialog,
+    private itemService:ItemService) { 
     super(d)
   }
 }
