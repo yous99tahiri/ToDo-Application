@@ -18,7 +18,7 @@ export class RegisterService {
 
   createAccount(userAccount: UserAccount): Observable<UserAccount> {
     console.log(`RegisterService: createUser called for user `, userAccount)
-    const url = `${env.apiUrl}/auth/profile`
+    const url = `${env.apiUrl}/auth/profile/create`
     return this.http.post<any>(url, userAccount.toObject(), {headers: this.defaultHeaders}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
