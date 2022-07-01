@@ -3,14 +3,14 @@
   [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
   [mode]="(isHandset$ | async) ? 'over' : 'side'"
   [opened]="(isHandset$ | async) === false">
-      <mat-toolbar>Navigation</mat-toolbar>
       <mat-nav-list>
         <a *ngIf="!isLoggedIn" 
         mat-list-item 
         routerLink="/auth"
         routerLinkActive="active" 
-        ariaCurrentWhenActive="page">
-            <mat-icon>login</mat-icon>
+        ariaCurrentWhenActive="page"
+        #rla="routerLinkActive">
+            <mat-icon color="{{rla.isActive ? 'accent' : 'fffff'}}">login</mat-icon>
             <span>Login</span>
         </a>
       </mat-nav-list>
@@ -19,8 +19,9 @@
         mat-list-item 
         routerLink="/register"
         routerLinkActive="active" 
-        ariaCurrentWhenActive="page">
-            <mat-icon>person_add</mat-icon>
+        ariaCurrentWhenActive="page"
+        #rla="routerLinkActive">
+            <mat-icon color="{{rla.isActive ? 'accent' : 'fffff'}}">person_add</mat-icon>
             <span>Register</span>
         </a>
       </mat-nav-list>
@@ -29,8 +30,9 @@
         mat-list-item 
         routerLink="/dashboard"
         routerLinkActive="active" 
-        ariaCurrentWhenActive="page">
-            <mat-icon>dashboard</mat-icon>
+        ariaCurrentWhenActive="page"
+        #rla="routerLinkActive">
+            <mat-icon color="{{rla.isActive ? 'accent' : 'fffff'}}">dashboard</mat-icon>
             <span>Dashboard</span>
         </a>
       </mat-nav-list>
@@ -39,8 +41,9 @@
         mat-list-item 
         routerLink="/profile"
         routerLinkActive="active" 
-        ariaCurrentWhenActive="page">
-            <mat-icon>account_circle</mat-icon>
+        ariaCurrentWhenActive="page"
+        #rla="routerLinkActive">
+            <mat-icon color="{{rla.isActive ? 'accent' : 'fffff'}}">account_circle</mat-icon>
             <span>Profile</span>
         </a>
       </mat-nav-list>
@@ -59,7 +62,7 @@
           <button mat-icon-button (click)="sidenav.toggle()">
               <mat-icon>menu</mat-icon>
           </button>
-          <span class="flexExpand">tuDo</span>
+          <img src="assets/logo_breit_transparent.png" style='height: 100%; width: 100%; object-fit: contain'>
       </mat-toolbar>
       <wt2-message-box [messageModel]="messageModel"></wt2-message-box>
       <router-outlet></router-outlet>
