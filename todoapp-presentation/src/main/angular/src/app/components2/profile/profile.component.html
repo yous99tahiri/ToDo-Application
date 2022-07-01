@@ -25,7 +25,7 @@
         <button mat-raised-button color="accent" type="submit" [disabled]="selectedItem === null" (click)="showSelectedItem()">Show Item</button>
     </mat-card-actions>
 </mat-card>
-<mat-card class="card">
+<mat-card class="card" *ngIf="isAdmin()">
     <mat-card-header>
       <mat-card-title>Admin Area</mat-card-title>
     </mat-card-header>
