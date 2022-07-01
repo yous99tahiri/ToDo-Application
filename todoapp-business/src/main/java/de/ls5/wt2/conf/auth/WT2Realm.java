@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
 import de.ls5.wt2.conf.auth.permission.ReadTodoItemListPermission;
+import de.ls5.wt2.entity.DBTodoItemList;
 import de.ls5.wt2.entity.DBUserAccount;
 import de.ls5.wt2.entity.UserRole;
 import org.apache.shiro.authc.AuthenticationException;
@@ -27,11 +28,15 @@ public class WT2Realm extends AuthorizingRealm implements Realm {
     @Autowired
     private EntityManager entityManager;
 
-    public DBUserAccount getByUserById(String userId) {
-        DBUserAccount user = this.entityManager.find(DBUserAccount.class, userId);
+    public DBUserAccount getByUserByName(String username) {
+
+        DBUserAccount user = this.entityManager
+                .createQuery("SELECT u from DBUserAccount u WHERE  u.username =: username", DBUserAccount.class)
+                .setParameter("username", username)
+                .getSingleResult();
 
         if(user == null) {
-            throw new NoResultException("There is no user with the id " + userId);
+            throw new NoResultException("There is no user with the name " + username);
         }
 
         return user;
@@ -40,17 +45,17 @@ public class WT2Realm extends AuthorizingRealm implements Realm {
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        final String userId = token.getPrincipal().toString();
+        final String username = token.getPrincipal().toString();
 
-        if(userId.isEmpty()) {
+        if(username.isEmpty()) {
             throw new AuthenticationException();
         }
 
-        DBUserAccount user = getByUserById(userId);
+        DBUserAccount user = getByUserByName(username);
 
-        System.out.println(userId);
+        System.out.println(username);
 
-        return new SimpleAccount(userId, user.getPassword(), WT2Realm.REALM);
+        return new SimpleAccount(username, user.getPassword(), WT2Realm.REALM);
     }
 
     @Override
