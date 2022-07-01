@@ -18,7 +18,7 @@ export class AuthentificationComponent extends MessageBoxParent{
   hidePassword:boolean=true;
 
   canLogin():boolean{
-    return true;
+    return this.loginForm.valid
   }
   login(): void {
     this.authService.getIsLoggedIn().subscribe({
