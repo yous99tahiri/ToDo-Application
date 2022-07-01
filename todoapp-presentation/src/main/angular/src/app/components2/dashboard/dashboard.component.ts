@@ -5,9 +5,6 @@ import { TodoItem } from 'src/app/entities/todo-item';
 import { TodoItemList } from 'src/app/entities/todo-item-list';
 import { DialogParent } from '../dialog/dialog-parent';
 import { MatDialog } from '@angular/material/dialog';
-import { ListCreationDialogContentComponent, ListCreationDialogInputData, ListCreationDialogOutputData } from '../dialog/contents/list-creation-dialog-content/list-creation-dialog-content.component';
-import { ItemCreationDialogContentComponent, ItemCreationDialogInputData, ItemCreationDialogOutputData } from '../dialog/contents/item-creation-dialog-content/item-creation-dialog-content.component';
-import { ItemDetailsDialogContentComponent, ItemDetailsDialogInputData, ItemDetailsDialogOutputData } from '../dialog/contents/item-details-dialog-content/item-details-dialog-content.component';
 import { ItemService } from 'src/app/services/item.service';
 
 @Component({
@@ -17,11 +14,11 @@ import { ItemService } from 'src/app/services/item.service';
 })
 export class DashboardComponent extends DialogParent{
   /** Based on the screen size, switch from standard to one column per row */
-  todoItems:TodoItemList[] = []
+  todoItemLists:TodoItemList[] = []
   
   cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map(({ matches }) => {
-      return this.todoItems.map(list => {return {list:list,cols:1,rows:1}} );
+      return this.todoItemLists.map(list => {return {list:list,cols:1,rows:1}} );
     })
   );
 
@@ -30,9 +27,8 @@ export class DashboardComponent extends DialogParent{
     .subscribe(
       ret => {
         if("changed" in ret && ret.changed){
-          //reload all lists
           console.log("item changed")
-          return
+          this.getAllLists()
         }
         console.log("item not changed")
       }
@@ -40,7 +36,16 @@ export class DashboardComponent extends DialogParent{
   }
 
   deleteItem(item:TodoItem):void{
-
+    this.itemService.deleteTodoItem(item.list.id.toString(),item.id.toString()).subscribe({
+      next:(item)=>{
+        console.log("Dashboard: deleteItem success:",item)
+        this.getAllLists();
+      },
+      error:(err)=>{
+        this.showDangerMessage(`Failed to delete item`)
+        console.log("Dashboard: deleteItem failed: ",err)
+      }
+    })
   }
 
   createItem(list:TodoItemList){
@@ -49,8 +54,7 @@ export class DashboardComponent extends DialogParent{
       ret => {
         if(ret && "created" in ret && ret.created){
           console.log("item created")
-          return
-          //reload all lists
+          this.getAllLists()
         }
         console.log("item not created")
       }
@@ -62,8 +66,8 @@ export class DashboardComponent extends DialogParent{
     .subscribe(
       ret => {
         if("created" in ret && ret.created){
-          //reload all lists
           console.log("list created")
+          this.getAllLists()
           return
         }
         console.log("list not created")
@@ -72,10 +76,28 @@ export class DashboardComponent extends DialogParent{
   }
 
   deleteList(list:TodoItemList):void{
-
+    this.itemService.deleteTodoItemList(list.id.toString()).subscribe({
+      next:(list)=>{
+        console.log("Dashboard: deleteList success:",list)
+        this.getAllLists();
+      },
+      error:(err)=>{
+        this.showDangerMessage(`Failed to delete list`)
+        console.log("Dashboard: deleteList failed: ",err)
+      }
+    })
   }
   getAllLists():void{
-
+    this.itemService.readAllTodoItemLists().subscribe({
+      next:(lists)=>{
+        console.log("Dashboard: getAllLists success:",lists)
+        this.todoItemLists = lists;
+      },
+      error:(err)=>{
+        this.showDangerMessage(`Failed to load lists`)
+        console.log("Dashboard: getAllLists failed: ",err)
+      }
+    })
   }
   constructor(private breakpointObserver: BreakpointObserver,
     public d:MatDialog,
