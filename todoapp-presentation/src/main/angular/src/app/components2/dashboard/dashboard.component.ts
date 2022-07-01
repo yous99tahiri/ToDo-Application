@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { TodoItem } from 'src/app/entities/todo-item';
@@ -12,15 +12,20 @@ import { ItemService } from 'src/app/services/item.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.sass']
 })
-export class DashboardComponent extends DialogParent{
+export class DashboardComponent extends DialogParent implements OnInit{
   /** Based on the screen size, switch from standard to one column per row */
   todoItemLists:TodoItemList[] = []
   
   cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map(({ matches }) => {
+      //if(matches){ return ...}
       return this.todoItemLists.map(list => {return {list:list,cols:1,rows:1}} );
     })
   );
+
+  ngOnInit():void{
+    this.getAllLists()
+  }
 
   showItem(item:TodoItem):void{
     this.openItemDetailsDialog({item:item})
