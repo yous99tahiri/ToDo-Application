@@ -1,58 +1,55 @@
-package de.ls5.wt2.rest;
+package de.ls5.wt2.auth;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Root;
-
-import de.ls5.wt2.entity.DBTodoItem;
-import de.ls5.wt2.entity.DBTodoItem_;
-import de.ls5.wt2.entity.DBTodoItemList;
-import de.ls5.wt2.entity.DBUserAccount;
-import de.ls5.wt2.entity.DBUserAccount_;
-import de.ls5.wt2.entity.UserRole;
-
+import de.ls5.wt2.entity.*;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.Permission;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @RestController
-@RequestMapping(path = {"rest/user"})
-public class UserREST2 {
-
+@RequestMapping(path = {"rest/auth/profile"})
+public class UserREST {
     @Autowired
     private EntityManager entityManager;
 
+    @GetMapping(produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<?> getProfile() {
+
+        final Subject subject = SecurityUtils.getSubject();
+
+        if (!subject.isAuthenticated()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        return ResponseEntity.ok(subject.getPrincipal().toString());
+    }
+
     @PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DBUserAccount> createUser(@RequestBody final DBUserAccount param) {
         String username = param.getUsername();
         List<DBUserAccount> users = this.entityManager
-            .createQuery(
-            "SELECT u from DBUserAccount u WHERE u.username = :username",
-                DBUserAccount.class
-            )
-            .setParameter("username", username)
-            .getResultList();
+                .createQuery(
+                        "SELECT u from DBUserAccount u WHERE u.username = :username",
+                        DBUserAccount.class
+                )
+                .setParameter("username", username)
+                .getResultList();
 
         if (users == null || users.size() != 0) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -79,13 +76,13 @@ public class UserREST2 {
         }
         final String userId = subject.getPrincipal().toString();
         List<DBUserAccount> users = this.entityManager
-        .createQuery(
-            "SELECT u from DBUserAccount u WHERE u.username = :username",
-                DBUserAccount.class
-            )
-        .setParameter("username", userId)
-        .getResultList();
-        
+                .createQuery(
+                        "SELECT u from DBUserAccount u WHERE u.username = :username",
+                        DBUserAccount.class
+                )
+                .setParameter("username", userId)
+                .getResultList();
+
         if (users == null || users.size() != 1) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -94,20 +91,21 @@ public class UserREST2 {
         return ResponseEntity.ok(account);
     }
 
-    @DeleteMapping(params = { "username" }, 
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(params = { "username" },
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DBUserAccount> deleteUser(@RequestParam final String username) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        //subject.checkRole(UserRole.ADMIN.toString()); //"admin" ? <- TODO needed for Rolecheck ?!
 
-        subject.checkRole("admin"); 
+        subject.checkRole(UserRole.ADMIN.toString());
+
+//        subject.checkRole("admin");
 
         DBUserAccount user = this.entityManager.createQuery("SELECT u from DBUserAccount u WHERE u.username = :username ",DBUserAccount.class)
-        .setParameter("username", username)
-        .getSingleResult();
+                .setParameter("username", username)
+                .getSingleResult();
         if (user==null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -131,7 +129,7 @@ public class UserREST2 {
     }
 
     @GetMapping(path = "items",
-    produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DBTodoItem>> readAssignedItems() {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
@@ -154,12 +152,15 @@ public class UserREST2 {
     }
 
     @GetMapping(path = "all",
-    produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> readAllUsernames() {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+
+        subject.checkRole(UserRole.ADMIN.toString());
+
         final CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
         final CriteriaQuery<DBUserAccount> query = builder.createQuery(DBUserAccount.class);
 
@@ -170,11 +171,11 @@ public class UserREST2 {
         query.select(from).orderBy(order);
 
         final List<String> result = this.entityManager
-        .createQuery(query)
-        .getResultList()
-        .stream()
-        .map(DBUserAccount::getUsername)
-        .collect(Collectors.toList());
+                .createQuery(query)
+                .getResultList()
+                .stream()
+                .map(DBUserAccount::getUsername)
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok(result);
     }
