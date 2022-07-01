@@ -1,21 +1,14 @@
 package de.ls5.wt2.rest;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Root;
 
-import de.ls5.wt2.Exception.ResourceAlreadyExistsException;
 import de.ls5.wt2.Exception.ResourceNotFoundException;
 import de.ls5.wt2.entity.*;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.Permission;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
