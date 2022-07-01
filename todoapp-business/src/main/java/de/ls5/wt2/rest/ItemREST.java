@@ -1,8 +1,10 @@
 package de.ls5.wt2.rest;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
@@ -36,7 +38,15 @@ public class ItemREST {
     @Autowired
     private EntityManager entityManager;
 
-    //create,delete item:
+    public DBUserAccount getByUserById(String userId) {
+        DBUserAccount user = this.entityManager.find(DBUserAccount.class, userId);
+
+        if(user == null) {
+            throw new NoResultException("There is no user with the id " + userId);
+        }
+
+        return user;
+    }
 
     @PostMapping(
         consumes=MediaType.APPLICATION_JSON_VALUE,
@@ -54,7 +64,7 @@ public class ItemREST {
         List <DBTodoItem> list = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE  u.title=: title",DBTodoItem.class ).setParameter("title", title).getResultList();
 
         final DBTodoItem item = new DBTodoItem();
-        item.setCreator(DBUserAccount.getById(userId));
+        item.setCreator(this.getByUserById(userId));
         item.setTitle(param.getTitle());
         item.setList(param.getList()); // ToDo: I doubt this works. Maybe get by id somehow
         item.setDescription(param.getDescription());
@@ -107,7 +117,7 @@ public class ItemREST {
                         .setParameter("listId", listId)
                         .getSingleResult();
 
-                Set<DBTodoItem> list = new HashSet<>(listitems.getDBTodoItems());
+                ArrayList<DBTodoItem> list = new ArrayList<>(listitems.getDBTodoItems());
                 list.remove(dbTodoItem);
                 listitems.setDBTodoItems(list);
 
@@ -132,7 +142,7 @@ public class ItemREST {
         }
 
         final String userId = subject.getPrincipal().toString();
-        param.setCreator(DBUserAccount.getById(userId));
+        param.setCreator(this.getByUserById(userId));
 
         String listTitle = param.getTitle();
 
@@ -148,10 +158,10 @@ public class ItemREST {
         DBTodoItemList result = new DBTodoItemList();
         result.setTitle(param.getTitle());
         result.setDescription(param.getDescription());
-        result.setDBTodoItems(new HashSet<DBTodoItem>());
+        result.setDBTodoItems(new ArrayList<>());
         result.setDeadLine(param.getDeadLine());
         result.setLastEdited(param.getLastEdited());
-        result.setCreator(DBUserAccount.getById(userId));
+        result.setCreator(this.getByUserById(userId));
 
         this.entityManager.persist(result);
 
@@ -190,7 +200,7 @@ public class ItemREST {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        Set <DBTodoItem> itemlist = liste.getDBTodoItems();
+        List<DBTodoItem> itemlist = liste.getDBTodoItems();
         Iterator<DBTodoItem> it = itemlist.iterator();
         while(it.hasNext()) {
                 this.entityManager.remove(it.next());
@@ -209,7 +219,7 @@ public class ItemREST {
         }
         List<DBTodoItemList> lists =  this.entityManager.createQuery("SELECT l FROM DBTodoItemList AS l",DBTodoItemList.class).getResultList();
         if (lists == null){
-            lists = new ArrayList<DBTodoItemList>();
+            lists = new ArrayList<>();
         }
         //TODO sort by lastEdited?!
         return ResponseEntity.ok(lists);
