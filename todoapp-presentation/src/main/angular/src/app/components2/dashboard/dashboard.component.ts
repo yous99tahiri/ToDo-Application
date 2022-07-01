@@ -38,6 +38,7 @@ export class DashboardComponent extends DialogParent implements OnInit{
         if("changed" in ret && ret.changed){
           console.log("item changed")
           this.getAllLists()
+          this.showSuccessMessage(`Successfully edited item!`)
           return;
         }
         console.log("item not changed")
@@ -54,6 +55,7 @@ export class DashboardComponent extends DialogParent implements OnInit{
       next:(item)=>{
         console.log("Dashboard: deleteItem success:",item)
         this.getAllLists();
+        this.showSuccessMessage(`Successfully deleted item!`)
       },
       error:(err)=>{
         this.showDangerMessage(`Failed to delete item`)
@@ -73,6 +75,7 @@ export class DashboardComponent extends DialogParent implements OnInit{
         if(ret && "created" in ret && ret.created){
           console.log("item created")
           this.getAllLists()
+          this.showSuccessMessage(`Successfully created item!`)
           return;
         }
         console.log("item not created")
@@ -87,6 +90,7 @@ export class DashboardComponent extends DialogParent implements OnInit{
         if("created" in ret && ret.created){
           console.log("list created")
           this.getAllLists()
+          this.showSuccessMessage(`Successfully created list!`)
           return
         }
         console.log("list not created")
@@ -103,6 +107,7 @@ export class DashboardComponent extends DialogParent implements OnInit{
       next:(list)=>{
         console.log("Dashboard: deleteList success:",list)
         this.getAllLists();
+        this.showSuccessMessage(`Successfully deleted list!`)
       },
       error:(err)=>{
         this.showDangerMessage(`Failed to delete list`)

@@ -55,6 +55,10 @@ export class ProfileComponent extends DialogParent implements OnInit{
   }
 
   getUsernames():void{
+    if(!this.isAdmin()){
+      this.showDangerMessage(`Failed to load usernames: you are no admin`)
+      return;
+    }
     this.userService.readAllUserNames().subscribe({
       next:(usernames)=>{
         console.log("ProfileComponent: getUsernames success:",usernames)
@@ -87,6 +91,7 @@ export class ProfileComponent extends DialogParent implements OnInit{
     this.userService.deleteUserAccount(this.selectedUsername).subscribe({
       next:(deletedAcc)=>{
         console.log("ProfileComponent: deleteUser success:",deletedAcc)
+        this.showSuccessMessage(`Successfully deleted user!`)
         this.getUsernames();
       },
       error:(err)=>{
@@ -111,6 +116,7 @@ export class ProfileComponent extends DialogParent implements OnInit{
         if(ret && "changed" in ret && ret.changed){
           console.log("item changed")
           this.getAssignedItems()
+          this.showSuccessMessage(`Successfully edited item!`)
           return
         }
         console.log("item not changed")
