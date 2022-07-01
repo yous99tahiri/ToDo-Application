@@ -1,26 +1,20 @@
 package de.ls5.wt2.entity;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Entity
 public class DBUserAccount extends DBIdentified{
-    @Autowired
-    static EntityManager entityManager;
-
     private String username;
     private String password;
     private Date registrationDate;
     private String userRole;
 
-    @OneToMany(targetEntity = DBTodoItemList.class, fetch = FetchType.EAGER, mappedBy = "creator")
     private Set<DBTodoItemList> lists;
 
     public void setUsername(String username) {
@@ -51,6 +45,7 @@ public class DBUserAccount extends DBIdentified{
         return this.userRole;
     }
 
+    @OneToMany(targetEntity = DBTodoItemList.class, fetch = FetchType.EAGER, mappedBy = "creator")
     public Set<DBTodoItemList> getLists() {
         return this.lists;
     }
@@ -63,15 +58,5 @@ public class DBUserAccount extends DBIdentified{
     @DateTimeFormat(iso = ISO.DATE_TIME)
     public Date getRegistrationDate() {
         return this.registrationDate;
-    }
-
-    public static DBUserAccount getById(String userId) {
-        DBUserAccount user = DBUserAccount.entityManager.find(DBUserAccount.class, userId);
-
-        if(user == null) {
-            throw new NoResultException("There is no user with the id " + userId);
-        }
-
-        return user;
     }
 }

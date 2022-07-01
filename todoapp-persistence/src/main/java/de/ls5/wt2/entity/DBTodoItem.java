@@ -12,14 +12,12 @@ public class DBTodoItem extends DBIdentified {
     private String description;
     private Date lastEdited;
     private Date deadLine;
-    @ManyToOne(targetEntity = DBUserAccount.class, fetch = FetchType.EAGER)
     private DBUserAccount creator;
-    @ManyToOne(targetEntity = DBUserAccount.class, fetch = FetchType.EAGER, optional = true)
     private DBUserAccount assignee;
-    @ManyToOne(targetEntity = DBTodoItemList.class, fetch = FetchType.EAGER)
     private DBTodoItemList list;
     private String state = ItemState.OPEN;
 
+    @ManyToOne(targetEntity = DBTodoItemList.class, fetch = FetchType.EAGER)
     public DBTodoItemList getList(){
         return this.list;
     }
@@ -65,6 +63,7 @@ public class DBTodoItem extends DBIdentified {
         this.deadLine = deadLine;
     }
 
+    @ManyToOne(targetEntity = DBUserAccount.class, fetch = FetchType.EAGER)
     public DBUserAccount getCreator(){
         return this.creator;
     }
@@ -73,6 +72,7 @@ public class DBTodoItem extends DBIdentified {
         this.creator = creator;
     }
 
+    @ManyToOne(targetEntity = DBUserAccount.class, fetch = FetchType.EAGER, optional = true)
     public DBUserAccount getAssignee(){
         return this.assignee;
     }

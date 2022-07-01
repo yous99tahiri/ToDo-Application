@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -13,9 +14,7 @@ public class DBTodoItemList extends DBIdentified {
     private String description = "";
     private Date lastEdited;
     private Date deadLine;
-    @OneToMany(targetEntity = DBTodoItem.class, fetch = FetchType.EAGER, mappedBy = "list")
-    private Set<DBTodoItem> todoItems;
-    @ManyToOne(targetEntity = DBUserAccount.class, fetch = FetchType.EAGER)
+    private List<DBTodoItem> todoItems;
     private DBUserAccount creator;
 
     public String getTitle(){
@@ -55,6 +54,7 @@ public class DBTodoItemList extends DBIdentified {
         this.deadLine = deadLine;
     }
 
+    @ManyToOne(targetEntity = DBUserAccount.class, fetch = FetchType.EAGER)
     public DBUserAccount getCreator(){
         return this.creator;
     }
@@ -63,11 +63,12 @@ public class DBTodoItemList extends DBIdentified {
         this.creator = creator;
     }
 
-    public void setDBTodoItems(Set<DBTodoItem> todoItems){
+    public void setDBTodoItems(List<DBTodoItem> todoItems){
         this.todoItems = todoItems;
     }
 
-    public Set<DBTodoItem> getDBTodoItems(){
+    @OneToMany(targetEntity = DBTodoItem.class, fetch = FetchType.EAGER, mappedBy = "list")
+    public List<DBTodoItem> getDBTodoItems(){
         return this.todoItems;
     }
 }
