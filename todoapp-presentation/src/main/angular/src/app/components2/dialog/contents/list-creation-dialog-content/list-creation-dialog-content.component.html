@@ -1,0 +1,38 @@
+<form [formGroup]="listForm" novalidate (ngSubmit)="createList()">
+    <mat-card class="card">
+      <mat-card-header>
+        <mat-card-title>List Creation</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        
+        <wt2-message-box [messageModel]="messageModel"></wt2-message-box>
+
+        <mat-form-field class="full-width">
+          <input matInput placeholder="Title:" formControlName="title">
+          <mat-error *ngIf="listForm.controls['title'].hasError('required')">
+            Title is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <textarea matInput placeholder="Description:" formControlName="description"></textarea>
+          <mat-error *ngIf="listForm.controls['description'].hasError('required')">
+            Description is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>    
+  
+      <mat-form-field class="full-width">
+        <input matInput [matDatepicker]="picker" placeholder="Deadline:" [ngModelOptions]="{standalone: true}" required [(ngModel)]="deadLine" [min]="minDate">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>    
+
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" type="submit">Create</button>
+        <button mat-raised-button color="primary" type="button" (click)="closeDialog()">Close</button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+  

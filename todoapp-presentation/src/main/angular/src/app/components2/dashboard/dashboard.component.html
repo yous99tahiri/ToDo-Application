@@ -1,0 +1,54 @@
+<mat-card class="card">
+  <mat-card-header>
+    <mat-card-title>Dashboard</mat-card-title>
+  </mat-card-header>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" type="button" (click)="createList()">Create List</button>
+  </mat-card-actions>
+  <mat-card-content class="dashboard-card-content"> 
+    <wt2-message-box [messageModel]="messageModel"></wt2-message-box>
+    <mat-grid-list cols="2" rowHeight="350px">
+      <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
+        <mat-card class="list-card">
+          <mat-card-header>
+            <mat-card-title class="list-title">
+              {{card.list.title}}
+              <button mat-icon-button class="more-button" [matMenuTriggerFor]="listMenu" aria-label="Toggle list menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #listMenu="matMenu" xPosition="before">
+                <button mat-menu-item (click)="createItem(card.list.title)">Delete List</button>
+                <button mat-menu-item (click)="deleteList(card.list)">Delete List</button>
+              </mat-menu>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="dashboard-list-card-content">
+            <div>
+              <!-- List content here -->
+              <p>Creator: {{card.list.creator}}</p>
+              <p>Deadline: {{card.list.deadLine | date}} </p>
+              <p>Description: {{card.list.description}}</p>
+              <!-- Todo item list here -->
+              <mat-selection-list  [multiple]="false">
+                <mat-list-option *ngFor="let item of card.list.dbtodoItems">
+                  <div>
+                    <span (click)="showItem(item)" class="item-title">{{item.title}}</span>
+                    <span> 
+                      <button mat-icon-button class="more-button" [matMenuTriggerFor]="itemMenu" aria-label="Toggle item menu">
+                        <mat-icon>more_vert</mat-icon>
+                      </button>
+                      <mat-menu #itemMenu="matMenu" xPosition="before">
+                        <button mat-menu-item (click)="showItem(item)">Show Item</button>
+                        <button mat-menu-item (click)="deleteItem(item)">Delete Item</button>
+                      </mat-menu>
+                    </span>
+                  </div>
+                </mat-list-option>
+              </mat-selection-list>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-content>
+</mat-card >

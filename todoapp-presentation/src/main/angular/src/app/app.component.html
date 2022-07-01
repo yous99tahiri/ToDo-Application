@@ -1,36 +1,68 @@
-<div class="container mt-4">
-  <!-- header -->
-  <div class="container-fluid">
-    <h1>tuDo</h1>
-    <p class="mb-1">The future of ticket systems.</p>
-  </div>
-  <hr>
-  <div class="alert alert-danger alert-dismissible" *ngIf="errorMessage !== ''">
-    {{errorMessage}}
-    <button type="button" id="closeAlertBtn_err" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="errorMessage = ''"></button>
-  </div>
-  <!-- navigation tabs -->
-  <ul class="nav nav-tabs">
-    <li class="nav-item" >
-      <a class="nav-link" id="loginNavBtn" routerLink="/loginc" routerLinkActive="active">Login</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="registerNavBtn" routerLink="/register" routerLinkActive="active">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="dashboardNavBtn" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="profileNavBtn" routerLink="/profile" routerLinkActive="active">Profile</a>
-    </li>
-  </ul>
-  <div class="col-12 text-right">
-    <button class="btn btn-sm btn-outline-secondary" id="logoutBtn" style="float: right;" (click)="logout()">Logout</button>
-  </div>
-  <hr>
+<mat-sidenav-container fullscreen>
+  <mat-sidenav #sidenav mode="side" fixedInViewport
+  [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+  [mode]="(isHandset$ | async) ? 'over' : 'side'"
+  [opened]="(isHandset$ | async) === false">
+      <mat-toolbar>Navigation</mat-toolbar>
+      <mat-nav-list>
+        <a *ngIf="!isLoggedIn" 
+        mat-list-item 
+        routerLink="/auth"
+        routerLinkActive="active" 
+        ariaCurrentWhenActive="page">
+            <mat-icon>login</mat-icon>
+            <span>Login</span>
+        </a>
+      </mat-nav-list>
+      <mat-nav-list>
+        <a *ngIf="!isLoggedIn" 
+        mat-list-item 
+        routerLink="/register"
+        routerLinkActive="active" 
+        ariaCurrentWhenActive="page">
+            <mat-icon>person_add</mat-icon>
+            <span>Register</span>
+        </a>
+      </mat-nav-list>
+      <mat-nav-list>
+        <a *ngIf="isLoggedIn" 
+        mat-list-item 
+        routerLink="/dashboard"
+        routerLinkActive="active" 
+        ariaCurrentWhenActive="page">
+            <mat-icon>dashboard</mat-icon>
+            <span>Dashboard</span>
+        </a>
+      </mat-nav-list>
+      <mat-nav-list>
+        <a *ngIf="isLoggedIn" 
+        mat-list-item 
+        routerLink="/profile"
+        routerLinkActive="active" 
+        ariaCurrentWhenActive="page">
+            <mat-icon>account_circle</mat-icon>
+            <span>Profile</span>
+        </a>
+      </mat-nav-list>
+      <mat-nav-list>
+        <a *ngIf="isLoggedIn" 
+        mat-list-item 
+        ariaCurrentWhenActive="page"
+        (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+        </a>
+      </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+      <mat-toolbar>
+          <button mat-icon-button (click)="sidenav.toggle()">
+              <mat-icon>menu</mat-icon>
+          </button>
+          <span class="flexExpand">tuDo</span>
+      </mat-toolbar>
+      <wt2-message-box [messageModel]="messageModel"></wt2-message-box>
+      <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
 
-  <!-- news area -->
-  <div class="mt-4">
-    <router-outlet></router-outlet>
-  </div>
-</div>
