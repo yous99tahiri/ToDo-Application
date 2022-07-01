@@ -63,12 +63,12 @@ public class DBTodoItemList extends DBIdentified {
         this.creator = creator;
     }
 
-    public void setDBTodoItems(List<DBTodoItem> todoItems){
+    public void setTodoItems(List<DBTodoItem> todoItems){
         this.todoItems = todoItems;
     }
 
     @OneToMany(targetEntity = DBTodoItem.class, fetch = FetchType.EAGER, mappedBy = "list")
-    public List<DBTodoItem> getDBTodoItems(){
+    public List<DBTodoItem> getTodoItems(){
         return this.todoItems;
     }
 }

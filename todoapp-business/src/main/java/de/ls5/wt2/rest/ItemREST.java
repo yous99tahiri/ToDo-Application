@@ -117,9 +117,9 @@ public class ItemREST {
                         .setParameter("listId", listId)
                         .getSingleResult();
 
-                ArrayList<DBTodoItem> list = new ArrayList<>(listitems.getDBTodoItems());
+                ArrayList<DBTodoItem> list = new ArrayList<>(listitems.getTodoItems());
                 list.remove(dbTodoItem);
-                listitems.setDBTodoItems(list);
+                listitems.setTodoItems(list);
 
                 this.entityManager.refresh(listitems);
                 this.entityManager.remove(dbTodoItem);
@@ -158,7 +158,7 @@ public class ItemREST {
         DBTodoItemList result = new DBTodoItemList();
         result.setTitle(param.getTitle());
         result.setDescription(param.getDescription());
-        result.setDBTodoItems(new ArrayList<>());
+        result.setTodoItems(new ArrayList<>());
         result.setDeadLine(param.getDeadLine());
         result.setLastEdited(param.getLastEdited());
         result.setCreator(this.getByUserById(userId));
@@ -200,7 +200,7 @@ public class ItemREST {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        List<DBTodoItem> itemlist = liste.getDBTodoItems();
+        List<DBTodoItem> itemlist = liste.getTodoItems();
         Iterator<DBTodoItem> it = itemlist.iterator();
         while(it.hasNext()) {
                 this.entityManager.remove(it.next());
