@@ -14,7 +14,8 @@ export class AppComponent extends MessageBoxParent implements OnChanges {
 
   private _isLoggedIn: boolean = false;
   public get isLoggedIn(): boolean {
-    return this.authService.loggedIn;
+    this._isLoggedIn = this.authService.loggedIn
+    return this._isLoggedIn;
   }
 
   constructor(private authService:SessionAuthService, 
