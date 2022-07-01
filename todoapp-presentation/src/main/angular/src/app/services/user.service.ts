@@ -1,6 +1,6 @@
 import { HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { TodoItem } from '../entities/todo-item';
 import { UserAccount } from '../entities/user-account';
 import { SessionAuthService } from './session-auth.service';
@@ -8,19 +8,9 @@ import { SessionAuthService } from './session-auth.service';
 @Injectable()
 export class UserService {
 
-  private _authService: SessionAuthService;
-  //MAYBE NEEDED:
-  private headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
-
-  public set authService(value: SessionAuthService) {
-    this._authService = value;
-  }
-  public get authService(): SessionAuthService {
-    return this._authService;
-  }
-  constructor(authService:SessionAuthService) {
+  constructor( private authService:SessionAuthService) {
     console.log("UserService: created")
-    this._authService = authService
+    console.log("UserService: authService null | undefined?", this.authService == null || this.authService == undefined)
   }
 
   deleteUserAccount(username:string): Observable<UserAccount> {
@@ -28,27 +18,36 @@ export class UserService {
     const params = {
       "username" : username
     }
-    return this._authService.getHTTPClient().delete<any>(`${this._authService.getBaseUrl()}/user`, {headers: new HttpHeaders(),params : params}).pipe(
-      map(body => UserAccount.fromObject(body))
+    return this.authService.getHTTPClient().delete<any>(`${this.authService.getBaseUrl()}/user`, {headers: new HttpHeaders(),params : params}).pipe(
+      catchError(err => {
+        return err.status == 0 ? of([]) : throwError(err);
+      }),
+      map(body => {
+        console.log(`UserService: deleteUserAccount response`, body)
+        return UserAccount.fromObject(body)})
     );
   }
 
   readUserAccount(): Observable<UserAccount> {
     console.log(`UserService: readUserAccount called `)
-    return this._authService.getHTTPClient().get<any>(`${this._authService.getBaseUrl()}/user`, {headers: new HttpHeaders()}).pipe(
-      map(body => UserAccount.fromObject(body))
+    return this.authService.getHTTPClient().get<any>(`${this.authService.getBaseUrl()}/user`, {headers: new HttpHeaders()}).pipe(
+      catchError(err => {
+        return err.status == 0 ? of([]) : throwError(err);
+      }),
+      map(body => {
+        console.log(`UserService: readUserAccount response`, body)
+        return UserAccount.fromObject(body)})
     );
   }
 
   readAllUserNames(): Observable<string[]> {
     console.log(`UserService: readAllUserNames called`)
-    return this._authService.getHTTPClient().get<string[]>(`${this._authService.getBaseUrl()}/user/all`, {headers: new HttpHeaders()}).pipe(
+    return this.authService.getHTTPClient().get<string[]>(`${this.authService.getBaseUrl()}/user/all`, {headers: new HttpHeaders()}).pipe(
+      catchError(err => {
+        return err.status == 0 ? of([]) : throwError(err);
+      }),
       map(body => {
-        console.log("--------------")
-        console.log("Received body on readAllUserNames:", body)
-        console.log("Body as json:", JSON.stringify(body))
-        console.log("typeof:", typeof(body))
-        console.log("--------------")
+        console.log(`UserService: readAllUserNames response`, body)
         return body
       })
     );
@@ -56,13 +55,12 @@ export class UserService {
 
   readUserAssignedTodoItems(): Observable<TodoItem[]> {
     console.log(`UserService: readUserAssignedTodoItems called`)
-    return this._authService.getHTTPClient().get<any[]>(`${this._authService.getBaseUrl()}/user/items`, {headers: new HttpHeaders()}).pipe(
+    return this.authService.getHTTPClient().get<any[]>(`${this.authService.getBaseUrl()}/user/items`, {headers: new HttpHeaders()}).pipe(
+      catchError(err => {
+        return err.status == 0 ? of([]) : throwError(err);
+      }),
       map(body => {
-        console.log("--------------")
-        console.log("Received body on readUserAssignedTodoItems:", body)
-        console.log("Body as json:", JSON.stringify(body))
-        console.log("typeof:", typeof(body))
-        console.log("--------------")
+        console.log(`UserService: readUserAssignedTodoItems response`, body)
         return body.map(obj=> {return TodoItem.fromObject(obj)})
       })
     );

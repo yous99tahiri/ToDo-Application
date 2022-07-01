@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MessageBoxParent } from 'src/app/components2/message-box/message-box-parent';
+import { ItemService } from 'src/app/services/item.service';
 
 @Component({
   selector: 'wt2-list-creation-dialog-content',
@@ -23,7 +24,8 @@ export class ListCreationDialogContentComponent extends MessageBoxParent{
 
   constructor(public dialogRef: MatDialogRef<ListCreationDialogContentComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ListCreationDialogInputData,
-    private fb: FormBuilder) { 
+    private fb: FormBuilder,
+    private itemService:ItemService) { 
     super()
     console.log("ListCreationDialogContentComponent: created")
     console.log("Injected data: ",data)
