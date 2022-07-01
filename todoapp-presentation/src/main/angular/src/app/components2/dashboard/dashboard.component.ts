@@ -43,8 +43,8 @@ export class DashboardComponent extends DialogParent{
 
   }
 
-  createItem(listTitle:string){
-    this.openItemCreationDialog({listTitle:listTitle})
+  createItem(list:TodoItemList){
+    this.openItemCreationDialog({list:list})
     .subscribe(
       ret => {
         if(ret && "created" in ret && ret.created){
