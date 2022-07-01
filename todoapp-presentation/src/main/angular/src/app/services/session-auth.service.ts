@@ -8,6 +8,11 @@ import { environment as env } from 'src/environments/environment';
 @Injectable()
 export class SessionAuthService {
   private _loggedIn: boolean = false;
+  
+  public get loggedIn(): boolean {
+    return this._loggedIn;
+  }
+
 
   constructor(private http: HttpClient) {
     console.log("SessionAuthService: created")

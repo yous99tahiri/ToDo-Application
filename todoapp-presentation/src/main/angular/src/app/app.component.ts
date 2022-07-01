@@ -12,7 +12,10 @@ import { MessageBoxParent } from './components2/message-box/message-box-parent';
 })
 export class AppComponent extends MessageBoxParent implements OnChanges {
 
-  isLoggedIn:boolean=false;
+  private _isLoggedIn: boolean = false;
+  public get isLoggedIn(): boolean {
+    return this.authService.loggedIn;
+  }
 
   constructor(private authService:SessionAuthService, 
     private router:Router,
@@ -27,13 +30,13 @@ export class AppComponent extends MessageBoxParent implements OnChanges {
     this.authService.getIsLoggedIn().subscribe({
       next: (loggedIn) => {
         if(!loggedIn){
-          this.isLoggedIn = false;
+          this._isLoggedIn = false;
           this.showDangerMessage("Logout failed. Not logged in. Illegal State!")
           return
         }
         this.authService.logout().subscribe( {
           next:()=>{
-            this.isLoggedIn = false;
+            this._isLoggedIn = false;
             console.log("Logout succeeded. Navigation to /auth")
             this.router.navigate(["/auth"])
           },
@@ -54,8 +57,8 @@ export class AppComponent extends MessageBoxParent implements OnChanges {
   ngOnChanges():void{
     this.authService.getIsLoggedIn().subscribe({
       next: (loggedIn) => { 
-        this.isLoggedIn = loggedIn;
-        console.log("AppComponent: ngOnChanges called, isLoggedIn: ", this.isLoggedIn)
+        this._isLoggedIn = loggedIn;
+        console.log("AppComponent: ngOnChanges called, _isLoggedIn: ", this._isLoggedIn)
       } 
   })}
 }
