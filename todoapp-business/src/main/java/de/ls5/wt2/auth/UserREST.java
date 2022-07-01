@@ -27,7 +27,11 @@ public class UserREST {
     @Autowired
     private EntityManager entityManager;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(
+            path = "create",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<DBUserAccount> createUser(@RequestBody final DBUserAccount param) {
         String username = param.getUsername();
 

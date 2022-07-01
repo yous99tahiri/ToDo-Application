@@ -50,6 +50,8 @@ public class ShiroConfig {
         // configuration for stateless authentication on each request
         chainDefinition.put("/rest/auth/**", "restAuthenticator");
 
+        chainDefinition.put("/rest/auth/profile/create", "anon");
+
         // make other examples not require authentication
         chainDefinition.put("/rest/**", "anon");
 
