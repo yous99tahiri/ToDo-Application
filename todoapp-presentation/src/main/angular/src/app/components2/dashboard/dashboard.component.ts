@@ -28,6 +28,9 @@ export class DashboardComponent extends DialogParent implements OnInit{
   }
 
   showItem(item:TodoItem):void{
+    if(item == null){
+      this.showDangerMessage(`Failed to show item: item is null`)
+    }
     this.openItemDetailsDialog({item:item})
     .subscribe(
       ret => {
@@ -41,6 +44,9 @@ export class DashboardComponent extends DialogParent implements OnInit{
   }
 
   deleteItem(item:TodoItem):void{
+    if(item == null){
+      this.showDangerMessage(`Failed to delete item: item is null`)
+    }
     this.itemService.deleteTodoItem(item.list.id.toString(),item.id.toString()).subscribe({
       next:(item)=>{
         console.log("Dashboard: deleteItem success:",item)
@@ -81,6 +87,9 @@ export class DashboardComponent extends DialogParent implements OnInit{
   }
 
   deleteList(list:TodoItemList):void{
+    if(list == null){
+      this.showDangerMessage(`Failed to delete list: list is null`)
+    }
     this.itemService.deleteTodoItemList(list.id.toString()).subscribe({
       next:(list)=>{
         console.log("Dashboard: deleteList success:",list)
@@ -92,6 +101,7 @@ export class DashboardComponent extends DialogParent implements OnInit{
       }
     })
   }
+  
   getAllLists():void{
     this.itemService.readAllTodoItemLists().subscribe({
       next:(lists)=>{
@@ -104,6 +114,7 @@ export class DashboardComponent extends DialogParent implements OnInit{
       }
     })
   }
+
   constructor(private breakpointObserver: BreakpointObserver,
     public d:MatDialog,
     private itemService:ItemService) { 
