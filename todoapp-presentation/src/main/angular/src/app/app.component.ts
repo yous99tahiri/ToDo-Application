@@ -1,4 +1,4 @@
-import { Component, DoCheck, OnChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SessionAuthService } from './services/session-auth.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -10,11 +10,14 @@ import { MessageBoxParent } from './components2/message-box/message-box-parent';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass'],
 })
-export class AppComponent extends MessageBoxParent implements DoCheck {
+export class AppComponent extends MessageBoxParent{
 
   private _isLoggedIn: boolean = false;
+
+  public set isLoggedIn(value: boolean) {
+    this._isLoggedIn = value;
+  }
   public get isLoggedIn(): boolean {
-    this._isLoggedIn = this.authService.loggedIn
     return this._isLoggedIn;
   }
 
@@ -31,18 +34,18 @@ export class AppComponent extends MessageBoxParent implements DoCheck {
     this.authService.getIsLoggedIn().subscribe({
       next: (loggedIn) => {
         if(!loggedIn){
-          this._isLoggedIn = false;
+          this.isLoggedIn = false;
           this.showDangerMessage("Logout failed. Not logged in. Illegal State!")
           return
         }
         this.authService.logout().subscribe( {
           next:()=>{
-            this._isLoggedIn = false;
             console.log("Logout succeeded. Navigation to /auth")
             this.router.navigate(["/auth"])
           },
           error:(err)=>{
             this.showDangerMessage(`Logout failed. Error: ${err}`)
+            console.log("Logout failed: ",err)
           }
         });
       }
@@ -55,11 +58,13 @@ export class AppComponent extends MessageBoxParent implements DoCheck {
       shareReplay()
   );
 
-  ngDoCheck():void{
+  public onRouterOutletActivate(event : any) {
+    console.log("APPCOMPONENT onRouterOutletActivate:");
     this.authService.getIsLoggedIn().subscribe({
       next: (loggedIn) => { 
-        this._isLoggedIn = loggedIn;
-        //console.log("AppComponent: ngDoCheck called, _isLoggedIn: ", this._isLoggedIn)
+        this.isLoggedIn = loggedIn;
+        console.log("AppComponent: isLoggedIn: ", this.isLoggedIn)
       } 
-  })}
+    })
+  }
 }

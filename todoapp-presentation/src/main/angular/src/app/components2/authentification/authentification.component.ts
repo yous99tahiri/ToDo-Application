@@ -36,7 +36,8 @@ export class AuthentificationComponent extends MessageBoxParent{
             this.router.navigate(["/dashboard"])
           },
           error:(err)=>{
-            this.showDangerMessage(`Login failed. Error: ${err}`)
+            this.showDangerMessage(`Login failed. Error: ${JSON.stringify(err)}`)
+            console.log("Login failed: ", JSON.stringify(err))
           }
         });
       }

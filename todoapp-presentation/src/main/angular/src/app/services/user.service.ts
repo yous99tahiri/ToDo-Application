@@ -48,7 +48,7 @@ export class UserService {
       }),
       map(body => {
         console.log(`UserService: readAllUserNames response`, body)
-        return body
+        return body//.filter( s => s instanceof String)
       })
     );
   }

@@ -10,7 +10,8 @@ const routes: Routes = [
   { path: 'auth', component: AuthentificationComponent},
   { path: 'register', component: RegistrationComponent},
   { path: 'dashboard', component: DashboardComponent,canActivate:[AuthGuard]},//
-  { path: 'profile', component: ProfileComponent,canActivate:[AuthGuard]}//
+  { path: 'profile', component: ProfileComponent,canActivate:[AuthGuard]},//
+  { path: '', redirectTo:"/dashboard",pathMatch:"prefix"}
 ];
 
 @NgModule({

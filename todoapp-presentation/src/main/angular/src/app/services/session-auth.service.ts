@@ -7,13 +7,7 @@ import { environment as env } from 'src/environments/environment';
 
 @Injectable()
 export class SessionAuthService {
-  private _loggedIn: boolean = false;
-  
-  public get loggedIn(): boolean {
-    return this._loggedIn;
-  }
-
-
+  user:UserAccount = null;
   constructor(private http: HttpClient) {
     console.log("SessionAuthService: created")
     console.log("SessionAuthService: http null | undefined?", this.http == null || this.http == undefined)
@@ -31,8 +25,7 @@ export class SessionAuthService {
         return err.status == 0 ? of([]) : throwError(err);
       }),
       map(() => {
-        this._loggedIn = true;
-        return this._loggedIn;
+        return true;
       })
     );
   }
@@ -44,15 +37,25 @@ export class SessionAuthService {
         return err.status == 0 ? of([]) : throwError(err);
       }),
       map(() => {
-        this._loggedIn = false;
-        return this._loggedIn;
+        return true;
       })
     );
   }
 
   getIsLoggedIn():Observable<boolean>{
     //console.log(`SessionAuthService: getIsLoggedIn called. isLoggedIn: ${this._loggedIn}`)
-    return of(this._loggedIn);
+    console.log(`UserService: readUserAccount called `)
+    
+    return this.getHTTPClient().get<any>(`${this.getBaseUrl()}/profile/auth`, {headers: new HttpHeaders()}).pipe(
+      map(user => {
+        this.user = this.user == null ?  UserAccount.fromObject(user) : this.user;
+        return true;
+      }),
+      catchError(() => {
+        this.user = null;
+        return of(false);
+      }
+    ));
   }
 
   getHTTPClient(): HttpClient {

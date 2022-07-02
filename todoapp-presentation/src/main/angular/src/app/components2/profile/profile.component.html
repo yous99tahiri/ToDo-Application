@@ -33,7 +33,7 @@
         <mat-form-field appearance="fill">
             <mat-label>Select a username</mat-label>
             <mat-select [(value)]="selectedUsername">
-              <mat-option *ngFor="let username of usernames" [value]="usernames">
+              <mat-option *ngFor="let username of usernames" [value]="username">
                 {{username}}
               </mat-option>
             </mat-select>

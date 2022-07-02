@@ -157,7 +157,7 @@
 
       </mat-toolbar>
       <wt2-message-box [messageModel]="messageModel"></wt2-message-box>
-      <router-outlet></router-outlet>
+      <router-outlet (activate)="onRouterOutletActivate($event)"></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
 
