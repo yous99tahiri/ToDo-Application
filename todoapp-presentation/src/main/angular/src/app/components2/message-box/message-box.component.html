@@ -1,4 +1,7 @@
-<div class={{messageModel.type.toString()}} *ngIf="messageModel.message !== ''">
-    {{messageModel.message}}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="messageModel.message = ''"></button>
+
+<div id="messagebox" class={{messageModel.type.toString()}} *ngIf="messageModel.message !== ''">
+    <button mat-icon-button aria-label="Close" (click)="messageModel.message = ''">
+        <mat-icon>close</mat-icon>
+    </button>
+    <p>{{messageModel.message}}</p>
 </div>
