@@ -34,6 +34,30 @@ public class StartupBean implements ApplicationListener<ContextRefreshedEvent> {
 
             this.entityManager.persist(_admin);
         }
+
+        final DBUserAccount dummy1 = this.entityManager.find(DBUserAccount.class, 2L);
+        if (dummy1 == null) {
+            final DBUserAccount _dummy1 = new DBUserAccount();
+
+            _dummy1.setUsername("dummy1");
+            _dummy1.setPassword("dummy1");
+            _dummy1.setRegistrationDate(new Date());
+            _dummy1.setUserRole(UserRole.REGULAR);
+
+            this.entityManager.persist(_dummy1);
+        }
+
+        final DBUserAccount dummy2 = this.entityManager.find(DBUserAccount.class, 3L);
+        if (dummy2 == null) {
+            final DBUserAccount _dummy2 = new DBUserAccount();
+
+            _dummy2.setUsername("dummy2");
+            _dummy2.setPassword("dummy2");
+            _dummy2.setRegistrationDate(new Date());
+            _dummy2.setUserRole(UserRole.REGULAR);
+
+            this.entityManager.persist(_dummy2);
+        }
     }
 
 }
