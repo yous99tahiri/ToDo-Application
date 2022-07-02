@@ -4,6 +4,7 @@ export class UserAccount{
     password: string ="";
     registrationDate: Date = null;
     userRole:string = USER_ROLE.REGULAR.toString()
+    lists:number[] = []
   
     static fromObject(object: any): UserAccount {
       console.log(`UserAccount: fromObject called for ${JSON.stringify(object)}`)
@@ -13,6 +14,7 @@ export class UserAccount{
       n.password = object.password;
       n.registrationDate = new Date(object.registrationDate);
       n.userRole = object.userRole;
+      n.lists = object.lists
       return n;
     }
 
@@ -22,7 +24,8 @@ export class UserAccount{
         "username" : this.username,
         "password" : this.password,
         "registrationDate" : this.registrationDate != null ? this.registrationDate.toISOString() : new Date().toISOString(),
-        "userRole":this.userRole
+        "userRole":this.userRole,
+        "lists" : this.lists
       }
       console.log(`UserAccount: toObject called for ${JSON.stringify(obj)}`);
       return obj;
