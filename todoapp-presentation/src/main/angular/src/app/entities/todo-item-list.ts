@@ -31,7 +31,7 @@ export class TodoItemList{
         "lastEdited" : this.lastEdited != null ? this.lastEdited.toISOString() : new Date().toISOString(),
         "deadLine" : this.deadLine != null ? this.deadLine.toISOString() : new Date().toISOString(),
         "todoItems" : this.todoItems.map(item => { return item.toObject()} ),
-        "creator" : this.creator.toObject()
+        "creator" : this.creator == null ? null : this.creator.toObject()
       }
       console.log(`TodoItemList: toObject called for ${JSON.stringify(obj)}`);
       return obj;
