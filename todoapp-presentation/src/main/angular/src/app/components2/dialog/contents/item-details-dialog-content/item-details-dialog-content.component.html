@@ -26,11 +26,11 @@
         <mat-form-field class="full-width">
           <mat-label>Select a username (assignee)</mat-label>
           <mat-select [(value)]="selectedUsername" >
-            <mat-option *ngFor="let username of usernames" [value]="usernames">
-              {{username}}
+            <mat-option *ngFor="let username of usernames" [value]="username[1]">
+              {{username[1]}}
             </mat-option>
           </mat-select>
-          <mat-error *ngIf="selectedUsername === '' || usernames.includes(selectedUsername)===false">
+          <mat-error *ngIf="selectedUsername === ''">
             Assignee is <strong>required</strong>
           </mat-error>
       </mat-form-field>

@@ -19,7 +19,7 @@ export class ItemDetailsDialogContentComponent extends MessageBoxParent{
     description: [this.data.item.description, Validators.required]
   });
   selectedUsername:string=this.data.item.assignee.username;
-  usernames:string[]=[]
+  usernames:string[][]=[]
   ret:ItemDetailsDialogOutputData =  {changed:false}
   minDate:Date=new Date();
   @ViewChild(MatDatepicker) picker: MatDatepicker<Date>;
@@ -34,7 +34,7 @@ export class ItemDetailsDialogContentComponent extends MessageBoxParent{
     console.log("Injected data: ",data)
   }
   canUpdateItem():boolean{
-    return this.itemForm.valid && this.usernames.includes(this.selectedUsername) && this.data.item.deadLine > new Date();
+    return this.itemForm.valid && this.usernames.map(id_name_Pair => id_name_Pair[1]).includes(this.selectedUsername) && this.data.item.deadLine > new Date();
   }
   updateItem():void{
     if(this.canUpdateItem() == false){

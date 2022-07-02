@@ -21,7 +21,7 @@ export class ItemCreationDialogContentComponent extends MessageBoxParent {
     description: [null, Validators.required]
   });
   selectedUsername:string="";
-  usernames:string[]=[]
+  usernames:string[][]=[]
 
   ret:ItemCreationDialogOutputData =  {created:false}
 
@@ -40,7 +40,7 @@ export class ItemCreationDialogContentComponent extends MessageBoxParent {
     console.log("Injected data: ",data)
   }
   canCreateItem():boolean{
-    return this.itemForm.valid && this.usernames.includes(this.selectedUsername) && this.deadLine > new Date();
+    return this.itemForm.valid && this.usernames.map(id_name_Pair => id_name_Pair[1]).includes(this.selectedUsername) && this.deadLine > new Date();
   }
 
   createItem():void{

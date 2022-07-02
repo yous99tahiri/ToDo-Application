@@ -17,7 +17,7 @@ export class ProfileComponent extends DialogParent implements OnInit{
   assignedItems:TodoItem[] = []
   selectedItem:TodoItem = null;
 
-  usernames:string[]=[]
+  usernames:string[][]=[]
   selectedUsername:string="";
 
   ngOnInit():void{
@@ -63,6 +63,7 @@ export class ProfileComponent extends DialogParent implements OnInit{
       next:(usernames)=>{
         console.log("ProfileComponent: getUsernames success:",usernames)
         this.usernames = usernames;
+        //this.usernames = ["A","B","C"]
       },
       error:(err)=>{
         this.showDangerMessage(`Failed to load usernames`)
@@ -102,7 +103,7 @@ export class ProfileComponent extends DialogParent implements OnInit{
   }
 
   canDeleteUser():boolean{
-    return this.selectedUsername != '' && this.selectedUsername != this.userAccount.username;
+    return this.selectedUsername != '' && this.selectedUsername != this.userAccount.username && this.usernames.map(id_name_Pair => id_name_Pair[1]).includes(this.selectedUsername);
   }
 
   showSelectedItem():void{
