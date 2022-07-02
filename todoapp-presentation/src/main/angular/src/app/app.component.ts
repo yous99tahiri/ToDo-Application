@@ -44,7 +44,7 @@ export class AppComponent extends MessageBoxParent{
             this.router.navigate(["/auth"])
           },
           error:(err)=>{
-            this.showDangerMessage(`Logout failed. Error: ${JSON.stringify(err)}`)
+            this.showDangerMessage(`Logout failed.`)
             console.log("Logout failed: ",err)
           }
         });
