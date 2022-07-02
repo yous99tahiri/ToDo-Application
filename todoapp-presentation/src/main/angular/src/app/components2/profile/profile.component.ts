@@ -77,6 +77,7 @@ export class ProfileComponent extends DialogParent implements OnInit{
   }
 
   deleteUser():void{
+    console.log("selectedUsername: ",this.selectedUsername)
     if(this.selectedUsername == this.userAccount.username){
       this.showDangerMessage(`Failed to delete user: you can not delete yourself`)
       return;

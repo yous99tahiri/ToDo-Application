@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -15,7 +15,12 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./item-creation-dialog-content.component.sass']
 })
 //<T>
-export class ItemCreationDialogContentComponent extends MessageBoxParent {
+export class ItemCreationDialogContentComponent extends MessageBoxParent implements OnInit {
+
+  ngOnInit(): void {
+    this.getUsernames()
+  }
+
   itemForm = this.fb.group({
     title: [null, Validators.required],
     description: [null, Validators.required]
@@ -39,6 +44,9 @@ export class ItemCreationDialogContentComponent extends MessageBoxParent {
     console.log("ItemCreationDialogContentComponent: created")
     console.log("Injected data: ",data)
   }
+
+  
+
   canCreateItem():boolean{
     return this.itemForm.valid && this.usernames.map(id_name_Pair => id_name_Pair[1]).includes(this.selectedUsername) && this.deadLine > new Date();
   }
@@ -54,7 +62,7 @@ export class ItemCreationDialogContentComponent extends MessageBoxParent {
     item.title = this.itemForm.get("title").value
     item.description = this.itemForm.get("description").value
     item.lastEdited = new Date()
-
+    item.list = this.data.list.id
     this.itemService.createTodoItem(item).subscribe({
       next:(item)=>{
         console.log("ItemCreationDialogContentComponent: createItem success:",item)

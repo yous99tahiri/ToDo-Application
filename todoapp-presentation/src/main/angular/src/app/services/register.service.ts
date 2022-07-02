@@ -13,18 +13,18 @@ export class RegisterService {
   });
 
   constructor(private http: HttpClient) {
-    console.log("RegisterService: created")
+    //console.log("RegisterService: created")
   }
 
   createAccount(userAccount: UserAccount): Observable<UserAccount> {
-    console.log(`RegisterService: createUser called for user `, userAccount)
+    //console.log(`RegisterService: createUser called for user `, userAccount)
     const url = `${env.apiUrl}/profile`
     return this.http.post<any>(url, userAccount.toObject(), {headers: this.defaultHeaders}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),
       map(body => {
-        console.log(`RegisterService: createUser response `, body)
+        //console.log(`RegisterService: createUser response `, body)
         return UserAccount.fromObject(body)})
     );
   }

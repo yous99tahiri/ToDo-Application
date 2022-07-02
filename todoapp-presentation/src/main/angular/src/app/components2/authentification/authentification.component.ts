@@ -46,7 +46,7 @@ export class AuthentificationComponent extends MessageBoxParent{
 
   constructor(private fb: FormBuilder,private router:Router,private authService:SessionAuthService) {
     super()
-    console.log("AuthentificationComponent: crreated")
-    console.log("AuthentificationComponent: authService null | undefined?", this.authService == null || this.authService == undefined)
+    //console.log("AuthentificationComponent: crreated")
+    //console.log("AuthentificationComponent: authService null | undefined?", this.authService == null || this.authService == undefined)
   }
 }

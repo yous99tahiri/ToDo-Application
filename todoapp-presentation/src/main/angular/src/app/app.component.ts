@@ -25,9 +25,9 @@ export class AppComponent extends MessageBoxParent{
     private router:Router,
     private breakpointObserver: BreakpointObserver) {
       super()
-      console.log("AppComponent: created")
-      console.log("AppComponent: authService null | undefined?", this.authService == null || this.authService == undefined)
-      console.log("AppComponent: router null | undefined?", this.router == null || this.router == undefined)
+      //console.log("AppComponent: created")
+      //console.log("AppComponent: authService null | undefined?", this.authService == null || this.authService == undefined)
+      //console.log("AppComponent: router null | undefined?", this.router == null || this.router == undefined)
   }
 
   logout() {
@@ -40,7 +40,7 @@ export class AppComponent extends MessageBoxParent{
         }
         this.authService.logout().subscribe( {
           next:()=>{
-            console.log("Logout succeeded. Navigation to /auth")
+            //console.log("Logout succeeded. Navigation to /auth")
             this.router.navigate(["/auth"])
           },
           error:(err)=>{
@@ -59,11 +59,11 @@ export class AppComponent extends MessageBoxParent{
   );
 
   public onRouterOutletActivate(event : any) {
-    console.log("APPCOMPONENT onRouterOutletActivate:");
+    //console.log("APPCOMPONENT onRouterOutletActivate:");
     this.authService.getIsLoggedIn().subscribe({
       next: (loggedIn) => { 
         this.isLoggedIn = loggedIn;
-        console.log("AppComponent: isLoggedIn: ", this.isLoggedIn)
+        //console.log("AppComponent: isLoggedIn: ", this.isLoggedIn)
       } 
     })
   }

@@ -9,12 +9,12 @@ import { SessionAuthService } from './session-auth.service';
 export class UserService {
 
   constructor( private authService:SessionAuthService) {
-    console.log("UserService: created")
-    console.log("UserService: authService null | undefined?", this.authService == null || this.authService == undefined)
+    //console.log("UserService: created")
+    //console.log("UserService: authService null | undefined?", this.authService == null || this.authService == undefined)
   }
 
   deleteUserAccount(username:string): Observable<UserAccount> {
-    console.log(`UserService: deleteUserAccount called for user '${username}'`)
+    //console.log(`UserService: deleteUserAccount called for user '${username}'`)
     const params = {
       "username" : username
     }
@@ -23,44 +23,44 @@ export class UserService {
         return err.status == 0 ? of([]) : throwError(err);
       }),
       map(body => {
-        console.log(`UserService: deleteUserAccount response`, body)
+        //console.log(`UserService: deleteUserAccount response`, body)
         return UserAccount.fromObject(body)})
     );
   }
 
   readUserAccount(): Observable<UserAccount> {
-    console.log(`UserService: readUserAccount called `)
+    //console.log(`UserService: readUserAccount called `)
     return this.authService.getHTTPClient().get<any>(`${this.authService.getBaseUrl()}/profile/auth`, {headers: new HttpHeaders()}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),
       map(body => {
-        console.log(`UserService: readUserAccount response`, body)
+        //console.log(`UserService: readUserAccount response`, body)
         return UserAccount.fromObject(body)})
     );
   }
 
   readAllUserNames(): Observable<string[][]> {
-    console.log(`UserService: readAllUserNames called`)
+    //console.log(`UserService: readAllUserNames called`)
     return this.authService.getHTTPClient().get<string[][]>(`${this.authService.getBaseUrl()}/profile/auth/all`, {headers: new HttpHeaders()}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),
       map(body => {
-        console.log(`UserService: readAllUserNames response`, body)
+        //console.log(`UserService: readAllUserNames response`, body)
         return body//.filter( s => s instanceof String)
       })
     );
   }
 
   readUserAssignedTodoItems(): Observable<TodoItem[]> {
-    console.log(`UserService: readUserAssignedTodoItems called`)
+    //console.log(`UserService: readUserAssignedTodoItems called`)
     return this.authService.getHTTPClient().get<any[]>(`${this.authService.getBaseUrl()}/profile/auth/items`, {headers: new HttpHeaders()}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),
       map(body => {
-        console.log(`UserService: readUserAssignedTodoItems response`, body)
+        //console.log(`UserService: readUserAssignedTodoItems response`, body)
         return body.map(obj=> {return TodoItem.fromObject(obj)})
       })
     );

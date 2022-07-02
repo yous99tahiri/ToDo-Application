@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -13,7 +13,12 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './item-details-dialog-content.component.html',
   styleUrls: ['./item-details-dialog-content.component.sass']
 })
-export class ItemDetailsDialogContentComponent extends MessageBoxParent{
+export class ItemDetailsDialogContentComponent extends MessageBoxParent implements OnInit {
+
+  ngOnInit(): void {
+    this.getUsernames()
+  }
+
   itemForm = this.fb.group({
     title: [this.data.item.title, Validators.required],
     description: [this.data.item.description, Validators.required]

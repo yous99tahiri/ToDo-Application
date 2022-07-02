@@ -9,12 +9,12 @@ import { environment as env } from 'src/environments/environment';
 export class SessionAuthService {
   user:UserAccount = null;
   constructor(private http: HttpClient) {
-    console.log("SessionAuthService: created")
-    console.log("SessionAuthService: http null | undefined?", this.http == null || this.http == undefined)
+    //console.log("SessionAuthService: created")
+    //console.log("SessionAuthService: http null | undefined?", this.http == null || this.http == undefined)
   }
 
   login(userAccount:UserAccount): Observable<boolean> {
-    console.log(`SessionAuthService: login called`)
+    //console.log(`SessionAuthService: login called`)
     const body = new HttpParams()
       .set('username', userAccount.username)
       .set('password', userAccount.password);
@@ -31,7 +31,7 @@ export class SessionAuthService {
   }
 
   logout(): Observable<boolean> {
-    console.log(`SessionAuthService: logout called`)
+    //console.log(`SessionAuthService: logout called`)
     return this.http.get(`/logout`).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
@@ -43,8 +43,8 @@ export class SessionAuthService {
   }
 
   getIsLoggedIn():Observable<boolean>{
-    //console.log(`SessionAuthService: getIsLoggedIn called. isLoggedIn: ${this._loggedIn}`)
-    console.log(`UserService: readUserAccount called `)
+    ////console.log(`SessionAuthService: getIsLoggedIn called. isLoggedIn: ${this._loggedIn}`)
+    //console.log(`UserService: readUserAccount called `)
     
     return this.getHTTPClient().get<any>(`${this.getBaseUrl()}/profile/auth`, {headers: new HttpHeaders()}).pipe(
       map(user => {

@@ -5,32 +5,34 @@
   <mat-card-actions>
     <button mat-raised-button color="primary" type="button" (click)="createList()">Create List</button>
   </mat-card-actions>
-  <mat-card-content class="dashboard-card-content"> 
+  <mat-card-content class="dashboard-card"> 
     <wt2-message-box [messageModel]="messageModel"></wt2-message-box>
-    <mat-grid-list cols="2" rowHeight="350px">
-      <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
-        <mat-card class="list-card">
+    <mat-grid-list cols="2" rowHeight="2:1">
+      <mat-grid-tile>
+        <mat-card class="list-card" *ngFor="let list of todoItemLists">
           <mat-card-header>
             <mat-card-title class="list-title">
-              {{card.list.title}}
+              {{list.title}}
               <button mat-icon-button class="more-button" [matMenuTriggerFor]="listMenu" aria-label="Toggle list menu">
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #listMenu="matMenu" xPosition="before">
-                <button mat-menu-item (click)="createItem(card.list)">Create Item</button>
-                <button mat-menu-item (click)="deleteList(card.list)">Delete List</button>
+                <button mat-menu-item (click)="createItem(list)">Create Item</button>
+                <button mat-menu-item (click)="deleteList(list)">Delete List</button>
               </mat-menu>
             </mat-card-title>
           </mat-card-header>
           <mat-card-content class="dashboard-list-card-content">
             <div>
               <!-- List content here -->
-              <p>Creator: {{card.list.creator}}</p>
-              <p>Deadline: {{card.list.deadLine | date}} </p>
-              <p>Description: {{card.list.description}}</p>
+              <div class="list-details">
+                <p>Creator: {{list.creator.username}}</p>
+                <p>Deadline: {{list.deadLine | date}} </p>
+                <p>Description: {{list.description}}</p>
+              </div>
               <!-- Todo item list here -->
               <mat-selection-list  [multiple]="false">
-                <mat-list-option *ngFor="let item of card.list.todoItems">
+                <mat-list-option *ngFor="let item of list.todoItems">
                   <div>
                     <span (click)="showItem(item)" class="item-title">{{item.title}}</span>
                     <span> 
@@ -49,6 +51,6 @@
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>
-    </mat-grid-list>
+      </mat-grid-list> 
   </mat-card-content>
 </mat-card >

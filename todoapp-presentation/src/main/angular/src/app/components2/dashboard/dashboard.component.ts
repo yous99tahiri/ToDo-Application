@@ -28,7 +28,7 @@ export class DashboardComponent extends DialogParent implements OnInit{
   }
 
   showItem(item:TodoItem):void{
-    if(item == null){
+    if(item == null || item == undefined){
       this.showDangerMessage(`Failed to show item: item is null`)
       return;
     }
@@ -47,8 +47,16 @@ export class DashboardComponent extends DialogParent implements OnInit{
   }
 
   deleteItem(item:TodoItem):void{
-    if(item == null){
+    if(item == null || item == undefined){
       this.showDangerMessage(`Failed to delete item: item is null`)
+      return;
+    }
+    if(item.id == null || item.id  == undefined){
+      this.showDangerMessage(`Failed to delete item: item.id is null/undefined`)
+      return;
+    }
+    if(item.list == null || item.list  == undefined){
+      this.showDangerMessage(`Failed to delete item: item.list is null/undefined`)
       return;
     }
     this.itemService.deleteTodoItem(item.list.toString(),item.id.toString()).subscribe({
@@ -65,7 +73,7 @@ export class DashboardComponent extends DialogParent implements OnInit{
   }
 
   createItem(list:TodoItemList){
-    if(list == null){
+    if(list == null || list == undefined){
       this.showDangerMessage(`Failed to create item: list (parent) is null`)
       return;
     }
@@ -84,6 +92,7 @@ export class DashboardComponent extends DialogParent implements OnInit{
   }
 
   createList():void{
+    console.log("my lists: ",this.todoItemLists)
     this.openListCreationDialog({})
     .subscribe(
       ret => {
@@ -99,10 +108,15 @@ export class DashboardComponent extends DialogParent implements OnInit{
   }
 
   deleteList(list:TodoItemList):void{
-    if(list == null){
+    if(list == null || list == undefined){
       this.showDangerMessage(`Failed to delete list: list is null`)
       return;
     }
+    if(list.id == null || list.id  == undefined){
+      this.showDangerMessage(`Failed to delete item: item.id is null/undefined`)
+      return;
+    }
+    console.log("try to delete list", list)
     this.itemService.deleteTodoItemList(list.id.toString()).subscribe({
       next:(list)=>{
         console.log("Dashboard: deleteList success:",list)

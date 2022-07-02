@@ -8,15 +8,15 @@ import { SessionAuthService } from './session-auth.service';
 })
 export class AuthGuard implements CanActivate {
   constructor(private authService:SessionAuthService, private router:Router){
-    console.log("AuthGuard: created")
+    //console.log("AuthGuard: created")
   }
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      console.log("AuthGuard: canActivate called")
+      //console.log("AuthGuard: canActivate called")
     return this.authService.getIsLoggedIn().pipe(map(isLoggedIn => 
       { 
-        console.log("AuthGuard isLoggedIn: ",isLoggedIn)
+        //console.log("AuthGuard isLoggedIn: ",isLoggedIn)
         return isLoggedIn || this.router.createUrlTree(["auth"])
     } )) ;
   }
