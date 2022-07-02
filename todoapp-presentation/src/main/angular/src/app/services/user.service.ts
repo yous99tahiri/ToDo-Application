@@ -40,9 +40,9 @@ export class UserService {
     );
   }
 
-  readAllUserNames(): Observable<string[]> {
+  readAllUserNames(): Observable<string[][]> {
     console.log(`UserService: readAllUserNames called`)
-    return this.authService.getHTTPClient().get<string[]>(`${this.authService.getBaseUrl()}/profile/auth/all`, {headers: new HttpHeaders()}).pipe(
+    return this.authService.getHTTPClient().get<string[][]>(`${this.authService.getBaseUrl()}/profile/auth/all`, {headers: new HttpHeaders()}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),
