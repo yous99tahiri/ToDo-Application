@@ -1,7 +1,6 @@
 package de.ls5.wt2.conf.auth;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -19,6 +18,7 @@ import org.apache.shiro.authz.Permission;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class WT2Realm extends AuthorizingRealm implements Realm {
@@ -55,7 +55,12 @@ public class WT2Realm extends AuthorizingRealm implements Realm {
 
         System.out.println(username);
 
-        return new SimpleAccount(username, user.getPassword(), WT2Realm.REALM);
+        SimplePrincipalCollection principalCollection = new SimplePrincipalCollection();
+
+        principalCollection.add(username, WT2Realm.REALM);
+        principalCollection.add("role:" + user.getUserRole(), WT2Realm.REALM);
+
+        return new SimpleAccount(principalCollection, user.getPassword(), WT2Realm.REALM);
     }
 
     @Override
@@ -63,12 +68,12 @@ public class WT2Realm extends AuthorizingRealm implements Realm {
         return new AuthorizationInfo() {
             @Override
             public Collection<String> getRoles() {
-//                if (UserRole.ADMIN.equals(principals.getPrimaryPrincipal().toString())) {
-                System.out.println("Getting Roles");
-                return Collections.singleton(UserRole.ADMIN);
-//                }
+                if (("role:" + UserRole.ADMIN).equals(principals.asList().get(1).toString())) {
+                    System.out.println("Getting Roles");
+                    return Collections.singleton(UserRole.ADMIN);
+                }
 
-//                return Collections.emptyList();
+                return Collections.emptyList();
             }
 
             @Override
