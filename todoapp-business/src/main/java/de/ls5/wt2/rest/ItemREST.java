@@ -33,11 +33,12 @@ public class ItemREST {
 
     public DBUserAccount getByUserById(String userId) {
         DBUserAccount user = this.entityManager.find(DBUserAccount.class, userId);
-
+        //List<DBUserAccount> list = this.entityManager.createQuery("SELECT u from DBUserAccount WHERE u.username=:userId",DBUserAccount.class ).setParameter("userId", userId).getResultList();
+        //if(list == null || list.size() != 1) {throw new NoResultException("There is no user with the id " + userId);}
         if(user == null) {
             throw new NoResultException("There is no user with the id " + userId);
         }
-
+        //return list.get(0);
         return user;
     }
 
