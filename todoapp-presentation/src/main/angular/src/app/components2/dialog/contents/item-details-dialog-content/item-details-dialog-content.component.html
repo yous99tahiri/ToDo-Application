@@ -36,7 +36,8 @@
       </mat-form-field>
   
       <mat-form-field class="full-width">
-        <input matInput [matDatepicker]="picker" placeholder="Deadline:" required [ngModelOptions]="{standalone: true}" [(ngModel)]="data.item.deadLine" [min]="minDate">
+        <input matInput [matDatepicker]="picker" placeholder="Deadline:" required [ngModelOptions]="{standalone: true}" 
+        [(ngModel)]="data.item.deadLine" [min]="minDate">
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>

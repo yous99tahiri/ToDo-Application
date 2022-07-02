@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MessageBoxParent } from 'src/app/components2/message-box/message-box-parent';
+import { TodoItemList } from 'src/app/entities/todo-item-list';
 import { ItemService } from 'src/app/services/item.service';
 
 @Component({
@@ -14,8 +15,7 @@ export class ListCreationDialogContentComponent extends MessageBoxParent{
 
   listForm = this.fb.group({
     title: [null, Validators.required],
-    description: [null, Validators.required],
-    deadLine: [null, Validators.required]
+    description: [null, Validators.required]
   });
   ret:ListCreationDialogOutputData =  {created:false}
   minDate:Date=new Date();
@@ -32,12 +32,33 @@ export class ListCreationDialogContentComponent extends MessageBoxParent{
   }
 
   createList():void{
-    this.ret.created = true;
-    //todo use service to create list
-    console.log("ListCreationDialogContentComponent: createList called, TODO: implement")
-    this.dialogRef.close(this.ret)
+    if(this.canCreateList() == false){
+      this.showDangerMessage(`Failed to create list: form is not valid`)
+      return;
+    }
+    let list = new TodoItemList()
+    list.deadLine = this.deadLine;
+    list.title = this.listForm.get("title").value
+    list.description = this.listForm.get("description").value
+    list.lastEdited = new Date()
+
+    this.itemService.createTodoItemList(list).subscribe({
+      next:(list)=>{
+        console.log("ListCreationDialogContentComponent: createList success:",list)
+        this.ret.created = true;
+        this.dialogRef.close(this.ret)
+      },
+      error:(err)=>{
+        this.showDangerMessage(`Failed to create list`)
+        console.log("ListCreationDialogContentComponent: createList failed: ",err)
+      }
+    })
+    
   }
 
+  canCreateList():boolean{
+    return this.listForm.valid && this.deadLine != null && this.deadLine > new Date();
+  }
   closeDialog():void{
     this.ret.created = false;
     this.dialogRef.close(this.ret)

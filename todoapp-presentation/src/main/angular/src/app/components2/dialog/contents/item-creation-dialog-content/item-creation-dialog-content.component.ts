@@ -3,7 +3,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MessageBoxParent } from 'src/app/components2/message-box/message-box-parent';
+import { TodoItem } from 'src/app/entities/todo-item';
 import { TodoItemList } from 'src/app/entities/todo-item-list';
+import { UserAccount } from 'src/app/entities/user-account';
 import { ItemService } from 'src/app/services/item.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -37,16 +39,47 @@ export class ItemCreationDialogContentComponent extends MessageBoxParent {
     console.log("ItemCreationDialogContentComponent: created")
     console.log("Injected data: ",data)
   }
+  canCreateItem():boolean{
+    return this.itemForm.valid && this.usernames.includes(this.selectedUsername) && this.deadLine > new Date();
+  }
 
   createItem():void{
-    this.ret.created = true;
-    //todo use service to create item
-    console.log("ItemCreationDialogContentComponent: createItem called, TODO: implement")
-    this.dialogRef.close(this.ret)
+    if(this.canCreateItem() == false){
+      this.showDangerMessage(`Failed to create item: form is not valid`)
+      return;
+    }
+    let item = new TodoItem()
+    let assignee = new UserAccount()
+    assignee.username = this.selectedUsername
+    item.title = this.itemForm.get("title").value
+    item.description = this.itemForm.get("description").value
+    item.lastEdited = new Date()
+
+    this.itemService.createTodoItem(item).subscribe({
+      next:(item)=>{
+        console.log("ItemCreationDialogContentComponent: createItem success:",item)
+        this.ret.created = true;
+        this.dialogRef.close(this.ret)
+      },
+      error:(err)=>{
+        this.showDangerMessage(`Failed to create item`)
+        console.log("ItemCreationDialogContentComponent: createItem failed: ",err)
+      }
+    });
+    
   }
 
   getUsernames():void{
-    console.log("ItemCreationDialogContentComponent: getUsernames called, TODO: implement")
+    this.userService.readAllUserNames().subscribe({
+      next:(usernames)=>{
+        console.log("ItemCreationDialogContentComponent: getUsernames success:",usernames)
+        this.usernames = usernames;
+      },
+      error:(err)=>{
+        this.showDangerMessage(`Failed to load usernames`)
+        console.log("ItemCreationDialogContentComponent: getUsernames failed: ",err)
+      }
+    })
   }
 
   closeDialog():void{
