@@ -60,10 +60,8 @@ public class UserREST {
 
         subject.checkRole(UserRole.ADMIN);
 
-        System.out.println(this.entityManager);
-
-        List<DBUserAccount> result = this.entityManager
-                .createQuery("SELECT u.id, u.username from DBUserAccount u", DBUserAccount.class)
+        List result = this.entityManager
+                .createQuery("SELECT u.id, u.username from DBUserAccount u")
                 .getResultList();
 
         if (result == null) {

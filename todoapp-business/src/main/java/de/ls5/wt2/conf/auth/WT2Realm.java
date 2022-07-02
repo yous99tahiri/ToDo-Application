@@ -61,27 +61,14 @@ public class WT2Realm extends AuthorizingRealm implements Realm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         return new AuthorizationInfo() {
-
-            @Autowired
-            private EntityManager entityManager;
-
-            public DBUserAccount getByUserById(String userId) {
-                DBUserAccount user = this.entityManager.find(DBUserAccount.class, userId);
-
-                if(user == null) {
-                    throw new NoResultException("There is no user with the id " + userId);
-                }
-
-                return user;
-            }
-
             @Override
             public Collection<String> getRoles() {
-                if (UserRole.ADMIN.equals(this.getByUserById(principals.getPrimaryPrincipal().toString()).getUserRole())) {
-                    return Collections.singleton(UserRole.ADMIN);
-                }
+//                if (UserRole.ADMIN.equals(principals.getPrimaryPrincipal().toString())) {
+                System.out.println("Getting Roles");
+                return Collections.singleton(UserRole.ADMIN);
+//                }
 
-                return Collections.emptyList();
+//                return Collections.emptyList();
             }
 
             @Override
