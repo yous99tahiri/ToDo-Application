@@ -46,7 +46,7 @@ public class ItemREST {
         consumes=MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<DBTodoItem> createItem(@RequestBody final DBTodoItem param) {
+    public ResponseEntity<DBTodoItem> createItem(@RequestBody final ParamTodoItem param) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -54,18 +54,14 @@ public class ItemREST {
 
         final String userId = subject.getPrincipal().toString();
 
-        String title = param.getTitle();
-        List <DBTodoItem> list = this.entityManager.createQuery("SELECT u from DBTodoItem u WHERE u.title=: title",DBTodoItem.class ).setParameter("title", title).getResultList();
-
         final DBTodoItem item = new DBTodoItem();
         item.setCreator(this.getByUserById(userId));
         item.setTitle(param.getTitle());
-        item.setList(param.getList()); // ToDo: I doubt this works. Maybe get by id somehow
+        item.setList(this.entityManager.find(DBTodoItemList.class, param.getList())); // ToDo: Test this
         item.setDescription(param.getDescription());
         item.setLastEdited(param.getLastEdited());
         item.setDeadLine(param.getDeadLine());
-        //todo anhand von username von assignee den assignee account aus db laden und setten!
-        item.setAssignee(param.getAssignee());
+        item.setAssignee(this.entityManager.find(DBUserAccount.class, param.getAssignee()));
         item.setState(ItemState.OPEN);
 
         this.entityManager.persist(item);
