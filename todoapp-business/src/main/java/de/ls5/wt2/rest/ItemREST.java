@@ -182,7 +182,6 @@ public class ItemREST {
         return ResponseEntity.ok(new RepTodoItemList(list));
     }
 
-    //TODO
     @DeleteMapping(path = "list",
     params = { "listId" },
     produces = MediaType.APPLICATION_JSON_VALUE)
