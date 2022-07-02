@@ -63,6 +63,7 @@ public class ItemREST {
         item.setDescription(param.getDescription());
         item.setLastEdited(param.getLastEdited());
         item.setDeadLine(param.getDeadLine());
+        //todo anhand von username von assignee den assignee account aus db laden und setten!
         item.setAssignee(param.getAssignee());
         item.setState(ItemState.OPEN);
 
@@ -81,6 +82,8 @@ public class ItemREST {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+        //falls assignee in param ungleich als assignee in alten item, neu setzen 
+        //<= dazu assignees account aus db laden, nicht dne aus param nutzen!!
         this.entityManager.refresh(param);
         return ResponseEntity.ok(param);
     }
