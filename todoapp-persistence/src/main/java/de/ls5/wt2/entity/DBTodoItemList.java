@@ -17,6 +17,8 @@ public class DBTodoItemList extends DBIdentified {
     private List<DBTodoItem> todoItems;
     private DBUserAccount creator;
 
+    private Date created;
+
     public String getTitle(){
         return this.title;
     }
@@ -70,5 +72,16 @@ public class DBTodoItemList extends DBIdentified {
     @OneToMany(targetEntity = DBTodoItem.class, fetch = FetchType.EAGER, mappedBy = "list")
     public List<DBTodoItem> getTodoItems(){
         return this.todoItems;
+    }
+
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(iso = ISO.DATE_TIME)
+    public Date getCreated() {
+        return this.created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 }

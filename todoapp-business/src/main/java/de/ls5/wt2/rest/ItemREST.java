@@ -83,7 +83,7 @@ public class ItemREST {
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        //falls assignee in param ungleich als assignee in alten item, neu setzen 
+        //falls assignee in param ungleich als assignee in alten item, neu setzen
         //<= dazu assignees account aus db laden, nicht dne aus param nutzen!!
         this.entityManager.refresh(param);
         return ResponseEntity.ok(param);
@@ -159,6 +159,7 @@ public class ItemREST {
         result.setDeadLine(param.getDeadLine());
         result.setLastEdited(param.getLastEdited());
         result.setCreator(this.getByUserById(userId));
+        result.setCreated(new Date());
 
         this.entityManager.persist(result);
 
@@ -218,7 +219,9 @@ public class ItemREST {
         if (lists == null){
             lists = new ArrayList<>();
         }
-        //TODO sort by lastEdited?!
+
+        lists.sort(Comparator.comparing(DBTodoItemList::getCreated));
+
         return ResponseEntity.ok(lists);
     }
 }
