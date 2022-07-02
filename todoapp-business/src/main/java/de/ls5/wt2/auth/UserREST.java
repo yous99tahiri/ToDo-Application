@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -22,6 +23,57 @@ import java.util.List;
 public class UserREST {
     @Autowired
     private EntityManager entityManager;
+
+    @GetMapping(path = "auth/items", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<DBTodoItem>> readAssignedItems() {
+        final Subject subject = SecurityUtils.getSubject();
+        if (subject == null || !subject.isAuthenticated()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        final String userId = subject.getPrincipal().toString();
+
+        DBUserAccount account = this.entityManager
+                .createQuery("SELECT u from DBUserAccount u WHERE u.username = :userId ", DBUserAccount.class)
+                .setParameter("userId", userId)
+                .getSingleResult();
+
+        List<DBTodoItem> listItems = this.entityManager
+                .createQuery("SELECT u from DBTodoItem u WHERE u.assignee = :account ", DBTodoItem.class)
+                .setParameter("account", account)
+                .getResultList();
+
+        if (listItems == null) {
+            listItems = new ArrayList<>();
+        }
+
+        //it is ok to return empty list, means: no items assigned
+        return new ResponseEntity<>(listItems, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "auth/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List> readAllUsernames() {
+        final Subject subject = SecurityUtils.getSubject();
+
+        if (subject == null || !subject.isAuthenticated()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        subject.checkRole(UserRole.ADMIN);
+
+        System.out.println(this.entityManager);
+
+        List<DBUserAccount> result = this.entityManager
+                .createQuery("SELECT u.id, u.username from DBUserAccount u", DBUserAccount.class)
+                .getResultList();
+
+        if (result == null) {
+            result = new ArrayList<>();
+        }
+
+        // ToDo: Fix password leak
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
     @PostMapping(
             //path = "create",
@@ -48,6 +100,8 @@ public class UserREST {
 
         this.entityManager.persist(acc);
 
+        acc.setPassword("REDACTED");
+
         return new ResponseEntity<>(acc, HttpStatus.CREATED);
     }
 
@@ -72,9 +126,10 @@ public class UserREST {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        // ToDo: Allow this for the user themselves or for admin
-
         DBUserAccount account = users.get(0);
+
+        account.setPassword("REDACTED");
+
         return ResponseEntity.ok(account);
     }
 
@@ -120,53 +175,5 @@ public class UserREST {
         this.entityManager.remove(itemlistcre);
 
         return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
-    }
-
-    @GetMapping(path = "auth/items", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<DBTodoItem>> readAssignedItems() {
-        final Subject subject = SecurityUtils.getSubject();
-        if (subject == null || !subject.isAuthenticated()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-        final String userId = subject.getPrincipal().toString();
-
-        DBUserAccount account = this.entityManager
-                .createQuery("SELECT u from DBUserAccount u WHERE u.username = :userId ", DBUserAccount.class)
-                .setParameter("userId", userId)
-                .getSingleResult();
-
-        String username = account.getUsername();
-
-        List<DBTodoItem> listItems = this.entityManager
-                .createQuery("SELECT u from DBTodoItem u WHERE u.assignee = :username ", DBTodoItem.class)
-                .setParameter("username", username)
-                .getResultList();
-
-        if (listItems == null) {
-            listItems = new ArrayList<DBTodoItem>();
-        }
-
-        //it is ok to return empty list, means: no items assigned
-        return new ResponseEntity<>(listItems, HttpStatus.OK);
-    }
-
-    @GetMapping(path = "auth/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List> readAllUsernames() {
-        final Subject subject = SecurityUtils.getSubject();
-        if (subject == null || !subject.isAuthenticated()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        subject.checkRole(UserRole.ADMIN);
-
-        List<DBUserAccount> result = this.entityManager
-                .createQuery("SELECT u.id, u.username from DBUserAccount u")
-                .getResultList();
-
-        if (result == null) {
-            result = new ArrayList<DBUserAccount>();
-        }
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
