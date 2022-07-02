@@ -51,7 +51,7 @@ export class DashboardComponent extends DialogParent implements OnInit{
       this.showDangerMessage(`Failed to delete item: item is null`)
       return;
     }
-    this.itemService.deleteTodoItem(item.list.id.toString(),item.id.toString()).subscribe({
+    this.itemService.deleteTodoItem(item.list.toString(),item.id.toString()).subscribe({
       next:(item)=>{
         console.log("Dashboard: deleteItem success:",item)
         this.getAllLists();

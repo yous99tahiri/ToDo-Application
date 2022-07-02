@@ -6,8 +6,10 @@ export class MessageBoxParent{
     }
 
     showMessage(message:string,type:AlertType):void{
-        this.messageModel.type = type
-        this.messageModel.message = message;
+        this.messageModel = {
+            message:message,
+            type:type
+        }
     }
 
     showSuccessMessage(message:string):void{

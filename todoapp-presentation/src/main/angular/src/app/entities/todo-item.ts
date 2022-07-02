@@ -9,14 +9,14 @@ export class TodoItem{
     deadLine: Date =null;
     creator: UserAccount = null;
     assignee: UserAccount = null;
-    list:TodoItemList = null;
+    list:number = null;
     state:string = ITEM_STATE.OPEN.toString()
     
     static fromObject(object: any): TodoItem {
       console.log(`TodoItem: fromObject called for ${JSON.stringify(object)}`)
       const n = new TodoItem();
       n.id = object.id;
-      n.list = TodoItemList.fromObject(object.list);
+      n.list = object.list;
       n.title = object.title;
       n.description = object.description;
       n.lastEdited = new Date(object.lastEdited);
@@ -30,7 +30,7 @@ export class TodoItem{
     toObject() : any {
       const obj = {
         "id":this.id,
-        "list": this.list.toObject(),
+        "list": this.list,
         "title" : this.title,
         "description" : this.description,
         "lastEdited" : this.lastEdited != null ? this.lastEdited.toISOString() : new Date().toISOString(),

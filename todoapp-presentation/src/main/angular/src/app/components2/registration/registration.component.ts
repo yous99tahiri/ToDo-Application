@@ -32,7 +32,7 @@ export class RegistrationComponent extends MessageBoxParent{
         this.showSuccessMessage("Registration succeeded!")
       },
       error:(err)=>{
-        this.showDangerMessage(`Registration failed. Error: ${err}`)
+        this.showDangerMessage(`Registration failed. Error: ${JSON.stringify(err)}`)
       }
     })
   }
