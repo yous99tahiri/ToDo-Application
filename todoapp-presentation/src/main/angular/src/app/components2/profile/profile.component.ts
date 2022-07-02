@@ -27,7 +27,7 @@ export class ProfileComponent extends DialogParent implements OnInit{
   getUserAccount():void{
     this.userService.readUserAccount().subscribe({
       next:(userAccount)=>{
-        console.log("ProfileComponent: getAllLists success:",userAccount)
+        console.log("ProfileComponent: getUserAccount success:",userAccount)
         this.userAccount = userAccount;
         this.getAssignedItems();
         if(this.isAdmin()){
@@ -36,7 +36,7 @@ export class ProfileComponent extends DialogParent implements OnInit{
       },
       error:(err)=>{
         this.showDangerMessage(`Failed to load user account`)
-        console.log("ProfileComponent: getAllLists failed: ",err)
+        console.log("ProfileComponent: getUserAccount failed: ",err)
       }
     })
   }

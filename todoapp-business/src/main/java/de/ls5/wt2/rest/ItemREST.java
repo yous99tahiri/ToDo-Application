@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-@RequestMapping(path = {"rest/item"})
+@RequestMapping(path = {"rest/item/auth"})
 public class ItemREST {
     @Autowired
     private EntityManager entityManager;

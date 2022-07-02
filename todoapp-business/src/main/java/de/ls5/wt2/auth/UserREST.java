@@ -18,13 +18,13 @@ import java.util.List;
 
 @Transactional
 @RestController
-@RequestMapping(path = {"rest/auth/profile"})
+@RequestMapping(path = {"rest/profile"})
 public class UserREST {
     @Autowired
     private EntityManager entityManager;
 
     @PostMapping(
-            path = "create",
+            //path = "create",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -51,7 +51,10 @@ public class UserREST {
         return new ResponseEntity<>(acc, HttpStatus.CREATED);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(
+        path = "auth",
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<DBUserAccount> readUser() {
         final Subject subject = SecurityUtils.getSubject();
 
@@ -75,7 +78,7 @@ public class UserREST {
         return ResponseEntity.ok(account);
     }
 
-    @DeleteMapping(params = {"username"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping( path = "auth", params = {"username"}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DBUserAccount> deleteUser(@RequestParam final String username) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
@@ -119,7 +122,7 @@ public class UserREST {
         return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
     }
 
-    @GetMapping(path = "items", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "auth/items", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DBTodoItem>> readAssignedItems() {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
@@ -147,7 +150,7 @@ public class UserREST {
         return new ResponseEntity<>(listItems, HttpStatus.OK);
     }
 
-    @GetMapping(path = "all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "auth/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List> readAllUsernames() {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {

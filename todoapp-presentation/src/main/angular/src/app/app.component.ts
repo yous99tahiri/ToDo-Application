@@ -59,7 +59,7 @@ export class AppComponent extends MessageBoxParent implements DoCheck {
     this.authService.getIsLoggedIn().subscribe({
       next: (loggedIn) => { 
         this._isLoggedIn = loggedIn;
-        console.log("AppComponent: ngDoCheck called, _isLoggedIn: ", this._isLoggedIn)
+        //console.log("AppComponent: ngDoCheck called, _isLoggedIn: ", this._isLoggedIn)
       } 
   })}
 }

@@ -51,7 +51,7 @@ export class SessionAuthService {
   }
 
   getIsLoggedIn():Observable<boolean>{
-    console.log(`SessionAuthService: getIsLoggedIn called. isLoggedIn: ${this._loggedIn}`)
+    //console.log(`SessionAuthService: getIsLoggedIn called. isLoggedIn: ${this._loggedIn}`)
     return of(this._loggedIn);
   }
 

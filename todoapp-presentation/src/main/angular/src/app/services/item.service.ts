@@ -15,7 +15,7 @@ export class ItemService {
 
   createTodoItem(todoItem:TodoItem): Observable<TodoItem> {
     console.log(`ItemService: createTodoItem called for item`, todoItem)
-    return this.authService.getHTTPClient().post<any>(`${this.authService.getBaseUrl()}/item`, todoItem.toObject(), {headers: new HttpHeaders()}).pipe(
+    return this.authService.getHTTPClient().post<any>(`${this.authService.getBaseUrl()}/item/auth`, todoItem.toObject(), {headers: new HttpHeaders()}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),
@@ -28,7 +28,7 @@ export class ItemService {
 
   updateTodoItem(todoItem:TodoItem): Observable<TodoItem> {
     console.log(`ItemService: updateTodoItem called for item`, todoItem)
-    return this.authService.getHTTPClient().put<any>(`${this.authService.getBaseUrl()}/item`, todoItem.toObject(), {headers: new HttpHeaders()}).pipe(
+    return this.authService.getHTTPClient().put<any>(`${this.authService.getBaseUrl()}/item/auth`, todoItem.toObject(), {headers: new HttpHeaders()}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),
@@ -46,7 +46,7 @@ export class ItemService {
       "itemId" : itemId
     }
     console.log(`ItemService: deleteTodoItem called with params:`,params)
-    return this.authService.getHTTPClient().delete<any>(`${this.authService.getBaseUrl()}/item`, {headers: new HttpHeaders(),params : params}).pipe(
+    return this.authService.getHTTPClient().delete<any>(`${this.authService.getBaseUrl()}/item/auth`, {headers: new HttpHeaders(),params : params}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),
@@ -59,7 +59,7 @@ export class ItemService {
   
   createTodoItemList(todoItemList:TodoItemList): Observable<TodoItemList> {
     console.log(`ItemService: createTodoItemList called for list`,todoItemList)
-    return this.authService.getHTTPClient().post<any>(`${this.authService.getBaseUrl()}/item/list`, todoItemList.toObject(), {headers: new HttpHeaders()}).pipe(
+    return this.authService.getHTTPClient().post<any>(`${this.authService.getBaseUrl()}/item/auth/list`, todoItemList.toObject(), {headers: new HttpHeaders()}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),
@@ -74,7 +74,7 @@ export class ItemService {
   readTodoItemList(listId:string): Observable<TodoItemList> {
     console.log(`ItemService: readTodoItemList called for list '${listId}'`)
     const params = {"listId" : listId}
-    return this.authService.getHTTPClient().get<any>(`${this.authService.getBaseUrl()}/item/list`, {headers: new HttpHeaders(),params : params}).pipe(
+    return this.authService.getHTTPClient().get<any>(`${this.authService.getBaseUrl()}/item/auth/list`, {headers: new HttpHeaders(),params : params}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),
@@ -89,7 +89,7 @@ export class ItemService {
     const params = {
       "listId" : listId
     }
-    return this.authService.getHTTPClient().delete<any>(`${this.authService.getBaseUrl()}/item/list`, {headers: new HttpHeaders(),params : params}).pipe(
+    return this.authService.getHTTPClient().delete<any>(`${this.authService.getBaseUrl()}/item/auth/list`, {headers: new HttpHeaders(),params : params}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),
@@ -101,7 +101,7 @@ export class ItemService {
 
   readAllTodoItemLists(): Observable<TodoItemList[]> {
     console.log(`ItemService: readAllTodoItemList called`)
-    return this.authService.getHTTPClient().get<any[]>(`${this.authService.getBaseUrl()}/item/list/all`, {headers: new HttpHeaders()}).pipe(
+    return this.authService.getHTTPClient().get<any[]>(`${this.authService.getBaseUrl()}/item/auth/list/all`, {headers: new HttpHeaders()}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),

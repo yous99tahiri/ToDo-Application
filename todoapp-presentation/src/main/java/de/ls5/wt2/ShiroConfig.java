@@ -48,15 +48,23 @@ public class ShiroConfig {
         chainDefinition.put("/logout", "logoutFilter");
 
         // configuration for stateless authentication on each request
-        chainDefinition.put("/rest/auth/**", "restAuthenticator");
+        chainDefinition.put("/rest/item/auth", "restAuthenticator");
+        chainDefinition.put("/rest/item/auth/list", "restAuthenticator");
+        chainDefinition.put("/rest/item/auth/list/all", "restAuthenticator");
 
-        chainDefinition.put("/rest/auth/profile/create", "anon");
+        chainDefinition.put("/rest/profile", "anon");
+        chainDefinition.put("/rest/profile/auth", "restAuthenticator");
+        
+        chainDefinition.put("/rest/profile/auth/**", "restAuthenticator");
+        //chainDefinition.put("/rest/profile/auth/all", "restAuthenticator");
+        //chainDefinition.put("/rest/profile/auth/items", "restAuthenticator");
+        //chainDefinition.put("/rest/profile/create", "anon"); //if above does not work try this, also change in UserREST.java and in UserService and RegisterService
 
         // make other examples not require authentication
-        chainDefinition.put("/rest/**", "anon");
+        //chainDefinition.put("/rest/**", "anon");
 
         // make static Angular resources globally available
-        chainDefinition.put("/**", "anon");
+        //chainDefinition.put("/**", "anon");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(chainDefinition);
 
