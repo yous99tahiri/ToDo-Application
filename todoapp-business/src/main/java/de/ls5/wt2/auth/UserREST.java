@@ -1,6 +1,8 @@
 package de.ls5.wt2.auth;
 
 import de.ls5.wt2.entity.*;
+import de.ls5.wt2.representations.RepTodoItem;
+import de.ls5.wt2.representations.RepUserAccount;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,7 @@ public class UserREST {
     private EntityManager entityManager;
 
     @GetMapping(path = "auth/items", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<DBTodoItem>> readAssignedItems() {
+    public ResponseEntity<List<RepTodoItem>> readAssignedItems() {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -46,8 +48,14 @@ public class UserREST {
             listItems = new ArrayList<>();
         }
 
+        ArrayList<RepTodoItem> result = new ArrayList<>();
+
+        for (DBTodoItem item : listItems) {
+            result.add(new RepTodoItem(item));
+        }
+
         //it is ok to return empty list, means: no items assigned
-        return new ResponseEntity<>(listItems, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping(path = "auth/all", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -60,17 +68,15 @@ public class UserREST {
 
         subject.checkRole(UserRole.ADMIN);
 
-        List result = this.entityManager
+        List accounts = this.entityManager
                 .createQuery("SELECT u.id, u.username from DBUserAccount u")
                 .getResultList();
 
-        if (result == null) {
-            result = new ArrayList<>();
+        if (accounts == null) {
+            accounts = new ArrayList<>();
         }
 
-        // ToDo: Fix password leak
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
     @PostMapping(
@@ -78,7 +84,7 @@ public class UserREST {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<DBUserAccount> createUser(@RequestBody final DBUserAccount param) {
+    public ResponseEntity<RepUserAccount> createUser(@RequestBody final DBUserAccount param) {
         String username = param.getUsername();
 
         List<DBUserAccount> users = this.entityManager
@@ -100,14 +106,14 @@ public class UserREST {
 
         acc.setPassword("REDACTED");
 
-        return new ResponseEntity<>(acc, HttpStatus.CREATED);
+        return new ResponseEntity<>(new RepUserAccount(acc), HttpStatus.CREATED);
     }
 
     @GetMapping(
         path = "auth",
         produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<DBUserAccount> readUser() {
+    public ResponseEntity<RepUserAccount> readUser() {
         final Subject subject = SecurityUtils.getSubject();
 
         if (subject == null || !subject.isAuthenticated()) {
@@ -128,11 +134,11 @@ public class UserREST {
 
         account.setPassword("REDACTED");
 
-        return ResponseEntity.ok(account);
+        return ResponseEntity.ok(new RepUserAccount(account));
     }
 
     @DeleteMapping( path = "auth", params = {"username"}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DBUserAccount> deleteUser(@RequestParam final String username) {
+    public ResponseEntity<RepUserAccount> deleteUser(@RequestParam final String username) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -172,6 +178,6 @@ public class UserREST {
         this.entityManager.remove(itemcre);
         this.entityManager.remove(itemlistcre);
 
-        return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new RepUserAccount(user), HttpStatus.ACCEPTED);
     }
 }

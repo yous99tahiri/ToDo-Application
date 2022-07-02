@@ -8,6 +8,8 @@ import javax.persistence.NoResultException;
 import de.ls5.wt2.Exception.ResourceNotFoundException;
 import de.ls5.wt2.entity.*;
 
+import de.ls5.wt2.representations.RepTodoItem;
+import de.ls5.wt2.representations.RepTodoItemList;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +33,16 @@ public class ItemREST {
     @Autowired
     private EntityManager entityManager;
 
-    public DBUserAccount getByUserById(String userId) {
-        DBUserAccount user = this.entityManager.find(DBUserAccount.class, userId);
-        //List<DBUserAccount> list = this.entityManager.createQuery("SELECT u from DBUserAccount WHERE u.username=:userId",DBUserAccount.class ).setParameter("userId", userId).getResultList();
-        //if(list == null || list.size() != 1) {throw new NoResultException("There is no user with the id " + userId);}
+    public DBUserAccount getUserByName(String username) {
+        DBUserAccount user = this.entityManager
+            .createQuery("SELECT u from DBUserAccount u WHERE u.username =: username", DBUserAccount.class)
+            .setParameter("username", username)
+            .getSingleResult();
+
         if(user == null) {
-            throw new NoResultException("There is no user with the id " + userId);
+            throw new NoResultException("There is no user with the name " + username);
         }
-        //return list.get(0);
+
         return user;
     }
 
@@ -46,16 +50,16 @@ public class ItemREST {
         consumes=MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<DBTodoItem> createItem(@RequestBody final ParamTodoItem param) {
+    public ResponseEntity<RepTodoItem> createItem(@RequestBody final ParamTodoItem param) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        final String userId = subject.getPrincipal().toString();
+        final String username = subject.getPrincipal().toString();
 
         final DBTodoItem item = new DBTodoItem();
-        item.setCreator(this.getByUserById(userId));
+        item.setCreator(this.getUserByName(username));
         item.setTitle(param.getTitle());
         item.setList(this.entityManager.find(DBTodoItemList.class, param.getList())); // ToDo: Test this
         item.setDescription(param.getDescription());
@@ -66,14 +70,14 @@ public class ItemREST {
 
         this.entityManager.persist(item);
 
-        return new ResponseEntity<>(item, HttpStatus.CREATED);
+        return new ResponseEntity<>(new RepTodoItem(item), HttpStatus.CREATED);
     }
 
     @PutMapping(
         consumes=MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<DBTodoItem> updateItem(@RequestBody final DBTodoItem param) {
+    public ResponseEntity<RepTodoItem> updateItem(@RequestBody final DBTodoItem param) {
 
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
@@ -82,14 +86,14 @@ public class ItemREST {
         //falls assignee in param ungleich als assignee in alten item, neu setzen
         //<= dazu assignees account aus db laden, nicht dne aus param nutzen!!
         this.entityManager.refresh(param);
-        return ResponseEntity.ok(param);
+        return ResponseEntity.ok(new RepTodoItem(param));
     }
 
     @DeleteMapping(
         params = {"listId","itemId"},
         produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<DBTodoItem> deleteItem(
+    public ResponseEntity<RepTodoItem> deleteItem(
         @RequestParam final String listId,
         @RequestParam final String itemId
     ) {
@@ -117,7 +121,7 @@ public class ItemREST {
                 this.entityManager.refresh(listitems);
                 this.entityManager.remove(dbTodoItem);
 
-                return new ResponseEntity<>(dbTodoItem, HttpStatus.OK);
+                return new ResponseEntity<>(new RepTodoItem(dbTodoItem), HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -128,14 +132,14 @@ public class ItemREST {
         consumes=MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<DBTodoItemList> createList(@RequestBody final DBTodoItemList param) {
+    public ResponseEntity<RepTodoItemList> createList(@RequestBody final DBTodoItemList param) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        final String userId = subject.getPrincipal().toString();
-        param.setCreator(this.getByUserById(userId));
+        final String username = subject.getPrincipal().toString();
+        param.setCreator(this.getUserByName(username));
 
         String listTitle = param.getTitle();
 
@@ -145,7 +149,7 @@ public class ItemREST {
                 .getResultList();
 
         if(listitems.size() > 0){
-            return new ResponseEntity<>(param,HttpStatus.CONFLICT);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
         DBTodoItemList result = new DBTodoItemList();
@@ -154,18 +158,18 @@ public class ItemREST {
         result.setTodoItems(new ArrayList<>());
         result.setDeadLine(param.getDeadLine());
         result.setLastEdited(param.getLastEdited());
-        result.setCreator(this.getByUserById(userId));
+        result.setCreator(this.getUserByName(username));
         result.setCreated(new Date());
 
         this.entityManager.persist(result);
 
-        return new ResponseEntity<>(result,HttpStatus.CREATED);
+        return new ResponseEntity<>(new RepTodoItemList(result), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "list",
     params = { "listId" },
     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DBTodoItemList> readList(@RequestParam final String listId) {
+    public ResponseEntity<RepTodoItemList> readList(@RequestParam final String listId) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -175,14 +179,14 @@ public class ItemREST {
         if (list == null) {
             throw  new ResourceNotFoundException(" The list with the id : "+ listId+" is  dont exist");
         }
-        return ResponseEntity.ok(list);
+        return ResponseEntity.ok(new RepTodoItemList(list));
     }
 
     //TODO
     @DeleteMapping(path = "list",
     params = { "listId" },
     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DBTodoItemList> deleteList(@RequestParam final String listId) {
+    public ResponseEntity<RepTodoItemList> deleteList(@RequestParam final String listId) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -195,18 +199,18 @@ public class ItemREST {
         }
 
         List<DBTodoItem> itemlist = liste.getTodoItems();
-        Iterator<DBTodoItem> it = itemlist.iterator();
-        while(it.hasNext()) {
-                this.entityManager.remove(it.next());
+
+        for (DBTodoItem dbTodoItem : itemlist) {
+            this.entityManager.remove(dbTodoItem);
         }
 
         this.entityManager.remove(liste);
-        return new ResponseEntity<>(liste,HttpStatus.OK);
+        return new ResponseEntity<>(new RepTodoItemList(liste), HttpStatus.OK);
     }
 
     @GetMapping(path = "list/all",
     produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<DBTodoItemList>> readAllLists() {
+    public ResponseEntity<List<RepTodoItemList>> readAllLists() {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -218,6 +222,12 @@ public class ItemREST {
 
         lists.sort(Comparator.comparing(DBTodoItemList::getCreated));
 
-        return ResponseEntity.ok(lists);
+        ArrayList<RepTodoItemList> results = new ArrayList<>();
+
+        for(DBTodoItemList list : lists) {
+            results.add(new RepTodoItemList(list));
+        }
+
+        return ResponseEntity.ok(results);
     }
 }
