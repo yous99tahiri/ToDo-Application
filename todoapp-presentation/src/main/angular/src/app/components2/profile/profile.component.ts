@@ -90,7 +90,7 @@ export class ProfileComponent extends DialogParent implements OnInit{
       this.showDangerMessage(`Failed to delete user: selectedUsername is ''`)
       return;
     }
-    this.userService.deleteUserAccount(this.selectedUsername).subscribe({
+    this.userService.deleteUserAccount(this.selectedUsername/*,id*/).subscribe({
       next:(deletedAcc)=>{
         console.log("ProfileComponent: deleteUser success:",deletedAcc)
         this.showSuccessMessage(`Successfully deleted user!`)
@@ -112,7 +112,17 @@ export class ProfileComponent extends DialogParent implements OnInit{
       this.showDangerMessage(`Failed to show selected item: item is null`)
       return;
     }
-    this.openItemDetailsDialog({item:this.selectedItem})
+    let copy = new TodoItem();
+    copy.id = this.selectedItem.id
+    copy.title = this.selectedItem.title
+    copy.description = this.selectedItem.description
+    copy.lastEdited = new Date(this.selectedItem.lastEdited)
+    copy.deadLine = new Date(this.selectedItem.deadLine)
+    copy.assignee = UserAccount.fromObject(this.selectedItem.assignee.toObject())
+    copy.creator = UserAccount.fromObject(this.selectedItem.creator.toObject())
+    copy.list = this.selectedItem.list
+    copy.state = this.selectedItem.state
+    this.openItemDetailsDialog({item:copy})
     .subscribe(
       ret => {
         if(ret && "changed" in ret && ret.changed){

@@ -13,7 +13,7 @@ export class UserService {
     //console.log("UserService: authService null | undefined?", this.authService == null || this.authService == undefined)
   }
 
-  deleteUserAccount(username:string): Observable<UserAccount> {
+  deleteUserAccount(username:string/*,id:string */): Observable<UserAccount> {
     //console.log(`UserService: deleteUserAccount called for user '${username}'`)
     return this.authService.getHTTPClient().delete<any>(`${this.authService.getBaseUrl()}/profile/auth?username=` + username, {headers: new HttpHeaders()}).pipe(
       catchError(err => {

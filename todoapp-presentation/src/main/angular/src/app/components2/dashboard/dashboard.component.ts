@@ -6,6 +6,7 @@ import { TodoItemList } from 'src/app/entities/todo-item-list';
 import { DialogParent } from '../dialog/dialog-parent';
 import { MatDialog } from '@angular/material/dialog';
 import { ItemService } from 'src/app/services/item.service';
+import { UserAccount } from 'src/app/entities/user-account';
 
 @Component({
   selector: 'wt2-dashboard',
@@ -32,10 +33,20 @@ export class DashboardComponent extends DialogParent implements OnInit{
       this.showDangerMessage(`Failed to show item: item is null`)
       return;
     }
-    this.openItemDetailsDialog({item:item})
+    let copy = new TodoItem();
+    copy.id = item.id
+    copy.title = item.title
+    copy.description = item.description
+    copy.lastEdited = new Date(item.lastEdited)
+    copy.deadLine = new Date(item.deadLine)
+    copy.assignee = UserAccount.fromObject(item.assignee.toObject())
+    copy.creator = UserAccount.fromObject(item.creator.toObject())
+    copy.list = item.list
+    copy.state = item.state
+    this.openItemDetailsDialog({item:copy})
     .subscribe(
       ret => {
-        if("changed" in ret && ret.changed){
+        if(ret && "changed" in ret && ret.changed){
           console.log("item changed")
           this.getAllLists()
           this.showSuccessMessage(`Successfully edited item!`)
@@ -96,7 +107,7 @@ export class DashboardComponent extends DialogParent implements OnInit{
     this.openListCreationDialog({})
     .subscribe(
       ret => {
-        if("created" in ret && ret.created){
+        if(ret && "created" in ret && ret.created){
           console.log("list created")
           this.getAllLists()
           this.showSuccessMessage(`Successfully created list!`)

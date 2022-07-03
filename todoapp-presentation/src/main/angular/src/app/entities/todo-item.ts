@@ -29,14 +29,13 @@ export class TodoItem{
 
     toObject() : any {
       const obj = {
-        "id":this.id,
         "list": this.list,
         "title" : this.title,
         "description" : this.description,
         "lastEdited" : this.lastEdited != null ? this.lastEdited.toISOString() : new Date().toISOString(),
         "deadLine" : this.deadLine != null ? this.deadLine.toISOString() : new Date().toISOString(),
-        "creator" : this.creator != null ? this.creator.toObject() : null,
-        "assignee" : this.assignee != null ? this.assignee.toObject() : null,
+        "creator" : this.creator != null ? this.creator.id : -1,
+        "assignee" : this.assignee != null ? this.assignee.id : -1,
         "state":this.state
       }
       console.log(`TodoItem: toObject called for ${JSON.stringify(obj)}`);
