@@ -25,7 +25,7 @@ export class ItemDetailsDialogContentComponent extends MessageBoxParent implemen
   });
   selectedUsername:string=this.data.item.assignee.username;
   usernames:string[][]=[]
-  origAssignee:UserAccount = this.data.item.assignee;
+  origAssignee:UserAccount = UserAccount.fromObject(this.data.item.assignee.toObject());
   deadLine:string = this.data.item.deadLine.toISOString();
   ret:ItemDetailsDialogOutputData =  {changed:false}
   minDate:Date=new Date();

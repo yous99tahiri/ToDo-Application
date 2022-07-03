@@ -1,4 +1,3 @@
-import { TodoItemList } from "./todo-item-list";
 import { UserAccount } from "./user-account";
 
 export class TodoItem{
@@ -29,6 +28,7 @@ export class TodoItem{
 
     toObject() : any {
       const obj = {
+        "id":this.id,
         "list": this.list,
         "title" : this.title,
         "description" : this.description,
