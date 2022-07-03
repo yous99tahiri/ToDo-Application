@@ -102,8 +102,6 @@ public class UserREST {
 
         this.entityManager.persist(acc);
 
-        acc.setPassword("REDACTED");
-
         return new ResponseEntity<>(new RepUserAccount(acc), HttpStatus.CREATED);
     }
 
@@ -129,8 +127,6 @@ public class UserREST {
         }
 
         DBUserAccount account = users.get(0);
-
-        account.setPassword("REDACTED");
 
         return ResponseEntity.ok(new RepUserAccount(account));
     }
