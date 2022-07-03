@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 public class RepTodoItemList {
+    public final long id;
     public final String title;
     public final String description;
     public final Date lastEdited;
@@ -18,6 +19,7 @@ public class RepTodoItemList {
     public final Date created;
 
     public RepTodoItemList(DBTodoItemList dbTodoItemList) {
+        this.id = dbTodoItemList.getId();
         this.title = dbTodoItemList.getTitle();
         this.description = dbTodoItemList.getDescription();
         this.lastEdited = dbTodoItemList.getLastEdited();

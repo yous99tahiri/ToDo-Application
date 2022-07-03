@@ -19,7 +19,7 @@ export class ListCreationDialogContentComponent extends MessageBoxParent{
   });
   ret:ListCreationDialogOutputData =  {created:false}
   minDate:Date=new Date();
-  deadLine:Date=new Date();
+  deadLine:string=new Date().toISOString();
   @ViewChild(MatDatepicker) picker: MatDatepicker<Date>;
 
   constructor(public dialogRef: MatDialogRef<ListCreationDialogContentComponent>,
@@ -37,7 +37,7 @@ export class ListCreationDialogContentComponent extends MessageBoxParent{
       return;
     }
     let list = new TodoItemList()
-    list.deadLine = this.deadLine;
+    list.deadLine = new Date(this.deadLine);
     list.title = this.listForm.get("title").value
     list.description = this.listForm.get("description").value
     list.lastEdited = new Date()
@@ -57,7 +57,7 @@ export class ListCreationDialogContentComponent extends MessageBoxParent{
   }
 
   canCreateList():boolean{
-    return this.listForm.valid && this.deadLine != null && this.deadLine > new Date();
+    return this.listForm.valid && this.deadLine != null && new Date(this.deadLine) > new Date();
   }
   closeDialog():void{
     this.ret.created = false;

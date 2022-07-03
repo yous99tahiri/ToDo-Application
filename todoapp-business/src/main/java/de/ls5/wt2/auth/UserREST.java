@@ -13,10 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 
 
 @Transactional
@@ -66,8 +65,6 @@ public class UserREST {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        subject.checkRole(UserRole.ADMIN);
-
         List accounts = this.entityManager
                 .createQuery("SELECT u.id, u.username from DBUserAccount u")
                 .getResultList();
@@ -101,6 +98,7 @@ public class UserREST {
         acc.setPassword(param.getPassword());
         acc.setRegistrationDate(new Date());
         acc.setUserRole(UserRole.REGULAR);
+        acc.setLists(new HashSet<>());
 
         this.entityManager.persist(acc);
 
@@ -144,20 +142,24 @@ public class UserREST {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        subject.checkRole(UserRole.ADMIN);
+        if(!subject.getPrincipals().asList().get(1).equals("role:admin")) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        System.out.println(username);
 
         DBUserAccount user = this.entityManager
-                .createQuery("SELECT u from DBUserAccount u WHERE u.username = :username ", DBUserAccount.class)
+                .createQuery("SELECT u from DBUserAccount u WHERE u.username = :username", DBUserAccount.class)
                 .setParameter("username", username)
                 .getSingleResult();
 
         if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         List<DBTodoItem> itemassi = this.entityManager
-                .createQuery("SELECT u from DBTodoItem u WHERE u.assignee = :username ", DBTodoItem.class)
-                .setParameter("username", username)
+                .createQuery("SELECT u from DBTodoItem u WHERE u.assignee = :user ", DBTodoItem.class)
+                .setParameter("user", user)
                 .getResultList();
 
         for (DBTodoItem dbTodoItem : itemassi) {
@@ -165,18 +167,25 @@ public class UserREST {
         }
 
         List<DBTodoItem> itemcre = this.entityManager
-                .createQuery("SELECT u from DBTodoItem u WHERE u.creator = :username ", DBTodoItem.class)
-                .setParameter("username", username)
+                .createQuery("SELECT u from DBTodoItem u WHERE u.creator = :user ", DBTodoItem.class)
+                .setParameter("user", user)
                 .getResultList();
 
         List<DBTodoItemList> itemlistcre = this.entityManager
-                .createQuery("SELECT u from DBTodoItemList u WHERE u.creator = :username ", DBTodoItemList.class)
-                .setParameter("username", username)
+                .createQuery("SELECT u from DBTodoItemList u WHERE u.creator = :user ", DBTodoItemList.class)
+                .setParameter("user", user)
                 .getResultList();
 
         this.entityManager.remove(user);
-        this.entityManager.remove(itemcre);
-        this.entityManager.remove(itemlistcre);
+
+        for(DBTodoItem dbti : itemcre) {
+            this.entityManager.remove(dbti);
+        }
+
+        for(DBTodoItemList dbtil : itemlistcre) {
+            this.entityManager.remove(dbtil);
+        }
+
 
         return new ResponseEntity<>(new RepUserAccount(user), HttpStatus.ACCEPTED);
     }

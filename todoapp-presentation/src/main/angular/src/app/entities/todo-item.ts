@@ -1,4 +1,3 @@
-import { TodoItemList } from "./todo-item-list";
 import { UserAccount } from "./user-account";
 
 export class TodoItem{
@@ -35,8 +34,8 @@ export class TodoItem{
         "description" : this.description,
         "lastEdited" : this.lastEdited != null ? this.lastEdited.toISOString() : new Date().toISOString(),
         "deadLine" : this.deadLine != null ? this.deadLine.toISOString() : new Date().toISOString(),
-        "creator" : this.creator != null ? this.creator.toObject() : null,
-        "assignee" : this.assignee != null ? this.assignee.toObject() : null,
+        "creator" : this.creator != null ? this.creator.id : -1,
+        "assignee" : this.assignee != null ? this.assignee.id : -1,
         "state":this.state
       }
       console.log(`TodoItem: toObject called for ${JSON.stringify(obj)}`);

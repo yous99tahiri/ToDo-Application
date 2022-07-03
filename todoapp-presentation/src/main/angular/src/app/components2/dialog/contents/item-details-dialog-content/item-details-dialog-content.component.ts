@@ -25,6 +25,8 @@ export class ItemDetailsDialogContentComponent extends MessageBoxParent implemen
   });
   selectedUsername:string=this.data.item.assignee.username;
   usernames:string[][]=[]
+  origAssignee:UserAccount = UserAccount.fromObject(this.data.item.assignee.toObject());
+  deadLine:string = this.data.item.deadLine.toISOString();
   ret:ItemDetailsDialogOutputData =  {changed:false}
   minDate:Date=new Date();
   @ViewChild(MatDatepicker) picker: MatDatepicker<Date>;
@@ -39,7 +41,7 @@ export class ItemDetailsDialogContentComponent extends MessageBoxParent implemen
     console.log("Injected data: ",data)
   }
   canUpdateItem():boolean{
-    return this.itemForm.valid && this.usernames.map(id_name_Pair => id_name_Pair[1]).includes(this.selectedUsername) && this.data.item.deadLine > new Date();
+    return this.itemForm.valid && this.usernames.map(id_name_Pair => id_name_Pair[1]).includes(this.selectedUsername) && new Date(this.deadLine) > new Date();
   }
   updateItem():void{
     if(this.canUpdateItem() == false){
@@ -49,9 +51,12 @@ export class ItemDetailsDialogContentComponent extends MessageBoxParent implemen
     this.data.item.title = this.itemForm.get("title").value
     this.data.item.description = this.itemForm.get("description").value
     this.data.item.lastEdited = new Date()
-    if(this.selectedUsername != this.data.item.assignee.username){
+    this.data.item.deadLine = new Date(this.deadLine)
+    if(this.selectedUsername != this.origAssignee.username){
       let newAssignee = new UserAccount()
       newAssignee.username = this.selectedUsername
+      console.log("Assignee id is",this.usernames.filter(id_name_Pair => id_name_Pair[1]===this.selectedUsername)[0][0])
+      newAssignee.id = Number(this.usernames.filter(id_name_Pair => id_name_Pair[1]===this.selectedUsername)[0][0])
       this.data.item.assignee = newAssignee;
     }
 
@@ -64,6 +69,7 @@ export class ItemDetailsDialogContentComponent extends MessageBoxParent implemen
       error:(err)=>{
         this.showDangerMessage(`Failed to update item`)
         console.log("ItemDetailsDialogContentComponent: updateItem failed: ",err)
+        this.data.item.assignee = this.origAssignee;
       }
     });
     

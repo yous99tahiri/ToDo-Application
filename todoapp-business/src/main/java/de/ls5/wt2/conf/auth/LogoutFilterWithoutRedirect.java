@@ -9,11 +9,12 @@ import org.apache.shiro.web.util.WebUtils;
 
 public class LogoutFilterWithoutRedirect extends LogoutFilter {
     @Override
-    protected boolean preHandle(ServletRequest request, ServletResponse response) {
+    protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
         httpServletResponse.setStatus(200);
         httpServletResponse.setHeader("Set-Cookie", "JSESSIONID=EMPTY; expires=Thu, 01 Jan 1970 00:00:00 GMT");
-        return false;
+
+        return super.preHandle(request, httpServletResponse);
     }
 
     @Override

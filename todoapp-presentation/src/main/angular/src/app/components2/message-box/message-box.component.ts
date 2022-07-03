@@ -19,6 +19,6 @@ export interface MessageModel {
 }
 
 export enum AlertType{
-  DANGER = "alert alert-danger alert-dismissible",
-  SUCCESS = "alert alert-success alert-dismissible"
+  DANGER = "",
+  SUCCESS = ""
 }

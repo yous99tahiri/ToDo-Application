@@ -77,16 +77,35 @@ public class ItemREST {
         consumes=MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<RepTodoItem> updateItem(@RequestBody final DBTodoItem param) {
-
+    public ResponseEntity<RepTodoItem> updateItem(@RequestBody final ParamTodoItem param) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+
+        if(!subject.getPrincipals().asList().get(1).equals("role:admin")) {
+            if(!subject.getPrincipals().getPrimaryPrincipal().equals(subject.getPrincipal())) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+        }
+
+        DBTodoItem oldItem = this.entityManager
+                .createQuery("SELECT u from DBTodoItem u WHERE u.id =: id", DBTodoItem.class)
+                .setParameter("id", param.getId())
+                .getSingleResult();
+
+        oldItem.setTitle(param.getTitle());
+        oldItem.setDescription(param.getDescription());
+        oldItem.setDeadLine(param.getDeadLine());
+        oldItem.setAssignee(this.entityManager.find(DBUserAccount.class, param.getAssignee()));
+        oldItem.setState(param.getState());
+        oldItem.setLastEdited(new Date());
+
         //falls assignee in param ungleich als assignee in alten item, neu setzen
         //<= dazu assignees account aus db laden, nicht dne aus param nutzen!!
-        this.entityManager.refresh(param);
-        return ResponseEntity.ok(new RepTodoItem(param));
+        this.entityManager.persist(oldItem);
+
+        return ResponseEntity.ok(new RepTodoItem(oldItem));
     }
 
     @DeleteMapping(
@@ -104,14 +123,14 @@ public class ItemREST {
 
         List <DBTodoItem> itemlist = this.entityManager
                 .createQuery("SELECT u from DBTodoItem u WHERE u.id =: itemId", DBTodoItem.class)
-                .setParameter("itemId", itemId)
+                .setParameter("itemId", Long.parseLong(itemId))
                 .getResultList();
 
         for (DBTodoItem dbTodoItem : itemlist) {
             if (dbTodoItem.getList().getId() == Long.parseLong(listId)) {
                 DBTodoItemList listitems = this.entityManager
                         .createQuery("SELECT u from DBTodoItemList u WHERE u.id =: listId", DBTodoItemList.class)
-                        .setParameter("listId", listId)
+                        .setParameter("listId", Long.parseLong(listId))
                         .getSingleResult();
 
                 ArrayList<DBTodoItem> list = new ArrayList<>(listitems.getTodoItems());
@@ -192,7 +211,7 @@ public class ItemREST {
         }
 
         DBTodoItemList liste =  this.entityManager.createQuery("SELECT u from DBTodoItemList u WHERE u.id =: listId",DBTodoItemList.class).
-                setParameter("listId", listId).getSingleResult();
+                setParameter("listId", Long.parseLong(listId)).getSingleResult();
         if (liste == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
