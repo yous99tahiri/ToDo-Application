@@ -142,7 +142,9 @@ public class UserREST {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        subject.checkRole(UserRole.ADMIN);
+        if(!subject.getPrincipals().asList().get(1).equals("role:admin")) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
 
         System.out.println(username);
 
