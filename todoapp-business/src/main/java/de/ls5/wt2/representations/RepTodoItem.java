@@ -4,6 +4,7 @@ import de.ls5.wt2.entity.DBTodoItem;
 import java.util.Date;
 
 public class RepTodoItem {
+    public final long id;
     public final String title;
     public final String description;
     public final Date lastEdited;
@@ -14,6 +15,7 @@ public class RepTodoItem {
     public final String state;
 
     public RepTodoItem(DBTodoItem dbTodoItem) {
+        this.id = dbTodoItem.getId();
         this.title = dbTodoItem.getTitle();
         this.description = dbTodoItem.getDescription();
         this.lastEdited = dbTodoItem.getLastEdited();

@@ -66,8 +66,6 @@ public class UserREST {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        subject.checkRole(UserRole.ADMIN);
-
         List accounts = this.entityManager
                 .createQuery("SELECT u.id, u.username from DBUserAccount u")
                 .getResultList();
@@ -147,17 +145,17 @@ public class UserREST {
         subject.checkRole(UserRole.ADMIN);
 
         DBUserAccount user = this.entityManager
-                .createQuery("SELECT u from DBUserAccount u WHERE u.username = :username ", DBUserAccount.class)
+                .createQuery("SELECT u from DBUserAccount u WHERE u.username = :username", DBUserAccount.class)
                 .setParameter("username", username)
                 .getSingleResult();
 
         if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         List<DBTodoItem> itemassi = this.entityManager
-                .createQuery("SELECT u from DBTodoItem u WHERE u.assignee = :username ", DBTodoItem.class)
-                .setParameter("username", username)
+                .createQuery("SELECT u from DBTodoItem u WHERE u.assignee = :user ", DBTodoItem.class)
+                .setParameter("user", user)
                 .getResultList();
 
         for (DBTodoItem dbTodoItem : itemassi) {
@@ -165,13 +163,13 @@ public class UserREST {
         }
 
         List<DBTodoItem> itemcre = this.entityManager
-                .createQuery("SELECT u from DBTodoItem u WHERE u.creator = :username ", DBTodoItem.class)
-                .setParameter("username", username)
+                .createQuery("SELECT u from DBTodoItem u WHERE u.creator = :user ", DBTodoItem.class)
+                .setParameter("user", user)
                 .getResultList();
 
         List<DBTodoItemList> itemlistcre = this.entityManager
-                .createQuery("SELECT u from DBTodoItemList u WHERE u.creator = :username ", DBTodoItemList.class)
-                .setParameter("username", username)
+                .createQuery("SELECT u from DBTodoItemList u WHERE u.creator = :user ", DBTodoItemList.class)
+                .setParameter("user", user)
                 .getResultList();
 
         this.entityManager.remove(user);
