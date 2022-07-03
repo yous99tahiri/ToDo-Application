@@ -77,7 +77,7 @@ public class ItemREST {
         consumes=MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<RepTodoItem> updateItem(@RequestBody final DBTodoItem param) {
+    public ResponseEntity<RepTodoItem> updateItem(@RequestBody final ParamTodoItem param) {
         final Subject subject = SecurityUtils.getSubject();
         if (subject == null || !subject.isAuthenticated()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -97,15 +97,15 @@ public class ItemREST {
         oldItem.setTitle(param.getTitle());
         oldItem.setDescription(param.getDescription());
         oldItem.setDeadLine(param.getDeadLine());
-        oldItem.setAssignee(param.getAssignee());
+        oldItem.setAssignee(this.entityManager.find(DBUserAccount.class, param.getAssignee()));
         oldItem.setState(param.getState());
         oldItem.setLastEdited(new Date());
 
         //falls assignee in param ungleich als assignee in alten item, neu setzen
         //<= dazu assignees account aus db laden, nicht dne aus param nutzen!!
-        this.entityManager.refresh(oldItem);
+        this.entityManager.persist(oldItem);
 
-        return ResponseEntity.ok(new RepTodoItem(param));
+        return ResponseEntity.ok(new RepTodoItem(oldItem));
     }
 
     @DeleteMapping(
