@@ -15,10 +15,7 @@ export class UserService {
 
   deleteUserAccount(username:string): Observable<UserAccount> {
     //console.log(`UserService: deleteUserAccount called for user '${username}'`)
-    const params = {
-      "username" : username
-    }
-    return this.authService.getHTTPClient().delete<any>(`${this.authService.getBaseUrl()}/profile/auth`, {headers: new HttpHeaders(),params : params}).pipe(
+    return this.authService.getHTTPClient().delete<any>(`${this.authService.getBaseUrl()}/profile/auth?username=` + username, {headers: new HttpHeaders()}).pipe(
       catchError(err => {
         return err.status == 0 ? of([]) : throwError(err);
       }),

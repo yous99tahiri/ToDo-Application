@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+
 
 @Transactional
 @RestController
@@ -144,6 +146,8 @@ public class UserREST {
 
         subject.checkRole(UserRole.ADMIN);
 
+        System.out.println(username);
+
         DBUserAccount user = this.entityManager
                 .createQuery("SELECT u from DBUserAccount u WHERE u.username = :username", DBUserAccount.class)
                 .setParameter("username", username)
@@ -173,8 +177,15 @@ public class UserREST {
                 .getResultList();
 
         this.entityManager.remove(user);
-        this.entityManager.remove(itemcre);
-        this.entityManager.remove(itemlistcre);
+
+        for(DBTodoItem dbti : itemcre) {
+            this.entityManager.remove(dbti);
+        }
+
+        for(DBTodoItemList dbtil : itemlistcre) {
+            this.entityManager.remove(dbtil);
+        }
+
 
         return new ResponseEntity<>(new RepUserAccount(user), HttpStatus.ACCEPTED);
     }
