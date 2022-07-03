@@ -13,10 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 
@@ -101,6 +98,7 @@ public class UserREST {
         acc.setPassword(param.getPassword());
         acc.setRegistrationDate(new Date());
         acc.setUserRole(UserRole.REGULAR);
+        acc.setLists(new HashSet<>());
 
         this.entityManager.persist(acc);
 
