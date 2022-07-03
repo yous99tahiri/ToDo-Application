@@ -3,7 +3,6 @@ package de.ls5.wt2.entity;
 import java.util.Date;
 
 public class ParamTodoItem extends DBIdentified {
-    private long id;
     private String title;
     private String description;
     private Date lastEdited;
@@ -13,14 +12,6 @@ public class ParamTodoItem extends DBIdentified {
     private long list;
     private String state = ItemState.OPEN;
 
-    public long getId() {
-        return this.id;
-    }
-
-    public void setId(final long id) {
-        this.id = id;
-    }
-    
     public long getList(){
         return this.list;
     }
