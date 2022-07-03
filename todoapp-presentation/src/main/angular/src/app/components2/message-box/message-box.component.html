@@ -1,5 +1,5 @@
 
-<div id="messagebox" class={{messageModel.type.toString()}} *ngIf="messageModel.message !== ''">
+<div id="messagebox" [class]="messageModel.type.toString()" *ngIf="messageModel.message !== ''">
     <button mat-icon-button aria-label="Close" (click)="messageModel.message = ''">
         <mat-icon>close</mat-icon>
     </button>
